@@ -1,3 +1,6 @@
 {
-    "livePreview.defaultPreviewPath": "/frontend/index.html"
+    "livePreview.defaultPreviewPath": "/frontend/index.html",
+    "git.enableSmartCommit": true,
+    "git.postCommitCommand": "sync",
+    "git.confirmSync": false
 }

@@ -499,15 +499,14 @@
             const link = event.target.closest('a[href^="#"]');
             if (!link) return;
 
-                const href = link.getAttribute('href');
-                if (!href || href === '#') return;
+            const href = link.getAttribute('href');
+            if (!href || href === '#') return;
 
-                const target = document.querySelector(href);
-                if (!target) return;
+            const target = document.querySelector(href);
+            if (!target) return;
 
-                event.preventDefault();
-                scrollToTarget(target);
-            });
+            event.preventDefault();
+            scrollToTarget(target);
         });
 
         // Função para alternar todas as galerias
