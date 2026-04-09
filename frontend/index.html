@@ -509,6 +509,54 @@
             scrollToTarget(target);
         });
 
+        const initScrollReveal = () => {
+            const revealTargets = document.querySelectorAll('[data-scroll-anchor]');
+            if (!revealTargets.length) return;
+
+            revealTargets.forEach((target, index) => {
+                target.style.opacity = '0';
+                target.style.transform = 'translateY(10px)';
+                target.dataset.revealDelay = `${index * 40}`;
+            });
+
+            const reveal = (target) => {
+                if (target.dataset.revealed === 'true') return;
+
+                target.dataset.revealed = 'true';
+                target.style.animationDelay = `${target.dataset.revealDelay || '0'}ms`;
+                target.classList.add('animate-fadeIn');
+                target.style.transform = '';
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    reveal(entry.target);
+                    observer.unobserve(entry.target);
+                });
+            }, {
+                threshold: 0.12,
+                rootMargin: '0px 0px -8% 0px'
+            });
+
+            revealTargets.forEach((target) => observer.observe(target));
+        };
+
+        const animateHeroOnLoad = () => {
+            const heroText = document.querySelector('#inicio .relative.z-20.max-w-3xl');
+            const heroLogo = document.getElementById('columbina-wrapper');
+
+            if (heroText) {
+                heroText.classList.add('animate-fadeIn');
+            }
+
+            if (heroLogo) {
+                heroLogo.style.opacity = '0';
+                heroLogo.style.animationDelay = '140ms';
+                heroLogo.classList.add('animate-fadeIn');
+            }
+        };
+
         // Função para alternar todas as galerias
         function toggleAllGalleries(button) {
             const allGalleries = document.querySelectorAll('[data-gallery]');
@@ -647,6 +695,15 @@
                         </div>
                     </div>
                 `).join('');
+
+                const cards = container.querySelectorAll('.service-card');
+                cards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.animationDelay = `${index * 45}ms`;
+                    requestAnimationFrame(() => {
+                        card.classList.add('animate-fadeIn');
+                    });
+                });
             })
             .catch(err => console.error('Erro:', err));
 
@@ -704,6 +761,9 @@
             logoWrapper.addEventListener('mouseleave', resetLogo);
             animationFrame = requestAnimationFrame(animateLogo);
         }
+
+        animateHeroOnLoad();
+        initScrollReveal();
     </script>
 </body>
 </html>

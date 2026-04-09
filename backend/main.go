@@ -1,6 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -11,8 +16,57 @@ type Service struct {
 	Description string `json:"description"`
 }
 
+func applyStaticCacheHeaders(c *gin.Context, targetFile string) {
+	if strings.HasSuffix(strings.ToLower(targetFile), ".html") {
+		c.Header("Cache-Control", "no-cache")
+		return
+	}
+
+	if strings.TrimSpace(c.Query("v")) != "" {
+		c.Header("Cache-Control", "public, max-age=31536000, immutable")
+		return
+	}
+
+	c.Header("Cache-Control", "public, max-age=86400")
+}
+
+func resolveFrontendDir() (string, error) {
+	wd, _ := os.Getwd()
+	exePath, _ := os.Executable()
+	exeDir := filepath.Dir(exePath)
+
+	candidates := []string{
+		filepath.Join(wd, "frontend"),
+		filepath.Join(wd, "..", "frontend"),
+		filepath.Join(exeDir, "frontend"),
+		filepath.Join(exeDir, "..", "frontend"),
+	}
+
+	for _, dir := range candidates {
+		indexPath := filepath.Join(dir, "index.html")
+		if _, err := os.Stat(indexPath); err == nil {
+			abs, absErr := filepath.Abs(dir)
+			if absErr == nil {
+				return abs, nil
+			}
+			return dir, nil
+		}
+	}
+
+	return "", fmt.Errorf("nao foi possivel localizar frontend/index.html")
+}
+
 func main() {
+	if os.Getenv("GIN_MODE") == "" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	r := gin.Default()
+
+	frontendDir, err := resolveFrontendDir()
+	if err != nil {
+		panic(err)
+	}
 
 	// Configuração do CORS
 	r.Use(cors.New(cors.Config{
@@ -55,9 +109,41 @@ func main() {
 		})
 	})
 
-	// Serve a página inicial sem criar wildcard que conflita com /api
+	// Serve a página inicial e arquivos estáticos do frontend sem depender de caminho absoluto.
 	r.GET("/", func(c *gin.Context) {
-		c.File("c:\\Users\\Marcoss\\Documents\\Site Grupo Mano\\frontend\\index.html")
+		c.Header("Cache-Control", "no-cache")
+		c.File(filepath.Join(frontendDir, "index.html"))
+	})
+
+	r.NoRoute(func(c *gin.Context) {
+		requestPath := c.Request.URL.Path
+		if strings.HasPrefix(requestPath, "/api") {
+			c.AbortWithStatus(404)
+			return
+		}
+
+		cleanPath := filepath.Clean(strings.TrimPrefix(requestPath, "/"))
+		if cleanPath == "." {
+			c.Header("Cache-Control", "no-cache")
+			c.File(filepath.Join(frontendDir, "index.html"))
+			return
+		}
+
+		targetFile := filepath.Join(frontendDir, cleanPath)
+		targetAbs, absErr := filepath.Abs(targetFile)
+		if absErr != nil || (!strings.HasPrefix(targetAbs, frontendDir+string(os.PathSeparator)) && targetAbs != frontendDir) {
+			c.AbortWithStatus(404)
+			return
+		}
+
+		if info, statErr := os.Stat(targetFile); statErr == nil && !info.IsDir() {
+			applyStaticCacheHeaders(c, targetFile)
+			c.File(targetFile)
+			return
+		}
+
+		c.Header("Cache-Control", "no-cache")
+		c.File(filepath.Join(frontendDir, "index.html"))
 	})
 
 	r.Run(":8080")
