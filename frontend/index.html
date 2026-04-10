@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +27,16 @@
         }
     </script>
     <style>
+        html.lenis,
+        html.lenis body {
+            height: auto;
+        }
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
         html {
             scroll-padding-top: 6.5rem;
         }
@@ -185,9 +195,9 @@
     </section>
 
     <!-- Services -->
-    <section id="servicos" class="py-24 bg-shop-gray-light scroll-mt-28 md:scroll-mt-32">
+    <section id="servicos" class="py-20 bg-shop-gray-light scroll-mt-28 md:scroll-mt-32">
         <div class="max-w-7xl mx-auto px-6">
-            <div data-scroll-anchor class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div data-scroll-anchor class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
                 <div>
                     <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">O que oferecemos</span>
                     <h3 class="text-4xl md:text-5xl font-black text-shop-gray-dark uppercase italic">Serviços <span class="text-shop-red">Especializados</span></h3>
@@ -201,7 +211,7 @@
                 <!-- Services will be injected here by JS -->
             </div>
 
-            <div class="mt-14 bg-shop-gray-dark text-white rounded-2xl overflow-hidden shadow-2xl">
+            <div class="mt-10 bg-shop-gray-dark text-white rounded-2xl overflow-hidden shadow-2xl">
                 <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
                     <div class="p-10 lg:p-12">
                         <span class="text-shop-red font-black uppercase tracking-widest text-xs mb-4 block">Especialidades em destaque</span>
@@ -227,6 +237,14 @@
                         <div class="absolute inset-0 bg-gradient-to-r from-shop-gray-dark/80 via-shop-gray-dark/40 to-transparent"></div>
                     </div>
                 </div>
+            </div>
+
+            <div class="mt-8 flex justify-start">
+                <a href="https://wa.me/5573991420645?text=Olá!%20Quero%20marcar%20uma%20visita." target="_blank" class="group btn-clean btn-primary btn-rounded px-8 py-4 font-black uppercase tracking-[0.15em] text-xs hover:scale-[1.03]">
+                    <i class="fab fa-whatsapp text-base text-green-300"></i>
+                    <span>Marque uma visita</span>
+                    <i class="fas fa-arrow-right text-[10px] opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -474,7 +492,56 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
     <script>
+        let lenis = null;
+
+        const initLenis = () => {
+            if (typeof window.Lenis !== 'function') return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            lenis = new window.Lenis({
+                duration: 1.05,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                wheelMultiplier: 0.95,
+                touchMultiplier: 1,
+                smoothWheel: true,
+                syncTouch: false,
+            });
+
+            const raf = (time) => {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            };
+
+            requestAnimationFrame(raf);
+        };
+
+        const smoothScrollTo = (top, options = {}) => {
+            const {
+                duration = 1.05,
+                immediate = false,
+                force = false,
+            } = options;
+
+            const targetTop = Math.max(0, top);
+
+            if (lenis && (force || !immediate)) {
+                lenis.scrollTo(targetTop, {
+                    duration,
+                    immediate,
+                    lock: false,
+                });
+                return;
+            }
+
+            window.scrollTo({
+                top: targetTop,
+                left: 0,
+                behavior: immediate ? 'auto' : 'smooth',
+            });
+        };
+
         const headerOffset = () => {
             const header = document.querySelector('header');
             return header ? header.getBoundingClientRect().height + 16 : 96;
@@ -484,7 +551,7 @@
             if (!target) return;
 
             if (target.id === 'inicio') {
-                window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                smoothScrollTo(0, { duration: 1.1, force: true });
                 return;
             }
 
@@ -493,7 +560,7 @@
                 : target;
 
             const top = window.scrollY + anchor.getBoundingClientRect().top - headerOffset();
-            window.scrollTo({ top: Math.max(0, top), left: 0, behavior: 'smooth' });
+            smoothScrollTo(top, { duration: 1.1, force: true });
         };
 
         document.addEventListener('click', (event) => {
@@ -508,6 +575,10 @@
 
             event.preventDefault();
             scrollToTarget(target);
+
+            if (history.replaceState) {
+                history.replaceState(null, '', href);
+            }
         });
 
         const initScrollReveal = () => {
@@ -634,8 +705,7 @@
                 const targetY = window.scrollY + buttonRect.top - (window.innerHeight / 2) + (buttonRect.height / 2);
                 const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
                 const clampedY = Math.min(Math.max(0, targetY), maxScroll);
-
-                window.scrollTo({ top: clampedY, left: 0, behavior: 'smooth' });
+                smoothScrollTo(clampedY, { duration: 1.05, force: true });
             };
 
             const keepButtonStable = (initialTop, durationMs, onDone) => {
@@ -644,7 +714,7 @@
                 const tick = (now) => {
                     const delta = button.getBoundingClientRect().top - initialTop;
                     if (delta !== 0) {
-                        window.scrollTo({ top: Math.max(0, window.scrollY + delta), left: 0, behavior: 'auto' });
+                        smoothScrollTo(window.scrollY + delta, { immediate: true });
                     }
 
                     if (now - startedAt < durationMs) {
@@ -692,7 +762,7 @@
                     const delta = buttonTopAfter - buttonTopBefore;
                     if (delta !== 0) {
                         const targetY = Math.max(0, window.scrollY + delta);
-                        window.scrollTo({ top: targetY, left: 0, behavior: 'auto' });
+                        smoothScrollTo(targetY, { immediate: true });
                     }
 
                     requestAnimationFrame(() => {
@@ -827,6 +897,7 @@
             animationFrame = requestAnimationFrame(animateLogo);
         }
 
+        initLenis();
         animateHeroOnLoad();
         initScrollReveal();
         initContactForm();
