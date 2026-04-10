@@ -107,6 +107,72 @@
             opacity: 1;
             transform: translateY(0) scale(1);
         }
+        .partners-section {
+            position: relative;
+            overflow: hidden;
+        }
+        .partners-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.98));
+            pointer-events: none;
+        }
+        .partners-marquee {
+            position: relative;
+            overflow: hidden;
+            padding: 0.75rem 0.5rem 1rem;
+            mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+        }
+        .partners-track {
+            display: flex;
+            width: max-content;
+            gap: 1rem;
+            animation: partnersScroll 34s linear infinite;
+            will-change: transform;
+        }
+        .partners-track:hover {
+            animation-play-state: paused;
+        }
+        .partner-tile {
+            width: 8.5rem;
+            height: 8.5rem;
+            flex: 0 0 auto;
+            overflow: hidden;
+            border: 1px solid rgba(26, 26, 26, 0.08);
+            background: linear-gradient(160deg, rgba(255,255,255,0.98), rgba(245,245,245,0.9));
+            box-shadow: 0 18px 40px rgba(26, 26, 26, 0.08);
+            transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+            will-change: transform;
+        }
+        .partner-tile:hover {
+            transform: translateY(-2px) scale(1.025);
+            box-shadow: 0 24px 50px rgba(26, 26, 26, 0.14);
+            border-color: rgba(210, 0, 0, 0.18);
+        }
+        .partner-tile img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        .partner-tile span:first-child {
+            letter-spacing: 0.18em;
+        }
+        @keyframes partnersScroll {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-50%);
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .partners-track {
+                animation: none;
+            }
+        }
     </style>
 </head>
 <body class="font-sans bg-white text-gray-900">
@@ -284,7 +350,7 @@
 
                 <!-- Oficina -->
                 <div class="space-y-4">
-                    <h4 class="text-xl font-black uppercase italic text-shop-gray-dark border-l-4 border-shop-red pl-4">Nossa Oficina</h4>
+                    <h4 class="text-xl font-black uppercase italic text-shop-gray-dark border-l-4 border-shop-red pl-4">Nossa Casa de Peças</h4>
                     <div class="grid grid-cols-1 gap-4" data-gallery="oficina">
                         <div class="aspect-video bg-shop-gray-light rounded overflow-hidden group gallery-item">
                             <img src="https://a.imagem.app/GSEF2Z.png" alt="Oficina 1 Grupo Mano" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-500 grayscale hover:grayscale-0">
@@ -470,6 +536,127 @@
                         </button>
                         <p id="contact-feedback" class="md:col-span-2 hidden text-sm font-semibold"></p>
                     </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parceiros e Marcas -->
+    <section class="partners-section py-20 bg-shop-gray-light border-t border-b border-shop-red/10">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div data-scroll-anchor class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+                <div>
+                    <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">Marcas e parceiros</span>
+                    <h3 class="text-4xl md:text-5xl font-black text-shop-gray-dark uppercase italic">Tecnologias <span class="text-shop-red">que confiamos</span></h3>
+                </div>
+                <p class="max-w-xl text-gray-500 font-medium">
+                    Alguns dos nomes e marcas que fazem parte do nosso dia a dia na oficina, nas peças e no atendimento às frotas.
+                </p>
+            </div>
+
+            <div class="partners-marquee">
+                <div class="partners-track" aria-label="Marcas e parceiros do Grupo Mano">
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Volvo</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VN</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Linha pesada</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Scania</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">S</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Performance</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Mercedes</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">MB</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Origem forte</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Iveco</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">I</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Diesel</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Volkswagen</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VW</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Constante</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Ford</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">F</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Robustez</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
+                        <span class="text-[10px] font-black uppercase text-shop-red">DAF</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">D</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Estrada</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Bosch</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">B</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Tecnologia</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Mahle</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">M</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Precisão</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Cummins</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">C</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Potência</span>
+                    </div>
+
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Volvo</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VN</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Linha pesada</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Scania</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">S</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Performance</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Mercedes</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">MB</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Origem forte</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Iveco</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">I</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Diesel</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Volkswagen</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VW</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Constante</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Ford</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">F</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Robustez</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
+                        <span class="text-[10px] font-black uppercase text-shop-red">DAF</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">D</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Estrada</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Bosch</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">B</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Tecnologia</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Mahle</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">M</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Precisão</span>
+                    </div>
+                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
+                        <span class="text-[10px] font-black uppercase text-shop-red">Cummins</span>
+                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">C</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Potência</span>
+                    </div>
                 </div>
             </div>
         </div>
