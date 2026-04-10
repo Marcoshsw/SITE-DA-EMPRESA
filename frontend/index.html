@@ -422,18 +422,18 @@
                 <div class="lg:col-span-2 p-12">
                        <h3 class="text-3xl font-black mb-6 text-shop-gray-dark italic uppercase">Precisa de manutenção ou peças para seu caminhão?</h3>
                        <p class="text-gray-600 max-w-2xl mb-10 leading-relaxed">Fale com a oficina e tenha um serviço de confiança na estrada, com atendimento ágil para manutenção, autopeças e suporte técnico especializado.</p>
-                    <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <form id="contact-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="flex flex-col gap-2">
                             <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest">Nome Completo</label>
-                            <input type="text" class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition" placeholder="Seu nome">
+                            <input name="name" type="text" minlength="3" required class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition" placeholder="Seu nome">
                         </div>
                         <div class="flex flex-col gap-2">
                             <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest">E-mail</label>
-                            <input type="email" class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition" placeholder="seu@email.com">
+                            <input name="email" type="email" required class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition" placeholder="seu@email.com">
                         </div>
                         <div class="flex flex-col gap-2 md:col-span-2">
                             <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest">Serviço Desejado</label>
-                            <select class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition font-bold text-sm">
+                            <select name="service" required class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition font-bold text-sm">
                                 <option>Mecânica Pesada</option>
                                 <option>Câmbio Automático</option>
                                 <option>Automação de Módulo</option>
@@ -443,13 +443,14 @@
                         </div>
                         <div class="flex flex-col gap-2 md:col-span-2">
                             <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest">Mensagem</label>
-                            <textarea rows="4" class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition" placeholder="Como podemos ajudar sua frota?"></textarea>
+                            <textarea name="message" rows="4" minlength="10" required class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition" placeholder="Como podemos ajudar sua frota?"></textarea>
                         </div>
-                        <button class="md:col-span-2 group btn-clean btn-primary btn-rounded w-full py-5 font-black uppercase tracking-[0.2em] text-xs hover:scale-[1.01]">
+                        <button type="submit" class="md:col-span-2 group btn-clean btn-primary btn-rounded w-full py-5 font-black uppercase tracking-[0.2em] text-xs hover:scale-[1.01]">
                             <i class="fas fa-paper-plane text-[10px]"></i>
-                            <span>Enviar Solicitação</span>
+                            <span class="submit-text">Enviar Solicitação</span>
                             <i class="fas fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300"></i>
                         </button>
+                        <p id="contact-feedback" class="md:col-span-2 hidden text-sm font-semibold"></p>
                     </form>
                 </div>
             </div>
@@ -555,6 +556,70 @@
                 heroLogo.style.animationDelay = '140ms';
                 heroLogo.classList.add('animate-fadeIn');
             }
+        };
+
+        const initContactForm = () => {
+            const form = document.getElementById('contact-form');
+            if (!form) return;
+
+            const feedback = document.getElementById('contact-feedback');
+            const submitButton = form.querySelector('button[type="submit"]');
+            const submitText = form.querySelector('.submit-text');
+
+            const setFeedback = (message, isError) => {
+                if (!feedback) return;
+                feedback.textContent = message;
+                feedback.classList.remove('hidden', 'text-green-700', 'text-red-600');
+                feedback.classList.add(isError ? 'text-red-600' : 'text-green-700');
+            };
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                const payload = {
+                    name: (formData.get('name') || '').toString().trim(),
+                    email: (formData.get('email') || '').toString().trim(),
+                    service: (formData.get('service') || '').toString().trim(),
+                    message: (formData.get('message') || '').toString().trim(),
+                };
+
+                if (payload.name.length < 3) {
+                    setFeedback('Informe um nome valido.', true);
+                    return;
+                }
+
+                if (payload.message.length < 10) {
+                    setFeedback('A mensagem deve ter pelo menos 10 caracteres.', true);
+                    return;
+                }
+
+                if (submitButton) submitButton.disabled = true;
+                if (submitText) submitText.textContent = 'Enviando...';
+
+                try {
+                    const response = await fetch('/api/contact', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Nao foi possivel enviar no momento.');
+                    }
+
+                    setFeedback(data.message || 'Solicitacao enviada com sucesso.', false);
+                    form.reset();
+                } catch (error) {
+                    setFeedback(error.message || 'Falha no envio. Tente novamente.', true);
+                } finally {
+                    if (submitButton) submitButton.disabled = false;
+                    if (submitText) submitText.textContent = 'Enviar Solicitação';
+                }
+            });
         };
 
         // Função para alternar todas as galerias
@@ -764,6 +829,7 @@
 
         animateHeroOnLoad();
         initScrollReveal();
+        initContactForm();
     </script>
 </body>
 </html>

@@ -2,9 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/mail"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -14,6 +18,99 @@ type Service struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
+}
+
+type ContactRequest struct {
+	Name    string `json:"name"`
+	Email   string `json:"email"`
+	Service string `json:"service"`
+	Message string `json:"message"`
+}
+
+type appConfig struct {
+	Port              string
+	CorsOrigins       []string
+	FrontendDir       string
+	GinMode           string
+	AllowWildcardCORS bool
+}
+
+func loadAppConfig() appConfig {
+	port := strings.TrimSpace(os.Getenv("PORT"))
+	if port == "" {
+		port = "8080"
+	}
+
+	ginMode := strings.TrimSpace(os.Getenv("GIN_MODE"))
+	if ginMode == "" {
+		ginMode = gin.ReleaseMode
+	}
+
+	frontendDir := strings.TrimSpace(os.Getenv("FRONTEND_DIR"))
+	if frontendDir == "" {
+		resolvedDir, err := resolveFrontendDir()
+		if err != nil {
+			panic(err)
+		}
+		frontendDir = resolvedDir
+	} else if absDir, err := filepath.Abs(frontendDir); err == nil {
+		frontendDir = absDir
+	}
+
+	originsRaw := strings.TrimSpace(os.Getenv("CORS_ORIGINS"))
+	origins := []string{"*"}
+	allowWildcard := true
+	if originsRaw != "" {
+		parts := strings.Split(originsRaw, ",")
+		origins = make([]string, 0, len(parts))
+		for _, part := range parts {
+			origin := strings.TrimSpace(part)
+			if origin != "" {
+				origins = append(origins, origin)
+			}
+		}
+		if len(origins) == 0 {
+			origins = []string{"*"}
+		}
+		allowWildcard = false
+	}
+
+	if _, err := strconv.Atoi(port); err != nil {
+		port = "8080"
+	}
+
+	return appConfig{
+		Port:              port,
+		CorsOrigins:       origins,
+		FrontendDir:       frontendDir,
+		GinMode:           ginMode,
+		AllowWildcardCORS: allowWildcard,
+	}
+}
+
+func requestLogger() gin.HandlerFunc {
+	return gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
+		return fmt.Sprintf("[%s] %3d | %13v | %15s | %-7s %s | %s\n",
+			param.TimeStamp.Format("2006-01-02 15:04:05"),
+			param.StatusCode,
+			param.Latency.Truncate(time.Millisecond),
+			param.ClientIP,
+			param.Method,
+			param.Path,
+			param.ErrorMessage,
+		)
+	})
+}
+
+func securityHeaders() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("X-Frame-Options", "SAMEORIGIN")
+		c.Header("Referrer-Policy", "strict-origin-when-cross-origin")
+		c.Header("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+
+		c.Next()
+	}
 }
 
 func applyStaticCacheHeaders(c *gin.Context, targetFile string) {
@@ -57,25 +154,26 @@ func resolveFrontendDir() (string, error) {
 }
 
 func main() {
-	if os.Getenv("GIN_MODE") == "" {
-		gin.SetMode(gin.ReleaseMode)
-	}
+	config := loadAppConfig()
+	gin.SetMode(config.GinMode)
 
-	r := gin.Default()
-
-	frontendDir, err := resolveFrontendDir()
-	if err != nil {
-		panic(err)
-	}
+	r := gin.New()
+	r.Use(requestLogger())
+	r.Use(gin.Recovery())
+	r.Use(securityHeaders())
 
 	// Configuração do CORS
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
+	corsConfig := cors.Config{
+		AllowOrigins:     config.CorsOrigins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-	}))
+	}
+	if config.AllowWildcardCORS {
+		corsConfig.AllowWildcard = true
+	}
+	r.Use(cors.New(corsConfig))
 
 	services := []Service{
 		{ID: 1, Name: "Mecânica Pesada", Description: "Manutenção completa de veículos pesados com diagnóstico e reparo especializado."},
@@ -109,10 +207,55 @@ func main() {
 		})
 	})
 
+	r.GET("/healthz", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status":   "ok",
+			"service":  "Grupo Mano",
+			"uptime":   time.Now().UTC().Format(time.RFC3339),
+			"frontend": "available",
+		})
+	})
+
+	r.POST("/api/contact", func(c *gin.Context) {
+		var req ContactRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(400, gin.H{"message": "Dados invalidos para envio."})
+			return
+		}
+
+		req.Name = strings.TrimSpace(req.Name)
+		req.Email = strings.TrimSpace(req.Email)
+		req.Service = strings.TrimSpace(req.Service)
+		req.Message = strings.TrimSpace(req.Message)
+
+		if len(req.Name) < 3 {
+			c.JSON(400, gin.H{"message": "Informe um nome valido."})
+			return
+		}
+
+		if _, err := mail.ParseAddress(req.Email); err != nil {
+			c.JSON(400, gin.H{"message": "Informe um e-mail valido."})
+			return
+		}
+
+		if req.Service == "" {
+			c.JSON(400, gin.H{"message": "Selecione o servico desejado."})
+			return
+		}
+
+		if len(req.Message) < 10 {
+			c.JSON(400, gin.H{"message": "A mensagem deve ter pelo menos 10 caracteres."})
+			return
+		}
+
+		log.Printf("Novo contato | nome=%s email=%s servico=%s mensagem=%q", req.Name, req.Email, req.Service, req.Message)
+		c.JSON(200, gin.H{"message": "Solicitacao enviada com sucesso. Nossa equipe retornara em breve."})
+	})
+
 	// Serve a página inicial e arquivos estáticos do frontend sem depender de caminho absoluto.
 	r.GET("/", func(c *gin.Context) {
 		c.Header("Cache-Control", "no-cache")
-		c.File(filepath.Join(frontendDir, "index.html"))
+		c.File(filepath.Join(config.FrontendDir, "index.html"))
 	})
 
 	r.NoRoute(func(c *gin.Context) {
@@ -125,13 +268,13 @@ func main() {
 		cleanPath := filepath.Clean(strings.TrimPrefix(requestPath, "/"))
 		if cleanPath == "." {
 			c.Header("Cache-Control", "no-cache")
-			c.File(filepath.Join(frontendDir, "index.html"))
+			c.File(filepath.Join(config.FrontendDir, "index.html"))
 			return
 		}
 
-		targetFile := filepath.Join(frontendDir, cleanPath)
+		targetFile := filepath.Join(config.FrontendDir, cleanPath)
 		targetAbs, absErr := filepath.Abs(targetFile)
-		if absErr != nil || (!strings.HasPrefix(targetAbs, frontendDir+string(os.PathSeparator)) && targetAbs != frontendDir) {
+		if absErr != nil || (!strings.HasPrefix(targetAbs, config.FrontendDir+string(os.PathSeparator)) && targetAbs != config.FrontendDir) {
 			c.AbortWithStatus(404)
 			return
 		}
@@ -143,8 +286,8 @@ func main() {
 		}
 
 		c.Header("Cache-Control", "no-cache")
-		c.File(filepath.Join(frontendDir, "index.html"))
+		c.File(filepath.Join(config.FrontendDir, "index.html"))
 	})
 
-	r.Run(":8080")
+	r.Run(":" + config.Port)
 }
