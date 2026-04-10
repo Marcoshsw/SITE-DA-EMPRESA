@@ -7,6 +7,9 @@
     <link rel="icon" type="image/png" href="https://a.imagem.app/GSE2Mr.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -39,6 +42,17 @@
         }
         html {
             scroll-padding-top: 6.5rem;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Montserrat', sans-serif;
         }
         .service-card:hover {
             transform: translateY(-5px);
@@ -173,9 +187,61 @@
                 animation: none;
             }
         }
+        .floating-whatsapp {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.25rem;
+            z-index: 60;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.82rem 1.05rem;
+            border-radius: 9999px;
+            color: #fff;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 0.68rem;
+            background: linear-gradient(135deg, #1fbf5b, #1ea74f);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25), 0 0 0 8px rgba(37, 211, 102, 0.14);
+            transform: translateY(14px) scale(0.96);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+        }
+        .floating-whatsapp:hover {
+            transform: translateY(0) scale(1.03);
+            box-shadow: 0 22px 36px rgba(0, 0, 0, 0.28), 0 0 0 10px rgba(37, 211, 102, 0.2);
+        }
+        .floating-whatsapp.is-visible {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+        .floating-whatsapp i {
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+        @media (max-width: 640px) {
+            .floating-whatsapp {
+                right: 0.9rem;
+                bottom: 0.9rem;
+                width: 3.25rem;
+                height: 3.25rem;
+                justify-content: center;
+                padding: 0;
+                box-shadow: 0 16px 30px rgba(0, 0, 0, 0.24), 0 0 0 7px rgba(37, 211, 102, 0.16);
+            }
+            .floating-whatsapp span {
+                display: none;
+            }
+        }
     </style>
 </head>
-<body class="font-sans bg-white text-gray-900">
+<body class="bg-white text-gray-900">
 
     <!-- Header -->
     <header class="bg-shop-gray-dark text-white sticky top-0 z-50 shadow-lg border-b border-shop-red/20">
@@ -197,7 +263,7 @@
                 <a href="#sobre" class="hover:text-shop-red transition">Sobre</a>
                 <a href="#contato" class="group btn-clean btn-soft btn-rounded px-6 py-2 font-bold tracking-wider text-[10px] uppercase hover:scale-[1.02]">
                     <i class="fas fa-envelope text-[10px]"></i>
-                    <span>Contato</span>
+                    <span>Orçamento Agora</span>
                     <i class="fas fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
                 </a>
             </nav>
@@ -219,10 +285,10 @@
                     </span>
                     <span class="text-[10px] font-bold tracking-[.25em] text-white uppercase">Especialistas em Linha Pesada</span>
                 </div>
-                <h2 class="text-5xl md:text-8xl font-black text-white mb-6 leading-[0.9] italic uppercase">
-                    Potência e <br> <span class="text-shop-red drop-shadow-[0_5px_5px_rgba(210,0,0,0.5)]">Confiança</span>
+                <h2 class="text-5xl md:text-8xl font-black text-white mb-6 leading-[0.92] italic uppercase">
+                    Potência&nbsp;e <br> <span class="text-shop-red drop-shadow-[0_5px_5px_rgba(210,0,0,0.5)]">Confiança</span>
                 </h2>
-                <p class="text-xl text-gray-300 mb-10 max-w-xl leading-relaxed border-l-4 border-shop-red pl-6">
+                <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-xl leading-relaxed border-l-4 border-shop-red pl-6">
                        Referência em mecânica pesada e fornecimento de autopeças, com soluções completas para caminhões, ônibus e veículos diesel.
                 </p>
                 <div class="mb-10 max-w-2xl rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-sm">
@@ -231,14 +297,14 @@
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-5">
-                    <a href="#servicos" class="group btn-clean btn-primary btn-rounded min-w-[220px] px-9 py-5 font-black uppercase tracking-[0.2em] text-xs hover:scale-[1.04] backdrop-blur-md">
+                    <a href="#contato" class="group btn-clean btn-primary btn-rounded min-w-[220px] px-9 py-5 font-black uppercase tracking-[0.15em] text-xs hover:scale-[1.04] backdrop-blur-md">
                         <i class="fas fa-tools text-sm opacity-95"></i>
-                        <span>Ver Serviços</span>
+                        <span>Solicitar Orçamento</span>
                         <i class="fas fa-arrow-right text-[10px] opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 transition-all duration-300"></i>
                     </a>
-                    <a href="https://wa.me/5573991420645" target="_blank" class="group btn-clean btn-secondary btn-rounded min-w-[220px] px-9 py-5 font-black uppercase tracking-[0.2em] text-xs hover:scale-[1.04] backdrop-blur-md">
+                    <a href="https://wa.me/5573991420645" target="_blank" class="group btn-clean btn-secondary btn-rounded min-w-[220px] px-9 py-5 font-black uppercase tracking-[0.15em] text-xs hover:scale-[1.04] backdrop-blur-md">
                         <i class="fab fa-whatsapp text-base text-green-400"></i>
-                        <span>WhatsApp</span>
+                        <span>Falar no WhatsApp</span>
                         <i class="fas fa-external-link-alt text-[10px] opacity-60 group-hover:opacity-100 transition-all duration-300"></i>
                     </a>
                 </div>
@@ -308,7 +374,7 @@
             <div class="mt-8 flex justify-start">
                 <a href="https://wa.me/5573991420645?text=Olá!%20Quero%20marcar%20uma%20visita." target="_blank" class="group btn-clean btn-primary btn-rounded px-8 py-4 font-black uppercase tracking-[0.15em] text-xs hover:scale-[1.03]">
                     <i class="fab fa-whatsapp text-base text-green-300"></i>
-                    <span>Marque uma visita</span>
+                    <span>Agendar Visita Técnica</span>
                     <i class="fas fa-arrow-right text-[10px] opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
                 </a>
             </div>
@@ -531,7 +597,7 @@
                         </div>
                         <button type="submit" class="md:col-span-2 group btn-clean btn-primary btn-rounded w-full py-5 font-black uppercase tracking-[0.2em] text-xs hover:scale-[1.01]">
                             <i class="fas fa-paper-plane text-[10px]"></i>
-                            <span class="submit-text">Enviar Solicitação</span>
+                            <span class="submit-text">Solicitar Orçamento Agora</span>
                             <i class="fas fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300"></i>
                         </button>
                         <p id="contact-feedback" class="md:col-span-2 hidden text-sm font-semibold"></p>
@@ -679,6 +745,18 @@
         </div>
     </footer>
 
+    <a
+        id="floating-whatsapp"
+        href="https://wa.me/5573991420645?text=Olá!%20Quero%20falar%20sobre%20serviços%20da%20oficina."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="floating-whatsapp"
+        aria-label="Falar no WhatsApp"
+    >
+        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+        <span>WhatsApp</span>
+    </a>
+
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
     <script>
         let lenis = null;
@@ -816,6 +894,31 @@
             }
         };
 
+        const initFloatingWhatsapp = () => {
+            const floatingButton = document.getElementById('floating-whatsapp');
+            const heroSection = document.getElementById('inicio');
+            if (!floatingButton || !heroSection) return;
+
+            let ticking = false;
+
+            const updateVisibility = () => {
+                const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+                const shouldShow = window.scrollY > (heroBottom - window.innerHeight * 0.25);
+                floatingButton.classList.toggle('is-visible', shouldShow);
+                ticking = false;
+            };
+
+            const onScroll = () => {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(updateVisibility);
+            };
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onScroll);
+            updateVisibility();
+        };
+
         const initContactForm = () => {
             const form = document.getElementById('contact-form');
             if (!form) return;
@@ -875,7 +978,7 @@
                     setFeedback(error.message || 'Falha no envio. Tente novamente.', true);
                 } finally {
                     if (submitButton) submitButton.disabled = false;
-                    if (submitText) submitText.textContent = 'Enviar Solicitação';
+                    if (submitText) submitText.textContent = 'Solicitar Orçamento Agora';
                 }
             });
         };
@@ -1012,7 +1115,7 @@
                         <p class="text-sm text-gray-500 font-medium leading-relaxed relative z-10">${service.description}</p>
                         <div class="mt-6 border-t border-gray-50 pt-6 opacity-0 group-hover:opacity-100 transition-all">
                             <a href="#contato" class="btn-clean text-shop-red text-[10px] font-black uppercase tracking-widest items-center gap-2 hover:opacity-80">
-                                Saiba Mais <i class="fas fa-chevron-right"></i>
+                                Solicitar orçamento <i class="fas fa-chevron-right"></i>
                             </a>
                         </div>
                     </div>
@@ -1088,6 +1191,7 @@
         animateHeroOnLoad();
         initScrollReveal();
         initContactForm();
+        initFloatingWhatsapp();
     </script>
 </body>
 </html>
