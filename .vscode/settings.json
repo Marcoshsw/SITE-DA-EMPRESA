@@ -2,5 +2,6 @@
     "livePreview.defaultPreviewPath": "/frontend/index.html",
     "git.enableSmartCommit": true,
     "git.postCommitCommand": "sync",
-    "git.confirmSync": false
+    "git.confirmSync": false,
+    "git.ignoreLimitWarning": true
 }

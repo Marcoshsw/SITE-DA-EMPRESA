@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -33,6 +34,8 @@ type appConfig struct {
 	FrontendDir       string
 	GinMode           string
 	AllowWildcardCORS bool
+	ContactLimit      int
+	ContactWindowSecs int
 }
 
 func loadAppConfig() appConfig {
@@ -79,13 +82,90 @@ func loadAppConfig() appConfig {
 		port = "8080"
 	}
 
+	contactLimit := 5
+	if rawLimit := strings.TrimSpace(os.Getenv("CONTACT_RATE_LIMIT")); rawLimit != "" {
+		if parsed, err := strconv.Atoi(rawLimit); err == nil && parsed > 0 {
+			contactLimit = parsed
+		}
+	}
+
+	contactWindowSecs := 60
+	if rawWindow := strings.TrimSpace(os.Getenv("CONTACT_RATE_WINDOW_SECONDS")); rawWindow != "" {
+		if parsed, err := strconv.Atoi(rawWindow); err == nil && parsed > 0 {
+			contactWindowSecs = parsed
+		}
+	}
+
 	return appConfig{
 		Port:              port,
 		CorsOrigins:       origins,
 		FrontendDir:       frontendDir,
 		GinMode:           ginMode,
 		AllowWildcardCORS: allowWildcard,
+		ContactLimit:      contactLimit,
+		ContactWindowSecs: contactWindowSecs,
 	}
+}
+
+type rateBucket struct {
+	count   int
+	resetAt time.Time
+}
+
+type rateLimiter struct {
+	mu      sync.Mutex
+	buckets map[string]*rateBucket
+	limit   int
+	window  time.Duration
+}
+
+func newRateLimiter(limit int, window time.Duration) *rateLimiter {
+	return &rateLimiter{
+		buckets: make(map[string]*rateBucket),
+		limit:   limit,
+		window:  window,
+	}
+}
+
+func (rl *rateLimiter) middleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		clientIP := c.ClientIP()
+		now := time.Now()
+
+		rl.mu.Lock()
+		bucket, exists := rl.buckets[clientIP]
+		if !exists || now.After(bucket.resetAt) {
+			bucket = &rateBucket{
+				count:   0,
+				resetAt: now.Add(rl.window),
+			}
+			rl.buckets[clientIP] = bucket
+		}
+
+		bucket.count++
+		remaining := rl.limit - bucket.count
+		resetAt := bucket.resetAt
+		rl.mu.Unlock()
+
+		c.Header("X-RateLimit-Limit", strconv.Itoa(rl.limit))
+		if remaining < 0 {
+			c.Header("Retry-After", strconv.Itoa(int(time.Until(resetAt).Seconds())+1))
+			c.JSON(429, gin.H{"message": "Muitas solicitacoes. Tente novamente em instantes."})
+			c.Abort()
+			return
+		}
+
+		c.Header("X-RateLimit-Remaining", strconv.Itoa(max(0, remaining)))
+		c.Header("X-RateLimit-Reset", strconv.FormatInt(resetAt.Unix(), 10))
+		c.Next()
+	}
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 func requestLogger() gin.HandlerFunc {
@@ -161,6 +241,7 @@ func main() {
 	r.Use(requestLogger())
 	r.Use(gin.Recovery())
 	r.Use(securityHeaders())
+	contactLimiter := newRateLimiter(config.ContactLimit, time.Duration(config.ContactWindowSecs)*time.Second)
 
 	// Configuração do CORS
 	corsConfig := cors.Config{
@@ -216,7 +297,7 @@ func main() {
 		})
 	})
 
-	r.POST("/api/contact", func(c *gin.Context) {
+	r.POST("/api/contact", contactLimiter.middleware(), func(c *gin.Context) {
 		var req ContactRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
 			c.JSON(400, gin.H{"message": "Dados invalidos para envio."})

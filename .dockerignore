@@ -1,0 +1,9 @@
+.git
+.vscode
+**/*.exe
+backend/server.exe~
+backend/*.exe
+backend/site-grupo-mano
+backend/site-grupo-mano.exe
+**/node_modules
+**/.DS_Store
