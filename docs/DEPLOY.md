@@ -5,8 +5,8 @@
 - Endpoint de contato em `POST /api/contact`
 - Configuração por ambiente via `PORT`, `GIN_MODE`, `FRONTEND_DIR` e `CORS_ORIGINS`
 - Healthcheck em `GET /healthz`
-- Deploy em container com `Dockerfile`, `docker-compose.yml` e `docker-compose.prod.yml`
-- HTTPS com Caddy via `Caddyfile`
+- Deploy em container com [infra/Dockerfile](../infra/Dockerfile), [infra/docker-compose.yml](../infra/docker-compose.yml) e [infra/docker-compose.prod.yml](../infra/docker-compose.prod.yml)
+- HTTPS com Caddy via [infra/Caddyfile](../infra/Caddyfile)
 
 ## 2. Variáveis de ambiente
 ### Desenvolvimento
@@ -24,7 +24,7 @@
 
 ## 3. Subida local com container
 ```bash
-docker-compose up --build
+docker compose -f infra/docker-compose.yml up --build
 ```
 
 Acesso local:
@@ -37,7 +37,7 @@ Acesso local:
 3. Subir os serviços:
 
 ```bash
-docker-compose -f docker-compose.prod.yml up -d --build
+docker compose -f infra/docker-compose.prod.yml up -d --build
 ```
 
 ## 5. O que cada camada faz
@@ -55,17 +55,17 @@ docker-compose -f docker-compose.prod.yml up -d --build
 - Controla animações, scroll suave, galeria, carregamento dos serviços e logo animada
 - Faz o `fetch` para `GET /api/services`
 
-### `Dockerfile`
+### `infra/Dockerfile`
 - Compila o backend Go e monta a imagem final do site
 
-### `docker-compose.yml`
+### `infra/docker-compose.yml`
 - Sobe o site em container local com a mesma configuração de produção base
 
-### `docker-compose.prod.yml`
+### `infra/docker-compose.prod.yml`
 - Sobe o app Go e o Caddy juntos
 - Publica HTTPS nas portas 80 e 443
 
-### `Caddyfile`
+### `infra/Caddyfile`
 - Faz proxy reverso para o app Go
 - Ativa HTTPS automático
 - Adiciona headers de segurança na borda

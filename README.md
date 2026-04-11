@@ -6,10 +6,8 @@ Site institucional do Grupo Mano com backend em Go e frontend em HTML/CSS/JS.
 - `backend/`: servidor Go, API, contato, healthcheck e entrega do frontend
 - `frontend/`: interface visual do site
 - `frontend/assets/js/app.js`: animações e comportamento da página
-- `Dockerfile`: build da aplicação em container
-- `docker-compose.yml`: execução local com container
-- `docker-compose.prod.yml`: execução em produção com Caddy
-- `Caddyfile`: proxy reverso e HTTPS
+- `infra/`: build do container, compose e Caddy
+- `docs/DEPLOY.md`: guia de deploy
 
 ## Como rodar localmente
 ```bash
@@ -35,4 +33,4 @@ Acesse:
 - `POST /api/contact`
 
 ## Deploy
-Veja os detalhes em [DEPLOY.md](DEPLOY.md).
+Veja os detalhes em [docs/DEPLOY.md](docs/DEPLOY.md).

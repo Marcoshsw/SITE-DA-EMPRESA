@@ -1,8 +1,8 @@
 services:
   site-grupo-mano:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: infra/Dockerfile
     ports:
       - "8080:8080"
     environment:
