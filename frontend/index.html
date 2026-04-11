@@ -30,6 +30,11 @@
         }
     </script>
     <style>
+        :root {
+            --ui-radius-card: 1rem;
+            --ui-shadow-card-soft: 0 12px 28px rgba(17, 24, 39, 0.08);
+            --ui-shadow-card-hover: 0 22px 40px rgba(17, 24, 39, 0.14);
+        }
         html.lenis,
         html.lenis body {
             height: auto;
@@ -42,6 +47,7 @@
         }
         html {
             scroll-padding-top: 6.5rem;
+            scroll-behavior: smooth;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -54,9 +60,108 @@
         h6 {
             font-family: 'Montserrat', sans-serif;
         }
+        .service-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            border-radius: var(--ui-radius-card);
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            background:
+                radial-gradient(160px 120px at 100% 0%, rgba(210, 0, 0, 0.08), transparent 70%),
+                linear-gradient(180deg, #ffffff 0%, #fefefe 100%);
+            box-shadow: var(--ui-shadow-card-soft);
+            transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease;
+        }
         .service-card:hover {
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
+            transform: translateY(-6px);
+            box-shadow: var(--ui-shadow-card-hover);
+            border-color: rgba(210, 0, 0, 0.22);
+        }
+        .service-card__icon {
+            width: 3.2rem;
+            height: 3.2rem;
+            border-radius: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #D20000;
+            background: rgba(210, 0, 0, 0.1);
+            border: 1px solid rgba(210, 0, 0, 0.18);
+            font-size: 1.25rem;
+        }
+        .service-card__badge {
+            font-size: 0.62rem;
+            font-weight: 900;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.22);
+            border-radius: 9999px;
+            padding: 0.3rem 0.55rem;
+            line-height: 1;
+        }
+        .service-card__title {
+            font-size: 1rem;
+            font-weight: 900;
+            color: #111827;
+            line-height: 1.25;
+            text-transform: uppercase;
+            letter-spacing: -0.015em;
+            margin-top: 1rem;
+        }
+        .service-card__description {
+            margin-top: 0.65rem;
+            color: #4b5563;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        .service-card__footer {
+            margin-top: auto;
+            padding-top: 1.1rem;
+            border-top: 1px solid rgba(17, 24, 39, 0.08);
+        }
+        .service-card__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: #D20000;
+            font-size: 0.63rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            transition: gap 220ms ease, opacity 220ms ease;
+        }
+        .service-card__link:hover {
+            gap: 0.65rem;
+            opacity: 0.82;
+        }
+        .service-card--enter {
+            opacity: 0;
+            transform: translateY(14px) scale(0.985);
+            filter: blur(2.8px);
+            will-change: transform, opacity, filter;
+        }
+        .service-card--visible {
+            animation: serviceCardIn 560ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes serviceCardIn {
+            0% {
+                opacity: 0;
+                transform: translateY(14px) scale(0.985);
+                filter: blur(2.8px);
+            }
+            65% {
+                opacity: 1;
+                transform: translateY(-2px) scale(1.003);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
         }
         .btn-clean {
             display: inline-flex;
@@ -66,11 +171,41 @@
             text-decoration: none;
             line-height: 1;
             white-space: nowrap;
-            transition: transform 300ms ease, box-shadow 300ms ease, background-color 300ms ease, border-color 300ms ease, opacity 300ms ease;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 240ms ease, box-shadow 260ms ease, background-color 260ms ease, border-color 260ms ease, opacity 260ms ease;
+        }
+        .btn-clean::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(120deg, transparent 18%, rgba(255, 255, 255, 0.15) 48%, transparent 78%);
+            transform: translateX(-130%);
+            transition: transform 520ms ease;
+            pointer-events: none;
+        }
+        .btn-clean:hover {
+            transform: translateY(-2px) scale(1.015);
+        }
+        .btn-clean:hover::after {
+            transform: translateX(130%);
+        }
+        .btn-clean:active {
+            transform: translateY(0) scale(0.995);
+        }
+        .btn-clean:focus-visible {
+            outline: 2px solid rgba(210, 0, 0, 0.42);
+            outline-offset: 2px;
         }
         .btn-clean i {
             line-height: 1;
             flex-shrink: 0;
+            transition: transform 220ms ease;
+        }
+        .btn-clean:hover i:last-child {
+            transform: translateX(2px);
         }
         .btn-primary {
             color: #fff;
@@ -110,6 +245,19 @@
         }
         .animate-fadeIn {
             animation: fadeIn 0.4s ease-out forwards;
+        }
+        .scroll-fade {
+            opacity: 0;
+            transform: translate3d(0, 16px, 0) scale(0.995);
+            filter: blur(2.5px);
+            transition: opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 600ms ease;
+            transition-delay: var(--reveal-delay, 0ms);
+            will-change: opacity, transform, filter;
+        }
+        .scroll-fade.is-visible {
+            opacity: 1;
+            transform: translate3d(0, 0, 0) scale(1);
+            filter: blur(0);
         }
         .gallery-item-extra {
             opacity: 0;
@@ -171,9 +319,10 @@
             height: 8.5rem;
             flex: 0 0 auto;
             overflow: visible;
+            border-radius: var(--ui-radius-card);
             border: 1px solid rgba(26, 26, 26, 0.07);
             background: linear-gradient(165deg, rgba(255,255,255,0.95), rgba(248,248,248,0.78));
-            box-shadow: 0 16px 34px rgba(26, 26, 26, 0.08), inset 0 1px 0 rgba(255,255,255,0.65);
+            box-shadow: var(--ui-shadow-card-soft), inset 0 1px 0 rgba(255,255,255,0.65);
             transform: translateY(0);
             transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, background-color 220ms ease;
             will-change: transform;
@@ -192,9 +341,20 @@
         }
         .partner-tile:hover {
             transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 26px 54px rgba(26, 26, 26, 0.16), 0 0 0 1px rgba(210, 0, 0, 0.1);
+            box-shadow: var(--ui-shadow-card-hover), 0 0 0 1px rgba(210, 0, 0, 0.1);
             border-color: rgba(210, 0, 0, 0.3);
             background: linear-gradient(165deg, rgba(255,255,255,0.98), rgba(247,247,247,0.9));
+        }
+        #galeria .gallery-item {
+            border-radius: var(--ui-radius-card);
+            box-shadow: 0 8px 18px rgba(17, 24, 39, 0.08);
+            border: 1px solid rgba(17, 24, 39, 0.06);
+            transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+        }
+        #galeria .gallery-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 30px rgba(17, 24, 39, 0.12);
+            border-color: rgba(210, 0, 0, 0.18);
         }
         .partner-tile:hover::before {
             opacity: 1;
@@ -334,6 +494,20 @@
         @media (prefers-reduced-motion: reduce) {
             .partners-track {
                 animation: none;
+            }
+            .service-card--enter,
+            .service-card--visible {
+                opacity: 1;
+                transform: none;
+                filter: none;
+                animation: none;
+            }
+            .scroll-fade,
+            .scroll-fade.is-visible {
+                opacity: 1;
+                transform: none;
+                filter: none;
+                transition: none;
             }
         }
         @media (max-width: 640px) {
@@ -721,7 +895,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="services-container">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch" id="services-container">
                 <!-- Services will be injected here by JS -->
             </div>
 
@@ -860,9 +1034,23 @@
                 <div>
                        <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">Sobre nós</span>
                        <h3 class="text-4xl font-black mb-6 italic uppercase tracking-tighter">Uma oficina feita para <span class="text-shop-red underline decoration-4 underline-offset-8">resolver</span></h3>
-                       <p class="text-gray-300 leading-relaxed mb-10 max-w-2xl">
-                           Com uma trajetória sólida no setor automotivo, a oficina nasceu com o objetivo de oferecer um serviço confiável e especializado em veículos pesados. Evoluímos para um centro completo de mecânica e mecatrônica, acompanhando as novas tecnologias do mercado e investindo continuamente em capacitação e equipamentos modernos.
-                       </p>
+                       <div class="mb-10 max-w-2xl space-y-4 text-gray-300 leading-relaxed">
+                           <p>
+                               Com trajetória sólida no setor, o Grupo Mano nasceu para entregar <strong class="text-white">atendimento confiável</strong> em veículos pesados.
+                           </p>
+                           <p>
+                               Hoje somos um centro completo de <strong class="text-white">mecânica pesada e mecatrônica</strong>, com foco em diagnóstico assertivo e execução técnica.
+                           </p>
+                           <p>
+                               Evoluímos com o mercado, investindo em <strong class="text-white">tecnologia</strong>, <strong class="text-white">capacitação contínua</strong> e <strong class="text-white">equipamentos modernos</strong>.
+                           </p>
+                       </div>
+                    <div class="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold uppercase tracking-wide">
+                        <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Foco:</strong> linha pesada</span></div>
+                        <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Método:</strong> diagnóstico preciso</span></div>
+                        <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Equipe:</strong> especialização contínua</span></div>
+                        <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Meta:</strong> reduzir paradas</span></div>
+                    </div>
                     <div class="space-y-8">
                         <div class="flex gap-6">
                             <div class="text-shop-red text-3xl shrink-0"><i class="fas fa-microchip"></i></div>
@@ -1187,37 +1375,63 @@
             }
         });
 
-        const initScrollReveal = () => {
-            const revealTargets = document.querySelectorAll('[data-scroll-anchor]');
+        let scrollRevealObserver = null;
+
+        const registerRevealTargets = (root = document) => {
+            const revealSelectors = [
+                '[data-scroll-anchor]',
+                '#galeria [data-gallery] .gallery-item',
+                '#sobre .space-y-8 > div',
+                '#sobre .mt-10.rounded-2xl',
+                '#contato .bg-shop-red > .space-y-8 > div',
+                '#contato .lg\\:col-span-2 .rounded-2xl',
+                '.partners-marquee',
+                'footer > .max-w-7xl'
+            ];
+
+            const revealTargets = root.querySelectorAll(revealSelectors.join(','));
             if (!revealTargets.length) return;
 
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
             revealTargets.forEach((target, index) => {
-                target.style.opacity = '0';
-                target.style.transform = 'translateY(10px)';
-                target.dataset.revealDelay = `${index * 40}`;
+                if (target.dataset.revealBound === 'true') return;
+
+                target.dataset.revealBound = 'true';
+
+                if (prefersReducedMotion) {
+                    target.classList.add('is-visible');
+                    return;
+                }
+
+                const stagger = (index % 6) * 55;
+                target.style.setProperty('--reveal-delay', `${stagger}ms`);
+                target.classList.add('scroll-fade');
+
+                if (scrollRevealObserver) {
+                    scrollRevealObserver.observe(target);
+                }
             });
+        };
 
-            const reveal = (target) => {
-                if (target.dataset.revealed === 'true') return;
+        const initScrollReveal = () => {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                registerRevealTargets(document);
+                return;
+            }
 
-                target.dataset.revealed = 'true';
-                target.style.animationDelay = `${target.dataset.revealDelay || '0'}ms`;
-                target.classList.add('animate-fadeIn');
-                target.style.transform = '';
-            };
-
-            const observer = new IntersectionObserver((entries) => {
+            scrollRevealObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
-                    reveal(entry.target);
+                    entry.target.classList.add('is-visible');
                     observer.unobserve(entry.target);
                 });
             }, {
                 threshold: 0.12,
-                rootMargin: '0px 0px -8% 0px'
+                rootMargin: '0px 0px -10% 0px'
             });
 
-            revealTargets.forEach((target) => observer.observe(target));
+            registerRevealTargets(document);
         };
 
         const animateHeroOnLoad = () => {
@@ -1637,30 +1851,33 @@
             .then(res => res.json())
             .then(services => {
                 const container = document.getElementById('services-container');
-                container.innerHTML = services.map(service => `
-                    <div class="service-card bg-white p-8 border border-gray-100 shadow-sm hover:shadow-2xl transition-all group relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-16 h-16 bg-shop-red/5 -mr-8 -mt-8 rounded-full group-hover:bg-shop-red/10 transition-all"></div>
-                        <div class="text-shop-red text-3xl mb-6 relative z-10">
-                            <i class="fas ${getIconClass(service.name)}"></i>
+                container.innerHTML = services.map((service, index) => `
+                    <article class="service-card service-card--enter p-7 md:p-8">
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="service-card__icon" aria-hidden="true">
+                                <i class="fas ${getIconClass(service.name)}"></i>
+                            </span>
+                            <span class="service-card__badge">${String(index + 1).padStart(2, '0')}</span>
                         </div>
-                        <h4 class="text-lg font-black text-shop-gray-dark uppercase italic tracking-tighter mb-3 relative z-10">${service.name}</h4>
-                        <p class="text-sm text-gray-500 font-medium leading-relaxed relative z-10">${service.description}</p>
-                        <div class="mt-6 border-t border-gray-50 pt-6 opacity-0 group-hover:opacity-100 transition-all">
-                            <a href="#contato" class="btn-clean text-shop-red text-[10px] font-black uppercase tracking-widest items-center gap-2 hover:opacity-80">
-                                Solicitar orçamento <i class="fas fa-chevron-right"></i>
+                        <h4 class="service-card__title">${service.name}</h4>
+                        <p class="service-card__description">${service.description}</p>
+                        <div class="service-card__footer">
+                            <a href="#contato" class="service-card__link">
+                                Solicitar orçamento <i class="fas fa-chevron-right" aria-hidden="true"></i>
                             </a>
                         </div>
-                    </div>
+                    </article>
                 `).join('');
 
                 const cards = container.querySelectorAll('.service-card');
                 cards.forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.animationDelay = `${index * 45}ms`;
-                    requestAnimationFrame(() => {
-                        card.classList.add('animate-fadeIn');
-                    });
+                    const staggerDelay = index * 70;
+                    window.setTimeout(() => {
+                        card.classList.add('service-card--visible');
+                    }, staggerDelay);
                 });
+
+                registerRevealTargets(container);
             })
             .catch(err => console.error('Erro:', err));
 
@@ -1752,7 +1969,111 @@
             setTimeout(closeLoader, 2600);
         };
 
+        const initKeywordHighlights = () => {
+            const keywords = [
+                'mecanica pesada',
+                'mecânica pesada',
+                'mecanica',
+                'mecânica',
+                'mecatronica',
+                'mecatrônica',
+                'autopecas',
+                'autopeças',
+                'pronta entrega',
+                'diagnostico',
+                'diagnóstico',
+                'diagnosticos',
+                'diagnósticos',
+                'linha pesada',
+                'caminhoes',
+                'caminhões',
+                'onibus',
+                'ônibus',
+                'diesel',
+                'frota',
+                'orcamento',
+                'orçamento',
+                'whatsapp',
+                'setor automotivo',
+                'veiculos pesados',
+                'veículos pesados',
+                'tecnologia',
+                'tecnologias',
+                'equipamentos modernos',
+                'capacitacao',
+                'capacitação',
+                'automacao',
+                'automação',
+                'modulos',
+                'módulos',
+                'equipe especializada',
+                'arla',
+                'cambio automatico',
+                'câmbio automático',
+                'injecao diesel',
+                'injeção diesel',
+                'agilidade',
+                'garantia',
+                'entrega rapida',
+                'entrega rápida',
+                'compromisso'
+            ];
+
+            const escapedKeywords = [...new Set(keywords)]
+                .sort((a, b) => b.length - a.length)
+                .map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+
+            if (!escapedKeywords.length) return;
+
+            const keywordPattern = new RegExp(
+                `(^|[^\\p{L}\\p{N}])(${escapedKeywords.join('|')})(?=[^\\p{L}\\p{N}]|$)`,
+                'giu'
+            );
+
+            const skipTags = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME', 'TEXTAREA', 'CODE', 'PRE']);
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            const nodesToProcess = [];
+
+            let textNode = walker.nextNode();
+            while (textNode) {
+                const parent = textNode.parentElement;
+
+                if (
+                    parent &&
+                    !skipTags.has(parent.tagName) &&
+                    !parent.closest('strong, b, script, style, noscript, iframe, textarea, code, pre, .no-keyword-bold') &&
+                    textNode.nodeValue &&
+                    textNode.nodeValue.trim().length
+                ) {
+                    keywordPattern.lastIndex = 0;
+                    if (keywordPattern.test(textNode.nodeValue)) {
+                        nodesToProcess.push(textNode);
+                    }
+                }
+
+                textNode = walker.nextNode();
+            }
+
+            nodesToProcess.forEach((node) => {
+                const originalText = node.nodeValue;
+                if (!originalText) return;
+
+                keywordPattern.lastIndex = 0;
+                const highlightedText = originalText.replace(
+                    keywordPattern,
+                    (fullMatch, prefix, term) => `${prefix}<strong>${term}</strong>`
+                );
+
+                if (highlightedText === originalText) return;
+
+                const wrapper = document.createElement('span');
+                wrapper.innerHTML = highlightedText;
+                node.replaceWith(...wrapper.childNodes);
+            });
+        };
+
         initPageLoader();
+        initKeywordHighlights();
 
         initLenis();
         animateHeroOnLoad();
