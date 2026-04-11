@@ -661,122 +661,6 @@
                 display: none;
             }
         }
-        body.page-is-loading {
-            overflow: hidden;
-        }
-        .loader-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 120;
-            display: grid;
-            place-items: center;
-            background:
-                radial-gradient(1200px 400px at 15% -10%, rgba(210, 0, 0, 0.24), transparent 58%),
-                radial-gradient(900px 320px at 95% 120%, rgba(255, 255, 255, 0.08), transparent 60%),
-                linear-gradient(145deg, #111111, #1a1a1a 48%, #0f0f0f);
-            opacity: 1;
-            visibility: visible;
-            transition: opacity 420ms ease, visibility 420ms ease;
-        }
-        .loader-screen.is-hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        .loader-panel {
-            width: min(430px, 88vw);
-            border-radius: 1.1rem;
-            border: 1px solid rgba(255, 255, 255, 0.09);
-            background: linear-gradient(170deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-            box-shadow: 0 28px 60px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.11);
-            backdrop-filter: blur(4px);
-            padding: 1.4rem 1.25rem 1.2rem;
-        }
-        .loader-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.15rem;
-        }
-        .loader-logo {
-            width: 3rem;
-            height: 3rem;
-            object-fit: contain;
-            filter: drop-shadow(0 8px 18px rgba(210, 0, 0, 0.28));
-        }
-        .loader-name {
-            color: #fff;
-            font-size: 1.1rem;
-            font-weight: 900;
-            letter-spacing: 0.06em;
-            font-style: italic;
-            text-transform: uppercase;
-            line-height: 1;
-        }
-        .loader-name span {
-            color: #D20000;
-        }
-        .loader-tagline {
-            margin-top: 0.35rem;
-            color: rgba(255, 255, 255, 0.72);
-            font-size: 0.62rem;
-            font-weight: 700;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-        }
-        .loader-bar {
-            position: relative;
-            width: 100%;
-            height: 0.38rem;
-            border-radius: 9999px;
-            overflow: hidden;
-            background: rgba(255, 255, 255, 0.11);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .loader-bar::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: linear-gradient(90deg, rgba(210, 0, 0, 0.8), #D20000, rgba(255, 255, 255, 0.92));
-            transform-origin: left center;
-            animation: loaderProgress 1.3s ease-in-out infinite;
-        }
-        .loader-caption {
-            margin-top: 0.72rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.7rem;
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 0.62rem;
-            font-weight: 800;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-        }
-        .loader-caption i {
-            color: #D20000;
-            animation: loaderSpin 1.1s linear infinite;
-        }
-        @keyframes loaderProgress {
-            0% {
-                transform: scaleX(0.16);
-                opacity: 0.78;
-            }
-            50% {
-                transform: scaleX(0.74);
-                opacity: 1;
-            }
-            100% {
-                transform: scaleX(0.96);
-                opacity: 0.9;
-            }
-        }
-        @keyframes loaderSpin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
         .legal-modal {
             position: fixed;
             inset: 0;
@@ -822,26 +706,15 @@
         .legal-tab-panel.is-active {
             display: block;
         }
+        .legal-scroll {
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+        }
     </style>
 </head>
 <body class="bg-white text-gray-900">
-
-    <div id="page-loader" class="loader-screen" role="status" aria-live="polite" aria-label="Carregando site Grupo Mano">
-        <div class="loader-panel">
-            <div class="loader-brand">
-                <img src="https://a.imagem.app/GSE2Mr.png" alt="Logo Grupo Mano" class="loader-logo">
-                <div>
-                    <p class="loader-name">Grupo <span>Mano</span></p>
-                    <p class="loader-tagline">Preparando atendimento pesado</p>
-                </div>
-            </div>
-            <div class="loader-bar" aria-hidden="true"></div>
-            <div class="loader-caption">
-                <span>Inicializando oficina digital</span>
-                <i class="fas fa-gear" aria-hidden="true"></i>
-            </div>
-        </div>
-    </div>
 
     <!-- Header -->
     <header class="bg-shop-gray-dark text-white sticky top-0 z-50 shadow-lg border-b border-shop-red/20">
@@ -1279,8 +1152,8 @@
         </div>
     </footer>
 
-    <section id="legal-modal" class="legal-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="legal-modal-title">
-        <div class="legal-modal-panel text-white">
+    <section id="legal-modal" class="legal-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="legal-modal-title" data-lenis-prevent>
+        <div class="legal-modal-panel text-white" data-lenis-prevent>
             <div class="px-5 md:px-7 py-5 border-b border-white/10 flex items-start justify-between gap-4">
                 <div>
                     <p class="text-[10px] uppercase tracking-[0.2em] font-black text-shop-red">Informações legais</p>
@@ -1292,6 +1165,14 @@
             </div>
 
             <div class="px-5 md:px-7 py-4 border-b border-white/10 flex flex-wrap gap-2" role="tablist" aria-label="Seções legais">
+                <div class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 mb-1">
+                    <p class="text-[10px] uppercase tracking-[0.2em] font-black text-shop-red mb-2">Identificação da empresa</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-gray-200">
+                        <p><strong class="text-white">Razão social:</strong> AUTO PECAS MANO E OFICINA LTDA</p>
+                        <p><strong class="text-white">CNPJ:</strong> 01.922.166/0001-28</p>
+                        <p class="md:col-span-2"><strong class="text-white">Endereço:</strong> BR 116, km 635,8, Entroncamento Jaguaquara - BA, 45345-000</p>
+                    </div>
+                </div>
                 <button
                     id="tab-privacy"
                     type="button"
@@ -1316,33 +1197,37 @@
                 </button>
             </div>
 
-            <div class="px-5 md:px-7 py-5 md:py-6 max-h-[58vh] overflow-y-auto">
+            <div class="legal-scroll px-5 md:px-7 py-5 md:py-6 max-h-[58vh]" data-lenis-prevent>
                 <div id="panel-privacy" class="legal-tab-panel is-active" role="tabpanel" aria-labelledby="tab-privacy">
                     <p class="text-gray-200 leading-relaxed">
-                        Esta política explica como o Grupo Mano coleta e utiliza dados pessoais de clientes e visitantes, em conformidade com a LGPD (Lei nº 13.709/2018).
+                        Esta Política de Privacidade descreve como o Grupo Mano trata dados pessoais de clientes, visitantes e contatos comerciais, em conformidade com a LGPD (Lei nº 13.709/2018).
                     </p>
                     <div class="mt-5 space-y-4 text-sm text-gray-300 leading-relaxed">
-                        <p><strong class="text-white">1. Dados coletados:</strong> nome, telefone, e-mail, dados do veículo e informações fornecidas no atendimento presencial, WhatsApp e formulário do site.</p>
-                        <p><strong class="text-white">2. Finalidade:</strong> elaborar orçamentos, agendar serviços, responder solicitações e manter contato sobre o atendimento realizado.</p>
-                        <p><strong class="text-white">3. Compartilhamento:</strong> os dados não são comercializados. O compartilhamento ocorre apenas quando necessário para execução do serviço, obrigação legal ou parceiros técnicos autorizados.</p>
-                        <p><strong class="text-white">4. Armazenamento e segurança:</strong> adotamos medidas de segurança para proteger os dados contra acesso não autorizado, perda ou uso indevido.</p>
-                        <p><strong class="text-white">5. Direitos do titular:</strong> você pode solicitar acesso, correção, atualização ou exclusão de dados pessoais, conforme previsto em lei.</p>
-                        <p><strong class="text-white">6. Contato:</strong> para assuntos de privacidade, entre em contato pelo e-mail contato@grupomano.com.br ou WhatsApp (73) 99142-0645.</p>
-                        <p class="text-xs text-gray-400 pt-2 border-t border-white/10">Ultima atualizacao: 11/04/2026.</p>
+                        <p><strong class="text-white">1. Dados coletados:</strong> nome, telefone, e-mail, dados do veículo, histórico de atendimento e informações enviadas pelo formulário do site, WhatsApp, telefone ou atendimento presencial.</p>
+                        <p><strong class="text-white">2. Finalidades do tratamento:</strong> atendimento de solicitações, emissão de orçamento, agendamento de serviços, execução de reparos, contato pós-atendimento e cumprimento de obrigações legais e regulatórias.</p>
+                        <p><strong class="text-white">3. Bases legais:</strong> execução de contrato e procedimentos preliminares, cumprimento de obrigação legal, exercício regular de direitos e legítimo interesse para comunicação de atendimento e relacionamento comercial.</p>
+                        <p><strong class="text-white">4. Compartilhamento de dados:</strong> os dados não são vendidos. O compartilhamento pode ocorrer com parceiros técnicos, fornecedores e plataformas de comunicação quando necessário para prestação do serviço, sempre com limitação ao mínimo necessário.</p>
+                        <p><strong class="text-white">5. Retenção:</strong> os dados são armazenados pelo período necessário para cumprir as finalidades informadas, podendo ser mantidos por até 5 anos após o último atendimento, ou por prazo superior quando exigido por lei.</p>
+                        <p><strong class="text-white">6. Segurança:</strong> adotamos medidas administrativas e técnicas para reduzir riscos de acesso não autorizado, perda, alteração ou uso indevido das informações.</p>
+                        <p><strong class="text-white">7. Direitos do titular:</strong> você pode solicitar confirmação de tratamento, acesso, correção, anonimização, portabilidade, oposição e eliminação de dados, quando aplicável.</p>
+                        <p><strong class="text-white">8. Canal de privacidade:</strong> para solicitações relacionadas à LGPD, utilize contato@grupomano.com.br ou WhatsApp (73) 99142-0645.</p>
+                        <p class="text-xs text-gray-400 pt-2 border-t border-white/10">Última atualização: 11/04/2026.</p>
                     </div>
                 </div>
 
                 <div id="panel-terms" class="legal-tab-panel" role="tabpanel" aria-labelledby="tab-terms">
                     <p class="text-gray-200 leading-relaxed">
-                        Ao utilizar este site e os canais do Grupo Mano, você concorda com os termos abaixo para uso de conteúdo, solicitações e atendimento.
+                        Estes Termos de Uso regulam o acesso ao site e aos canais digitais do Grupo Mano. Ao navegar e utilizar os recursos disponíveis, você concorda com as condições abaixo.
                     </p>
                     <div class="mt-5 space-y-4 text-sm text-gray-300 leading-relaxed">
-                        <p><strong class="text-white">1. Informações do site:</strong> os conteúdos têm caráter informativo e podem ser atualizados sem aviso prévio.</p>
-                        <p><strong class="text-white">2. Orçamentos e prazos:</strong> valores e prazos dependem de análise técnica do veículo e disponibilidade de peças.</p>
-                        <p><strong class="text-white">3. Responsabilidades:</strong> o cliente deve fornecer informações corretas sobre o veículo para um diagnóstico adequado.</p>
-                        <p><strong class="text-white">4. Propriedade intelectual:</strong> marcas, imagens e textos do site pertencem ao Grupo Mano ou aos seus respectivos titulares.</p>
-                        <p><strong class="text-white">5. Links externos:</strong> não nos responsabilizamos por políticas ou conteúdos de sites de terceiros, como plataformas de mapas e redes sociais.</p>
-                        <p><strong class="text-white">6. Atendimento:</strong> o uso de WhatsApp, telefone e formulário está sujeito a disponibilidade da equipe e horário comercial.</p>
+                        <p><strong class="text-white">1. Conteúdo informativo:</strong> informações, descrições técnicas e imagens são apresentadas para fins institucionais e podem ser atualizadas sem aviso prévio.</p>
+                        <p><strong class="text-white">2. Solicitações e orçamento:</strong> valores, prazo de entrega e escopo dos serviços dependem de avaliação técnica do veículo e disponibilidade de peças no momento da análise.</p>
+                        <p><strong class="text-white">3. Responsabilidade do cliente:</strong> o usuário deve fornecer dados corretos e completos sobre o veículo para permitir diagnóstico e atendimento adequados.</p>
+                        <p><strong class="text-white">4. Propriedade intelectual:</strong> marca, identidade visual, textos e elementos gráficos do site pertencem ao Grupo Mano ou a seus licenciadores, sendo vedada reprodução sem autorização.</p>
+                        <p><strong class="text-white">5. Links de terceiros:</strong> o site pode conter links para plataformas externas (ex.: mapas e redes sociais). O Grupo Mano não se responsabiliza por conteúdo, práticas e políticas desses ambientes.</p>
+                        <p><strong class="text-white">6. Disponibilidade dos canais:</strong> atendimento por WhatsApp, telefone e formulário está sujeito ao horário comercial, fila de demandas e disponibilidade operacional.</p>
+                        <p><strong class="text-white">7. Limitação de responsabilidade:</strong> eventuais indisponibilidades temporárias do site, falhas de internet ou serviços de terceiros podem ocorrer sem caracterizar garantia de continuidade ininterrupta.</p>
+                        <p><strong class="text-white">8. Alterações destes termos:</strong> o Grupo Mano poderá revisar estes termos a qualquer momento, com vigência a partir da publicação desta página.</p>
                         <p class="text-xs text-gray-400 pt-2 border-t border-white/10">Última atualização: 11/04/2026.</p>
                     </div>
                 </div>
@@ -1377,6 +1262,7 @@
                 touchMultiplier: 1,
                 smoothWheel: true,
                 syncTouch: false,
+                prevent: (node) => Boolean(node?.closest?.('[data-lenis-prevent]')),
             });
 
             const raf = (time) => {
@@ -1516,6 +1402,42 @@
             });
 
             registerRevealTargets(document);
+
+            // Fallback: garante que os ultimos blocos aparecam ao atingir o fim da pagina.
+            let revealTicking = false;
+            const revealRemainingTargets = () => {
+                const pendingTargets = document.querySelectorAll('.scroll-fade:not(.is-visible)');
+                if (!pendingTargets.length) {
+                    revealTicking = false;
+                    return;
+                }
+
+                const pageBottomReached = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 2);
+                pendingTargets.forEach((target) => {
+                    const rect = target.getBoundingClientRect();
+                    const nearViewport = rect.top <= window.innerHeight * 0.98;
+
+                    if (!nearViewport && !pageBottomReached) return;
+
+                    target.classList.add('is-visible');
+                    if (scrollRevealObserver) {
+                        scrollRevealObserver.unobserve(target);
+                    }
+                });
+
+                revealTicking = false;
+            };
+
+            const scheduleRevealFallback = () => {
+                if (revealTicking) return;
+                revealTicking = true;
+                requestAnimationFrame(revealRemainingTargets);
+            };
+
+            window.addEventListener('scroll', scheduleRevealFallback, { passive: true });
+            window.addEventListener('resize', scheduleRevealFallback);
+            window.addEventListener('load', scheduleRevealFallback, { once: true });
+            scheduleRevealFallback();
         };
 
         const animateHeroOnLoad = () => {
@@ -1673,6 +1595,7 @@
             const modal = document.getElementById('legal-modal');
             if (!modal) return;
 
+            const scrollArea = modal.querySelector('.legal-scroll');
             const openButtons = document.querySelectorAll('[data-legal-open]');
             const closeButtons = modal.querySelectorAll('[data-legal-close]');
             const tabButtons = modal.querySelectorAll('[data-legal-tab]');
@@ -1694,13 +1617,27 @@
                 modal.classList.add('is-open');
                 modal.setAttribute('aria-hidden', 'false');
                 document.body.classList.add('overflow-hidden');
+                if (lenis) {
+                    lenis.stop();
+                }
             };
 
             const closeModal = () => {
                 modal.classList.remove('is-open');
                 modal.setAttribute('aria-hidden', 'true');
                 document.body.classList.remove('overflow-hidden');
+                if (lenis) {
+                    lenis.start();
+                }
             };
+
+            if (scrollArea) {
+                ['wheel', 'touchmove'].forEach((eventName) => {
+                    scrollArea.addEventListener(eventName, (event) => {
+                        event.stopPropagation();
+                    }, { passive: true });
+                });
+            }
 
             openButtons.forEach((button) => {
                 button.addEventListener('click', () => {
@@ -2028,34 +1965,6 @@
             });
         };
 
-        const initPageLoader = () => {
-            const loader = document.getElementById('page-loader');
-            if (!loader) return;
-
-            document.body.classList.add('page-is-loading');
-            let closed = false;
-
-            const closeLoader = () => {
-                if (closed) return;
-                closed = true;
-
-                loader.classList.add('is-hidden');
-                document.body.classList.remove('page-is-loading');
-
-                setTimeout(() => {
-                    loader.remove();
-                }, 460);
-            };
-
-            window.addEventListener('load', () => {
-                requestAnimationFrame(() => {
-                    setTimeout(closeLoader, 220);
-                });
-            }, { once: true });
-
-            setTimeout(closeLoader, 2600);
-        };
-
         const initKeywordHighlights = () => {
             const keywords = [
                 'mecanica pesada',
@@ -2159,7 +2068,6 @@
             });
         };
 
-        initPageLoader();
         initKeywordHighlights();
 
         initLenis();
