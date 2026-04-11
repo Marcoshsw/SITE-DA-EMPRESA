@@ -387,6 +387,20 @@
             font-size: 1.25rem;
             line-height: 1;
         }
+        .mobile-nav {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(-8px);
+            pointer-events: none;
+            transition: max-height 260ms ease, opacity 200ms ease, transform 220ms ease;
+        }
+        .mobile-nav.is-open {
+            max-height: 28rem;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
         @media (max-width: 640px) {
             .floating-whatsapp {
                 right: 0.9rem;
@@ -407,14 +421,14 @@
 
     <!-- Header -->
     <header class="bg-shop-gray-dark text-white sticky top-0 z-50 shadow-lg border-b border-shop-red/20">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-between items-center gap-3">
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-center">
-                    <img src="https://a.imagem.app/GSE2Mr.png" alt="Grupo Mano" class="h-20 w-auto object-contain">
+                    <img src="https://a.imagem.app/GSE2Mr.png" alt="Grupo Mano" class="h-14 sm:h-16 md:h-20 w-auto object-contain">
                 </div>
                 <div>
-                    <h1 class="text-2xl font-black tracking-tighter italic leading-none">GRUPO <span class="text-shop-red">MANO</span></h1>
-                    <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-bold mt-1">Mecânica de Alta Performance</p>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-tighter italic leading-none">GRUPO <span class="text-shop-red">MANO</span></h1>
+                    <p class="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-[0.18em] sm:tracking-[0.2em] font-bold mt-1">Mecânica de Alta Performance</p>
                 </div>
             </div>
             
@@ -431,40 +445,68 @@
             </nav>
             
             <div class="md:hidden">
-                <button class="btn-clean btn-secondary btn-rounded w-11 h-11 text-white text-xl hover:scale-[1.03]" aria-label="Abrir menu"><i class="fas fa-bars"></i></button>
+                <button id="mobile-menu-toggle" class="btn-clean btn-secondary btn-rounded w-11 h-11 text-white text-xl hover:scale-[1.03]" aria-label="Abrir menu" aria-controls="mobile-menu" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
+        <nav id="mobile-menu" class="mobile-nav md:hidden border-t border-white/10 bg-shop-gray-dark/95 backdrop-blur px-4" aria-label="Navegação mobile">
+            <div class="py-4 flex flex-col gap-1 font-bold uppercase text-xs tracking-widest">
+                <a href="#inicio" class="px-2 py-3 rounded hover:bg-white/5 transition">Início</a>
+                <a href="#servicos" class="px-2 py-3 rounded hover:bg-white/5 transition">Serviços</a>
+                <a href="#galeria" class="px-2 py-3 rounded hover:bg-white/5 transition">Galeria</a>
+                <a href="#sobre" class="px-2 py-3 rounded hover:bg-white/5 transition">Sobre</a>
+                <a href="#contato" class="mt-2 group btn-clean btn-soft btn-rounded px-4 py-3 font-black tracking-wider text-[10px] uppercase">
+                    <i class="fas fa-envelope text-[10px]"></i>
+                    <span>Orçamento Agora</span>
+                    <i class="fas fa-arrow-right text-[10px]"></i>
+                </a>
+            </div>
+        </nav>
     </header>
 
     <!-- Hero -->
-    <section id="inicio" class="hero-gradient min-h-[80vh] flex items-center relative overflow-hidden py-16 scroll-mt-28 md:scroll-mt-32">
-        <div class="max-w-7xl mx-auto px-6 w-full relative z-10 grid xl:grid-cols-[1.05fr_0.95fr] gap-12 xl:gap-10 items-center">
+    <section id="inicio" class="hero-gradient min-h-[75vh] md:min-h-[80vh] flex items-center relative overflow-hidden py-14 md:py-16 scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 w-full relative z-10 grid xl:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-10 items-center">
             <div class="relative z-20 max-w-3xl">
-                <div class="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 px-5 py-2.5 mb-10 rounded-full shadow-2xl">
+                <div class="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 px-4 md:px-5 py-2.5 mb-8 md:mb-10 rounded-full shadow-2xl">
                     <span class="relative flex h-2.5 w-2.5">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-shop-red opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-shop-red"></span>
                     </span>
-                    <span class="text-[10px] font-bold tracking-[.25em] text-white uppercase">Especialistas em Linha Pesada</span>
+                    <span class="text-[9px] md:text-[10px] font-bold tracking-[.22em] md:tracking-[.25em] text-white uppercase">Especialistas em Linha Pesada</span>
                 </div>
-                <h2 class="text-5xl md:text-8xl font-black text-white mb-6 leading-[0.92] italic uppercase">
+                <h2 class="text-4xl sm:text-5xl md:text-8xl font-black text-white mb-6 leading-[0.92] italic uppercase">
                     Potência&nbsp;e <br> <span class="text-shop-red drop-shadow-[0_5px_5px_rgba(210,0,0,0.5)]">Confiança</span>
                 </h2>
-                <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-xl leading-relaxed border-l-4 border-shop-red pl-6">
+                <p class="text-base sm:text-lg md:text-xl text-gray-300 mb-8 md:mb-10 max-w-xl leading-relaxed border-l-4 border-shop-red pl-4 md:pl-6">
                        Referência em mecânica pesada e fornecimento de autopeças, com soluções completas para caminhões, ônibus e veículos diesel.
                 </p>
-                <div class="mb-10 max-w-2xl rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-sm">
+                <div class="xl:hidden mb-8 flex justify-center">
+                    <div class="relative w-full max-w-[230px] sm:max-w-[280px] mx-auto">
+                        <div class="absolute top-1 left-1 w-3.5 h-3.5 pointer-events-none" style="border-top:1px solid rgba(210,0,0,.5);border-left:1px solid rgba(210,0,0,.5);border-radius:3px 0 0 0;"></div>
+                        <div class="absolute top-1 right-1 w-3.5 h-3.5 pointer-events-none" style="border-top:1px solid rgba(210,0,0,.5);border-right:1px solid rgba(210,0,0,.5);border-radius:0 3px 0 0;"></div>
+                        <div class="absolute bottom-1 left-1 w-3.5 h-3.5 pointer-events-none" style="border-bottom:1px solid rgba(210,0,0,.5);border-left:1px solid rgba(210,0,0,.5);border-radius:0 0 0 3px;"></div>
+                        <div class="absolute bottom-1 right-1 w-3.5 h-3.5 pointer-events-none" style="border-bottom:1px solid rgba(210,0,0,.5);border-right:1px solid rgba(210,0,0,.5);border-radius:0 0 3px 0;"></div>
+                        <div class="absolute inset-1 rounded-2xl pointer-events-none" style="background:linear-gradient(135deg,rgba(210,0,0,.035),transparent 60%);border:1px solid rgba(210,0,0,.08);border-radius:0.9rem;"></div>
+
+                        <div class="js-floating-logo-wrapper relative flex items-center justify-center overflow-hidden rounded-sm mx-auto" style="aspect-ratio: 1 / 1; width: 100%; max-width: 260px; padding: 1rem;">
+                            <img src="https://a.imagem.app/GSE2Mr.png" alt="Grupo Mano" class="js-floating-logo w-full h-full object-cover relative z-10 opacity-90" style="transform: translate3d(0px, -4.0742px, 0px);">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-8 md:mb-10 max-w-2xl rounded-2xl border border-white/10 bg-white/5 px-4 md:px-5 py-4 backdrop-blur-sm">
                     <p class="text-sm md:text-base text-white/90 leading-relaxed">
                         Mecânica pesada e mecatrônica especializada em <span class="font-bold italic">Volvo, Scania, Mercedes, Iveco, Volkswagen, Ford e Daf</span>.
                     </p>
                 </div>
-                <div class="flex flex-wrap gap-5">
-                    <a href="#contato" class="group btn-clean btn-primary btn-rounded min-w-[220px] px-9 py-5 font-black uppercase tracking-[0.15em] text-xs hover:scale-[1.04] backdrop-blur-md">
+                <div class="flex flex-wrap gap-4 md:gap-5">
+                    <a href="#contato" class="group btn-clean btn-primary btn-rounded w-full sm:w-auto min-w-0 sm:min-w-[220px] px-7 md:px-9 py-4 md:py-5 font-black uppercase tracking-[0.13em] md:tracking-[0.15em] text-[11px] md:text-xs hover:scale-[1.04] backdrop-blur-md">
                         <i class="fas fa-tools text-sm opacity-95"></i>
                         <span>Solicitar Orçamento</span>
                         <i class="fas fa-arrow-right text-[10px] opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 transition-all duration-300"></i>
                     </a>
-                    <a href="https://wa.me/5573991420645" target="_blank" class="group btn-clean btn-secondary btn-rounded min-w-[220px] px-9 py-5 font-black uppercase tracking-[0.15em] text-xs hover:scale-[1.04] backdrop-blur-md">
+                    <a href="https://wa.me/5573991420645" target="_blank" class="group btn-clean btn-secondary btn-rounded w-full sm:w-auto min-w-0 sm:min-w-[220px] px-7 md:px-9 py-4 md:py-5 font-black uppercase tracking-[0.13em] md:tracking-[0.15em] text-[11px] md:text-xs hover:scale-[1.04] backdrop-blur-md">
                         <i class="fab fa-whatsapp text-base text-green-400"></i>
                         <span>Falar no WhatsApp</span>
                         <i class="fas fa-external-link-alt text-[10px] opacity-60 group-hover:opacity-100 transition-all duration-300"></i>
@@ -479,8 +521,8 @@
                     <div class="absolute bottom-1 right-1 w-3.5 h-3.5 pointer-events-none" style="border-bottom:1px solid rgba(210,0,0,.5);border-right:1px solid rgba(210,0,0,.5);border-radius:0 0 3px 0;"></div>
                     <div class="absolute inset-1 rounded-2xl pointer-events-none" style="background:linear-gradient(135deg,rgba(210,0,0,.035),transparent 60%);border:1px solid rgba(210,0,0,.08);border-radius:0.9rem;"></div>
 
-                    <div id="columbina-wrapper" class="relative flex items-center justify-center overflow-hidden rounded-sm mx-auto" style="aspect-ratio: 1 / 1; width: 100%; max-width: 400px; padding: 1rem; translate: none; rotate: none; scale: none; transform: translate(0px, 0px);">
-                        <img src="https://a.imagem.app/GSE2Mr.png" id="imagemFlutuante" alt="Grupo Mano" class="idx-hero-float w-full h-full object-cover relative z-10 opacity-90" style="translate: none; rotate: none; scale: none; transform: translate3d(0px, -4.0742px, 0px);">
+                    <div class="js-floating-logo-wrapper relative flex items-center justify-center overflow-hidden rounded-sm mx-auto" style="aspect-ratio: 1 / 1; width: 100%; max-width: 400px; padding: 1rem; translate: none; rotate: none; scale: none; transform: translate(0px, 0px);">
+                        <img src="https://a.imagem.app/GSE2Mr.png" alt="Grupo Mano" class="js-floating-logo idx-hero-float w-full h-full object-cover relative z-10 opacity-90" style="translate: none; rotate: none; scale: none; transform: translate3d(0px, -4.0742px, 0px);">
                     </div>
                 </div>
             </div>
@@ -489,8 +531,8 @@
     </section>
 
     <!-- Services -->
-    <section id="servicos" class="py-20 bg-shop-gray-light scroll-mt-28 md:scroll-mt-32">
-        <div class="max-w-7xl mx-auto px-6">
+    <section id="servicos" class="py-16 md:py-20 bg-shop-gray-light scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
             <div data-scroll-anchor class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
                 <div>
                     <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">O que oferecemos</span>
@@ -544,8 +586,8 @@
     </section>
 
     <!-- Gallery Section (Serviços e Oficina) -->
-    <section id="galeria" class="py-24 bg-white scroll-mt-28 md:scroll-mt-32">
-        <div class="max-w-7xl mx-auto px-6">
+    <section id="galeria" class="py-16 md:py-24 bg-white scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
             <div data-scroll-anchor class="text-center mb-16">
                 <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">Galeria</span>
                 <h3 class="text-4xl md:text-5xl font-black text-shop-gray-dark uppercase italic">Nosso <span class="text-shop-red">Trabalho</span> em Ação</h3>
@@ -634,8 +676,8 @@
     </section>
 
     <!-- Why Us -->
-    <section id="sobre" class="py-24 bg-shop-gray-dark text-white overflow-hidden relative scroll-mt-28 md:scroll-mt-32">
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
+    <section id="sobre" class="py-16 md:py-24 bg-shop-gray-dark text-white overflow-hidden relative scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
             <div data-scroll-anchor class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div>
                        <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">Sobre nós</span>
@@ -671,24 +713,24 @@
                             <p class="text-gray-300 leading-relaxed">Garantir que cada cliente tenha seu veículo funciona desempenho, reduzindo paradas e prejuízos.</p>
                         </div>
                 </div>
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1486006396193-471a2abc881e?q=80&w=1000" alt="Mecânica" class="rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
-                    <div class="absolute -bottom-10 -left-10 bg-shop-red p-10 rounded shadow-2xl hidden md:block">
-                        <p class="text-6xl font-black italic">17+</p>
-                        <p class="text-xs uppercase font-bold tracking-widest">Anos de Mercado</p>
+                <div class="relative flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1486006396193-471a2abc881e?q=80&w=1000" alt="Mecânica" class="w-full rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='https://a.imagem.app/GSEF2Z.png';">
+                    <div class="mt-4 self-center md:mt-0 md:absolute md:-bottom-10 md:-left-10 bg-shop-red p-5 md:p-10 rounded shadow-2xl">
+                        <p class="text-4xl md:text-6xl font-black italic leading-none">19+</p>
+                        <p class="text-[10px] md:text-xs uppercase font-bold tracking-widest mt-1 md:mt-0">Anos de Mercado</p>
                     </div>
                 </div>
             </div>
         </div>
-        <i class="fas fa-tools absolute -top-20 -right-20 text-[30rem] text-white/5 rotate-12"></i>
+        <i class="fas fa-tools absolute -top-20 -right-20 text-[30rem] text-white/5 rotate-12 hidden md:block"></i>
     </section>
 
     <!-- Contact -->
-    <section id="contato" class="py-24 bg-white scroll-mt-28 md:scroll-mt-32">
-        <div class="max-w-7xl mx-auto px-6">
+    <section id="contato" class="py-16 md:py-24 bg-white scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
             <div data-scroll-anchor class="bg-shop-gray-light rounded-2xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-3">
-                <div class="bg-shop-red p-12 text-white">
-                    <h3 class="text-3xl font-black mb-10 italic uppercase">Contato Direto</h3>
+                <div class="bg-shop-red p-7 md:p-12 text-white">
+                    <h3 class="text-2xl md:text-3xl font-black mb-8 md:mb-10 italic uppercase">Contato Direto</h3>
                     <div class="space-y-8">
                         <div class="flex items-center gap-4">
                             <i class="fab fa-whatsapp text-2xl"></i>
@@ -708,7 +750,7 @@
                             <i class="fas fa-map-marker-alt text-2xl"></i>
                             <div>
                                 <p class="text-[10px] uppercase font-bold opacity-70">Endereço</p>
-                                <p class="text-lg font-bold">BR 116, km 635,8, Entroncamento Jaguaquara - BA, 45345-000</p>
+                                <p class="text-lg font-bold break-words">BR 116, km 635,8, Entroncamento Jaguaquara - BA, 45345-000</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
@@ -731,8 +773,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="lg:col-span-2 p-12">
-                       <h3 class="text-3xl font-black mb-6 text-shop-gray-dark italic uppercase">Precisa de manutenção ou peças para seu caminhão?</h3>
+                  <div class="lg:col-span-2 p-7 md:p-12">
+                      <h3 class="text-2xl md:text-3xl font-black mb-6 text-shop-gray-dark italic uppercase">Precisa de manutenção ou peças para seu caminhão?</h3>
                        <p class="text-gray-600 max-w-2xl mb-10 leading-relaxed">Fale com a oficina e tenha um serviço de confiança na estrada, com atendimento ágil para manutenção, autopeças e suporte técnico especializado.</p>
                     <form id="contact-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="flex flex-col gap-2">
@@ -753,7 +795,7 @@
                                 <option>Outros</option>
                             </select>
                         </div>
-                        <div class="flex flex-col gap-2 md:col-ndo com máximospan-2">
+                        <div class="flex flex-col gap-2 md:col-span-2">
                             <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest">Mensagem</label>
                             <textarea name="message" rows="4" minlength="10" required class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition" placeholder="Como podemos ajudar sua frota?"></textarea>
                         </div>
@@ -770,15 +812,15 @@
     </section>
 
     <!-- Parceiros e Marcas -->
-    <section class="partners-section py-20 bg-shop-gray-light border-t border-b border-shop-red/10">
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
+    <section class="partners-section py-16 md:py-20 bg-shop-gray-light border-t border-b border-shop-red/10">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
             <div data-scroll-anchor class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
                 <div>
                     <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">Marcas e parceiros</span>
                     <h3 class="text-4xl md:text-5xl font-black text-shop-gray-dark uppercase italic">Tecnologias <span class="text-shop-red">que confiamos</span></h3>
                 </div>
                 <p class="max-w-xl text-gray-500 font-medium">
-                    Alguns dos nomes e marcas que fazem parte do nosso dia a dia na oficina, nas peças e no atendimento às frotas.
+                    Alguns dos nomes e marcas que fazem parte do nosso dia a dia na oficina, nas peças e no atendimento.
                 </p>
             </div>
 
@@ -789,13 +831,13 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-shop-gray-dark text-gray-500 py-12 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+    <footer class="bg-shop-gray-dark text-gray-500 py-10 md:py-12 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-8">
             <div class="flex items-center gap-4 grayscale opacity-80 hover:grayscale-0 transition-all duration-300">
                 <img src="https://a.imagem.app/GSE2Mr.png" alt="Grupo Mano" class="h-16 w-auto object-contain">
                 <h1 class="text-xl font-black tracking-tighter italic text-white">GRUPO <span class="text-shop-red">MANO</span></h1>
             </div>
-            <div class="text-xs font-bold tracking-widest uppercase">
+            <div class="text-xs font-bold tracking-widest uppercase text-center md:text-left">
                 &copy; 2026 Grupo Mano. Todos os direitos reservados.
             </div>
             <div class="flex gap-8 text-[10px] font-black uppercase tracking-widest">
@@ -1043,6 +1085,50 @@
             });
         };
 
+        const initMobileMenu = () => {
+            const menuToggle = document.getElementById('mobile-menu-toggle');
+            const menu = document.getElementById('mobile-menu');
+            if (!menuToggle || !menu) return;
+
+            const closeMenu = () => {
+                menu.classList.remove('is-open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('overflow-hidden');
+            };
+
+            const openMenu = () => {
+                menu.classList.add('is-open');
+                menuToggle.setAttribute('aria-expanded', 'true');
+                document.body.classList.add('overflow-hidden');
+            };
+
+            menuToggle.addEventListener('click', () => {
+                const isOpen = menu.classList.contains('is-open');
+                if (isOpen) {
+                    closeMenu();
+                    return;
+                }
+                openMenu();
+            });
+
+            menu.querySelectorAll('a[href^="#"]').forEach((link) => {
+                link.addEventListener('click', closeMenu);
+            });
+
+            document.addEventListener('click', (event) => {
+                const clickInside = menu.contains(event.target) || menuToggle.contains(event.target);
+                if (!clickInside) {
+                    closeMenu();
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) {
+                    closeMenu();
+                }
+            });
+        };
+
         // Função para alternar todas as galerias
         function toggleAllGalleries(button) {
             const allGalleries = document.querySelectorAll('[data-gallery]');
@@ -1278,60 +1364,65 @@
             })
             .catch(err => console.error('Erro:', err));
 
-        const logoWrapper = document.getElementById('columbina-wrapper');
-        const floatingLogo = document.getElementById('imagemFlutuante');
+        const initFloatingLogos = () => {
+            const logoWrappers = document.querySelectorAll('.js-floating-logo-wrapper');
+            if (!logoWrappers.length) return;
 
-        if (logoWrapper && floatingLogo) {
-            let animationFrame = null;
-            let targetX = 0;
-            const baseY = -4.0742;
-            let targetY = baseY;
-            let currentX = 0;
-            let currentY = baseY;
-            let floatTime = 0;
+            logoWrappers.forEach((logoWrapper) => {
+                const floatingLogo = logoWrapper.querySelector('.js-floating-logo');
+                if (!floatingLogo) return;
 
-            const maxOffset = 8;
-            const followSpeed = 0.21;
-            const floatAmplitude = 2.2;
-            const floatVelocity = 0.003;
+                let animationFrame = null;
+                let targetX = 0;
+                const baseY = -4.0742;
+                let targetY = baseY;
+                let currentX = 0;
+                let currentY = baseY;
+                let floatTime = 0;
 
-            const animateLogo = (time) => {
-                floatTime = time;
-                currentX += (targetX - currentX) * followSpeed;
-                currentY += (targetY - currentY) * followSpeed;
-                const slowFloat = Math.sin(floatTime * floatVelocity) * floatAmplitude;
+                const maxOffset = 8;
+                const followSpeed = 0.21;
+                const floatAmplitude = 2.2;
+                const floatVelocity = 0.003;
 
-                floatingLogo.style.transform = `translate3d(${currentX}px, ${currentY + slowFloat}px, 0)`;
+                const animateLogo = (time) => {
+                    floatTime = time;
+                    currentX += (targetX - currentX) * followSpeed;
+                    currentY += (targetY - currentY) * followSpeed;
+                    const slowFloat = Math.sin(floatTime * floatVelocity) * floatAmplitude;
+
+                    floatingLogo.style.transform = `translate3d(${currentX}px, ${currentY + slowFloat}px, 0)`;
+                    animationFrame = requestAnimationFrame(animateLogo);
+                };
+
+                const moveLogo = (event) => {
+                    const rect = logoWrapper.getBoundingClientRect();
+                    const normalizedX = (event.clientX - rect.left) / rect.width - 0.5;
+                    const normalizedY = (event.clientY - rect.top) / rect.height - 0.5;
+
+                    targetX = normalizedX * maxOffset;
+                    targetY = baseY + normalizedY * maxOffset;
+
+                    if (!animationFrame) {
+                        animationFrame = requestAnimationFrame(animateLogo);
+                    }
+                };
+
+                const resetLogo = () => {
+                    targetX = 0;
+                    targetY = baseY;
+
+                    if (!animationFrame) {
+                        animationFrame = requestAnimationFrame(animateLogo);
+                    }
+                };
+
+                logoWrapper.addEventListener('mousemove', moveLogo);
+                logoWrapper.addEventListener('mouseenter', moveLogo);
+                logoWrapper.addEventListener('mouseleave', resetLogo);
                 animationFrame = requestAnimationFrame(animateLogo);
-            };
-
-            const moveLogo = (event) => {
-                const rect = logoWrapper.getBoundingClientRect();
-                const normalizedX = (event.clientX - rect.left) / rect.width - 0.5;
-                const normalizedY = (event.clientY - rect.top) / rect.height - 0.5;
-
-                targetX = normalizedX * maxOffset;
-                targetY = baseY + normalizedY * maxOffset;
-
-                if (!animationFrame) {
-                    animationFrame = requestAnimationFrame(animateLogo);
-                }
-            };
-
-            const resetLogo = () => {
-                targetX = 0;
-                targetY = baseY;
-
-                if (!animationFrame) {
-                    animationFrame = requestAnimationFrame(animateLogo);
-                }
-            };
-
-            logoWrapper.addEventListener('mousemove', moveLogo);
-            logoWrapper.addEventListener('mouseenter', moveLogo);
-            logoWrapper.addEventListener('mouseleave', resetLogo);
-            animationFrame = requestAnimationFrame(animateLogo);
-        }
+            });
+        };
 
         initLenis();
         animateHeroOnLoad();
@@ -1339,6 +1430,8 @@
         renderPartners();
         initContactForm();
         initFloatingWhatsapp();
+        initMobileMenu();
+        initFloatingLogos();
     </script>
 </body>
 </html>
