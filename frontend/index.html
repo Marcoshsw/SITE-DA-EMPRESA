@@ -30,6 +30,11 @@
         }
     </script>
     <style>
+        :root {
+            --ui-radius-card: 1rem;
+            --ui-shadow-card-soft: 0 12px 28px rgba(17, 24, 39, 0.08);
+            --ui-shadow-card-hover: 0 22px 40px rgba(17, 24, 39, 0.14);
+        }
         html.lenis,
         html.lenis body {
             height: auto;
@@ -42,6 +47,7 @@
         }
         html {
             scroll-padding-top: 6.5rem;
+            scroll-behavior: smooth;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -54,9 +60,108 @@
         h6 {
             font-family: 'Montserrat', sans-serif;
         }
+        .service-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            border-radius: var(--ui-radius-card);
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            background:
+                radial-gradient(160px 120px at 100% 0%, rgba(210, 0, 0, 0.08), transparent 70%),
+                linear-gradient(180deg, #ffffff 0%, #fefefe 100%);
+            box-shadow: var(--ui-shadow-card-soft);
+            transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease;
+        }
         .service-card:hover {
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
+            transform: translateY(-6px);
+            box-shadow: var(--ui-shadow-card-hover);
+            border-color: rgba(210, 0, 0, 0.22);
+        }
+        .service-card__icon {
+            width: 3.2rem;
+            height: 3.2rem;
+            border-radius: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #D20000;
+            background: rgba(210, 0, 0, 0.1);
+            border: 1px solid rgba(210, 0, 0, 0.18);
+            font-size: 1.25rem;
+        }
+        .service-card__badge {
+            font-size: 0.62rem;
+            font-weight: 900;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.22);
+            border-radius: 9999px;
+            padding: 0.3rem 0.55rem;
+            line-height: 1;
+        }
+        .service-card__title {
+            font-size: 1rem;
+            font-weight: 900;
+            color: #111827;
+            line-height: 1.25;
+            text-transform: uppercase;
+            letter-spacing: -0.015em;
+            margin-top: 1rem;
+        }
+        .service-card__description {
+            margin-top: 0.65rem;
+            color: #4b5563;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        .service-card__footer {
+            margin-top: auto;
+            padding-top: 1.1rem;
+            border-top: 1px solid rgba(17, 24, 39, 0.08);
+        }
+        .service-card__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: #D20000;
+            font-size: 0.63rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            transition: gap 220ms ease, opacity 220ms ease;
+        }
+        .service-card__link:hover {
+            gap: 0.65rem;
+            opacity: 0.82;
+        }
+        .service-card--enter {
+            opacity: 0;
+            transform: translateY(14px) scale(0.985);
+            filter: blur(2.8px);
+            will-change: transform, opacity, filter;
+        }
+        .service-card--visible {
+            animation: serviceCardIn 560ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes serviceCardIn {
+            0% {
+                opacity: 0;
+                transform: translateY(14px) scale(0.985);
+                filter: blur(2.8px);
+            }
+            65% {
+                opacity: 1;
+                transform: translateY(-2px) scale(1.003);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
         }
         .btn-clean {
             display: inline-flex;
@@ -66,11 +171,41 @@
             text-decoration: none;
             line-height: 1;
             white-space: nowrap;
-            transition: transform 300ms ease, box-shadow 300ms ease, background-color 300ms ease, border-color 300ms ease, opacity 300ms ease;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 240ms ease, box-shadow 260ms ease, background-color 260ms ease, border-color 260ms ease, opacity 260ms ease;
+        }
+        .btn-clean::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(120deg, transparent 18%, rgba(255, 255, 255, 0.15) 48%, transparent 78%);
+            transform: translateX(-130%);
+            transition: transform 520ms ease;
+            pointer-events: none;
+        }
+        .btn-clean:hover {
+            transform: translateY(-2px) scale(1.015);
+        }
+        .btn-clean:hover::after {
+            transform: translateX(130%);
+        }
+        .btn-clean:active {
+            transform: translateY(0) scale(0.995);
+        }
+        .btn-clean:focus-visible {
+            outline: 2px solid rgba(210, 0, 0, 0.42);
+            outline-offset: 2px;
         }
         .btn-clean i {
             line-height: 1;
             flex-shrink: 0;
+            transition: transform 220ms ease;
+        }
+        .btn-clean:hover i:last-child {
+            transform: translateX(2px);
         }
         .btn-primary {
             color: #fff;
@@ -93,6 +228,36 @@
         .btn-rounded {
             border-radius: 1rem;
         }
+        .ui-panel {
+            border-radius: var(--ui-radius-card);
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            box-shadow: var(--ui-shadow-card-soft);
+            transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+        }
+        .ui-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--ui-shadow-card-hover);
+            border-color: rgba(210, 0, 0, 0.2);
+        }
+        .ui-panel-dark {
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+        }
+        .ui-panel-dark:hover {
+            border-color: rgba(210, 0, 0, 0.35);
+            box-shadow: 0 24px 46px rgba(0, 0, 0, 0.34);
+        }
+        .ui-media-frame {
+            border-radius: var(--ui-radius-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--ui-shadow-card-soft);
+            transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease, filter 260ms ease;
+        }
+        .ui-media-frame:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--ui-shadow-card-hover);
+            border-color: rgba(210, 0, 0, 0.26);
+        }
         .hero-gradient {
             background: linear-gradient(rgba(26,26,26,0.65), rgba(26,26,26,0.65)), url('https://a.imagem.app/GSEF2Z.png');
             background-size: cover;
@@ -111,6 +276,19 @@
         .animate-fadeIn {
             animation: fadeIn 0.4s ease-out forwards;
         }
+        .scroll-fade {
+            opacity: 0;
+            transform: translate3d(0, 16px, 0) scale(0.995);
+            filter: blur(2.5px);
+            transition: opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 600ms ease;
+            transition-delay: var(--reveal-delay, 0ms);
+            will-change: opacity, transform, filter;
+        }
+        .scroll-fade.is-visible {
+            opacity: 1;
+            transform: translate3d(0, 0, 0) scale(1);
+            filter: blur(0);
+        }
         .gallery-item-extra {
             opacity: 0;
             transform: translateY(-10px) scale(0.985);
@@ -124,18 +302,34 @@
         .partners-section {
             position: relative;
             overflow: hidden;
+            background:
+                radial-gradient(1200px 280px at 8% -10%, rgba(210, 0, 0, 0.1), transparent 55%),
+                radial-gradient(900px 240px at 92% 118%, rgba(26, 26, 26, 0.08), transparent 58%),
+                linear-gradient(180deg, #f8f8f8 0%, #ffffff 52%, #f7f7f7 100%);
         }
         .partners-section::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.98));
+            background: linear-gradient(180deg, rgba(255,255,255,0.56), rgba(255,255,255,0.9));
+            pointer-events: none;
+        }
+        .partners-section::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -110px;
+            width: min(920px, 92vw);
+            height: 210px;
+            transform: translateX(-50%);
+            background: radial-gradient(closest-side, rgba(210, 0, 0, 0.09), transparent 70%);
+            filter: blur(10px);
             pointer-events: none;
         }
         .partners-marquee {
             position: relative;
             overflow: hidden;
-            padding: 0.75rem 0.5rem 1rem;
+            padding: 1rem 0.7rem 2.85rem;
             mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
             -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
         }
@@ -143,27 +337,57 @@
             display: flex;
             width: max-content;
             gap: 1rem;
-            animation: partnersScroll 34s linear infinite;
+            animation: partnersScroll 30s linear infinite;
             will-change: transform;
         }
         .partners-track:hover {
             animation-play-state: paused;
         }
         .partner-tile {
+            position: relative;
             width: 8.5rem;
             height: 8.5rem;
             flex: 0 0 auto;
-            overflow: hidden;
-            border: 1px solid rgba(26, 26, 26, 0.08);
-            background: linear-gradient(160deg, rgba(255,255,255,0.98), rgba(245,245,245,0.9));
-            box-shadow: 0 18px 40px rgba(26, 26, 26, 0.08);
-            transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+            overflow: visible;
+            border-radius: var(--ui-radius-card);
+            border: 1px solid rgba(26, 26, 26, 0.07);
+            background: linear-gradient(165deg, rgba(255,255,255,0.95), rgba(248,248,248,0.78));
+            box-shadow: var(--ui-shadow-card-soft), inset 0 1px 0 rgba(255,255,255,0.65);
+            transform: translateY(0);
+            transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, background-color 220ms ease;
             will-change: transform;
+            isolation: isolate;
+        }
+        .partner-tile::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(140deg, rgba(210, 0, 0, 0.1), transparent 38%, transparent 64%, rgba(26, 26, 26, 0.05));
+            opacity: 0.68;
+            transition: opacity 220ms ease;
+            pointer-events: none;
+            z-index: 0;
         }
         .partner-tile:hover {
-            transform: translateY(-2px) scale(1.025);
-            box-shadow: 0 24px 50px rgba(26, 26, 26, 0.14);
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: var(--ui-shadow-card-hover), 0 0 0 1px rgba(210, 0, 0, 0.1);
+            border-color: rgba(210, 0, 0, 0.3);
+            background: linear-gradient(165deg, rgba(255,255,255,0.98), rgba(247,247,247,0.9));
+        }
+        #galeria .gallery-item {
+            border-radius: var(--ui-radius-card);
+            box-shadow: 0 8px 18px rgba(17, 24, 39, 0.08);
+            border: 1px solid rgba(17, 24, 39, 0.06);
+            transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+        }
+        #galeria .gallery-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 30px rgba(17, 24, 39, 0.12);
             border-color: rgba(210, 0, 0, 0.18);
+        }
+        .partner-tile:hover::before {
+            opacity: 1;
         }
         .partner-tile img {
             width: 100%;
@@ -171,8 +395,123 @@
             object-fit: contain;
             display: block;
         }
-        .partner-tile span:first-child {
-            letter-spacing: 0.18em;
+        .partner-logo-wrap {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.1rem 0.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        .partner-logo {
+            width: 100%;
+            max-width: 7.6rem;
+            max-height: 3.8rem;
+            object-fit: contain;
+            display: block;
+        }
+        .partner-logo.logo-boost {
+            transform: scale(1.28);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-strong {
+            transform: scale(1.42);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-lonaflex {
+            transform: scale(1.82);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-knorr {
+            transform: scale(1.58);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-parker {
+            transform: scale(1.56);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-mwm {
+            transform: scale(1.66);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-wabco {
+            transform: scale(1.58);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-quinelato {
+            transform: scale(1.52);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-sachs {
+            transform: scale(1.48);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-schadek {
+            transform: scale(1.56);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-zf {
+            transform: scale(1.52);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-sabo {
+            transform: scale(1.6);
+            transform-origin: center;
+        }
+        .partner-fallback {
+            display: none;
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: #1A1A1A;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .partner-hover-info {
+            position: absolute;
+            top: calc(100% + 0.35rem);
+            left: 50%;
+            transform: translate(-50%, -4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.04rem;
+            padding: 0.2rem 0.42rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(210, 0, 0, 0.11);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(3px);
+            box-shadow: 0 5px 14px rgba(26, 26, 26, 0.07);
+            opacity: 0;
+            transition: opacity 200ms ease, transform 200ms ease;
+            pointer-events: none;
+            z-index: 3;
+            white-space: nowrap;
+        }
+        .partner-tile:hover .partner-hover-info {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        .partner-hover-name {
+            color: #D20000;
+            font-size: 0.56rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            line-height: 1.1;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        .partner-hover-tag {
+            color: #4b5563;
+            font-size: 0.5rem;
+            font-weight: 800;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+            line-height: 1.1;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
         @keyframes partnersScroll {
             from {
@@ -185,6 +524,33 @@
         @media (prefers-reduced-motion: reduce) {
             .partners-track {
                 animation: none;
+            }
+            .service-card--enter,
+            .service-card--visible {
+                opacity: 1;
+                transform: none;
+                filter: none;
+                animation: none;
+            }
+            .scroll-fade,
+            .scroll-fade.is-visible {
+                opacity: 1;
+                transform: none;
+                filter: none;
+                transition: none;
+            }
+        }
+        @media (max-width: 640px) {
+            .partners-marquee {
+                padding-bottom: 3rem;
+            }
+            .partner-tile {
+                width: 7.8rem;
+                height: 7.8rem;
+            }
+            .partner-logo {
+                max-width: 7rem;
+                max-height: 3.45rem;
             }
         }
         .floating-whatsapp {
@@ -225,6 +591,62 @@
             font-size: 1.25rem;
             line-height: 1;
         }
+        .mobile-nav {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(-8px);
+            pointer-events: none;
+            transition: max-height 260ms ease, opacity 200ms ease, transform 220ms ease;
+        }
+        .mobile-nav.is-open {
+            max-height: 28rem;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .mobile-menu-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .mobile-menu-toggle.is-open {
+            transform: translateY(0) scale(1.03);
+            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+        }
+        .mobile-menu-toggle__icon {
+            width: 1.1rem;
+            height: 0.9rem;
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: stretch;
+            transition: transform 220ms ease, opacity 220ms ease;
+            transform-origin: center;
+        }
+        .mobile-menu-toggle__icon span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            border-radius: 9999px;
+            background: currentColor;
+            transition: transform 220ms ease, opacity 180ms ease, width 220ms ease;
+        }
+        .mobile-menu-toggle.is-open .mobile-menu-toggle__icon {
+            transform: scale(0.98);
+        }
+        .mobile-menu-toggle.is-open .mobile-menu-toggle__icon span:nth-child(1) {
+            transform: translateY(0.35rem) rotate(45deg);
+        }
+        .mobile-menu-toggle.is-open .mobile-menu-toggle__icon span:nth-child(2) {
+            opacity: 0;
+            width: 0;
+        }
+        .mobile-menu-toggle.is-open .mobile-menu-toggle__icon span:nth-child(3) {
+            transform: translateY(-0.35rem) rotate(-45deg);
+        }
         @media (max-width: 640px) {
             .floating-whatsapp {
                 right: 0.9rem;
@@ -239,20 +661,71 @@
                 display: none;
             }
         }
+        .legal-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 130;
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+            background: rgba(10, 10, 10, 0.72);
+            backdrop-filter: blur(3px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 220ms ease, visibility 220ms ease;
+        }
+        .legal-modal.is-open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .legal-modal-panel {
+            width: min(760px, 100%);
+            max-height: min(88vh, 760px);
+            overflow: hidden;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: linear-gradient(165deg, #151515, #101010 56%, #0b0b0b);
+            box-shadow: 0 28px 62px rgba(0, 0, 0, 0.4);
+            transform: translateY(12px) scale(0.98);
+            transition: transform 220ms ease;
+        }
+        .legal-modal.is-open .legal-modal-panel {
+            transform: translateY(0) scale(1);
+        }
+        .legal-tab-button[aria-selected="true"] {
+            color: #FFFFFF;
+            background: rgba(210, 0, 0, 0.22);
+            border-color: rgba(210, 0, 0, 0.55);
+            box-shadow: 0 10px 22px rgba(210, 0, 0, 0.2);
+        }
+        .legal-tab-panel {
+            display: none;
+        }
+        .legal-tab-panel.is-active {
+            display: block;
+        }
+        .legal-scroll {
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+        }
     </style>
 </head>
 <body class="bg-white text-gray-900">
 
     <!-- Header -->
     <header class="bg-shop-gray-dark text-white sticky top-0 z-50 shadow-lg border-b border-shop-red/20">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-between items-center gap-3">
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-center">
-                    <img src="https://a.imagem.app/GSE2Mr.png" alt="Grupo Mano" class="h-20 w-auto object-contain">
+                    <img src="https://a.imagem.app/GSE2Mr.png" alt="Grupo Mano" class="h-14 sm:h-16 md:h-20 w-auto object-contain">
                 </div>
                 <div>
-                    <h1 class="text-2xl font-black tracking-tighter italic leading-none">GRUPO <span class="text-shop-red">MANO</span></h1>
-                    <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-bold mt-1">Mecânica de Alta Performance</p>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-tighter italic leading-none">GRUPO <span class="text-shop-red">MANO</span></h1>
+                    <p class="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-[0.18em] sm:tracking-[0.2em] font-bold mt-1">Mecânica de Alta Performance</p>
                 </div>
             </div>
             
@@ -261,48 +734,80 @@
                 <a href="#servicos" class="hover:text-shop-red transition">Serviços</a>
                 <a href="#galeria" class="hover:text-shop-red transition">Galeria</a>
                 <a href="#sobre" class="hover:text-shop-red transition">Sobre</a>
-                <a href="#contato" class="group btn-clean btn-soft btn-rounded px-6 py-2 font-bold tracking-wider text-[10px] uppercase hover:scale-[1.02]">
-                    <i class="fas fa-envelope text-[10px]"></i>
-                    <span>Orçamento Agora</span>
-                    <i class="fas fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+                <a href="https://www.google.com/maps/dir//Oficina+Mecatr%C3%B4nica+e+Autope%C3%A7as+Paran%C3%A1,+Br+116+km+635,8+Entrocamento+Jaguaquara+BA+Br+116,+km+635,+Jaguaquara+-+BA,+45345-000/@-13.5406007,-40.0712523,16.5z/data=!3m1!4b1!4m9!4m8!1m0!1m5!1m1!1s0x74084a8d2947d7b:0x3f3bfc6168f9f4a!2m2!1d-40.0683332!2d-13.541849!3e0?authuser=0&entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="group btn-clean btn-primary btn-rounded px-6 py-2 font-bold tracking-wider text-[10px] uppercase hover:scale-[1.02]">
+                    <i class="fas fa-location-arrow text-[10px]"></i>
+                    <span>Abrir Rota</span>
+                    <i class="fas fa-arrow-right text-[10px] opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
                 </a>
             </nav>
             
             <div class="md:hidden">
-                <button class="btn-clean btn-secondary btn-rounded w-11 h-11 text-white text-xl hover:scale-[1.03]" aria-label="Abrir menu"><i class="fas fa-bars"></i></button>
+                <button id="mobile-menu-toggle" class="mobile-menu-toggle btn-clean btn-secondary btn-rounded w-11 h-11 text-white text-xl hover:scale-[1.03]" aria-label="Abrir menu" aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="mobile-menu-toggle__icon" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
             </div>
         </div>
+        <nav id="mobile-menu" class="mobile-nav md:hidden border-t border-white/10 bg-shop-gray-dark/95 backdrop-blur px-4" aria-label="Navegação mobile">
+            <div class="py-4 flex flex-col gap-1 font-bold uppercase text-xs tracking-widest">
+                <a href="#inicio" class="px-2 py-3 rounded hover:bg-white/5 transition">Início</a>
+                <a href="#servicos" class="px-2 py-3 rounded hover:bg-white/5 transition">Serviços</a>
+                <a href="#galeria" class="px-2 py-3 rounded hover:bg-white/5 transition">Galeria</a>
+                <a href="#sobre" class="px-2 py-3 rounded hover:bg-white/5 transition">Sobre</a>
+                <a href="https://www.google.com/maps/dir//Oficina+Mecatr%C3%B4nica+e+Autope%C3%A7as+Paran%C3%A1,+Br+116+km+635,8+Entrocamento+Jaguaquara+BA+Br+116,+km+635,+Jaguaquara+-+BA,+45345-000/@-13.5406007,-40.0712523,16.5z/data=!3m1!4b1!4m9!4m8!1m0!1m5!1m1!1s0x74084a8d2947d7b:0x3f3bfc6168f9f4a!2m2!1d-40.0683332!2d-13.541849!3e0?authuser=0&entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="mt-2 group btn-clean btn-primary btn-rounded px-4 py-3 font-black tracking-wider text-[10px] uppercase">
+                    <i class="fas fa-location-arrow text-[10px]"></i>
+                    <span>Abrir Rota</span>
+                    <i class="fas fa-arrow-right text-[10px]"></i>
+                </a>
+            </div>
+        </nav>
     </header>
 
     <!-- Hero -->
-    <section id="inicio" class="hero-gradient min-h-[80vh] flex items-center relative overflow-hidden py-16 scroll-mt-28 md:scroll-mt-32">
-        <div class="max-w-7xl mx-auto px-6 w-full relative z-10 grid xl:grid-cols-[1.05fr_0.95fr] gap-12 xl:gap-10 items-center">
+    <section id="inicio" class="hero-gradient min-h-[75vh] md:min-h-[80vh] flex items-center relative overflow-hidden py-14 md:py-16 scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 w-full relative z-10 grid xl:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-10 items-center">
             <div class="relative z-20 max-w-3xl">
-                <div class="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 px-5 py-2.5 mb-10 rounded-full shadow-2xl">
+                <div class="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 px-4 md:px-5 py-2.5 mb-8 md:mb-10 rounded-full shadow-2xl">
                     <span class="relative flex h-2.5 w-2.5">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-shop-red opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-shop-red"></span>
                     </span>
-                    <span class="text-[10px] font-bold tracking-[.25em] text-white uppercase">Especialistas em Linha Pesada</span>
+                    <span class="text-[9px] md:text-[10px] font-bold tracking-[.22em] md:tracking-[.25em] text-white uppercase">Especialistas em Linha Pesada</span>
                 </div>
-                <h2 class="text-4xl md:text-6xl xl:text-7xl font-black text-white mb-6 leading-[0.92] italic uppercase">
-                    Potência e <br> <span class="text-shop-red drop-shadow-[0_5px_5px_rgba(210,0,0,0.5)]">Confiança</span>
+                <h2 class="text-4xl sm:text-5xl md:text-8xl font-black text-white mb-6 leading-[0.92] italic uppercase">
+                    Potência&nbsp;e <br> <span class="text-shop-red drop-shadow-[0_5px_5px_rgba(210,0,0,0.5)]">Confiança</span>
                 </h2>
-                <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-xl leading-relaxed border-l-4 border-shop-red pl-6">
+                <p class="text-base sm:text-lg md:text-xl text-gray-300 mb-8 md:mb-10 max-w-xl leading-relaxed border-l-4 border-shop-red pl-4 md:pl-6">
                        Referência em mecânica pesada e fornecimento de autopeças, com soluções completas para caminhões, ônibus e veículos diesel.
                 </p>
-                <div class="mb-10 max-w-2xl rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-sm">
+                <div class="xl:hidden mb-8 flex justify-center">
+                    <div class="relative w-full max-w-[230px] sm:max-w-[280px] mx-auto">
+                        <div class="absolute top-1 left-1 w-3.5 h-3.5 pointer-events-none" style="border-top:1px solid rgba(210,0,0,.5);border-left:1px solid rgba(210,0,0,.5);border-radius:3px 0 0 0;"></div>
+                        <div class="absolute top-1 right-1 w-3.5 h-3.5 pointer-events-none" style="border-top:1px solid rgba(210,0,0,.5);border-right:1px solid rgba(210,0,0,.5);border-radius:0 3px 0 0;"></div>
+                        <div class="absolute bottom-1 left-1 w-3.5 h-3.5 pointer-events-none" style="border-bottom:1px solid rgba(210,0,0,.5);border-left:1px solid rgba(210,0,0,.5);border-radius:0 0 0 3px;"></div>
+                        <div class="absolute bottom-1 right-1 w-3.5 h-3.5 pointer-events-none" style="border-bottom:1px solid rgba(210,0,0,.5);border-right:1px solid rgba(210,0,0,.5);border-radius:0 0 3px 0;"></div>
+                        <div class="absolute inset-1 rounded-2xl pointer-events-none" style="background:linear-gradient(135deg,rgba(210,0,0,.035),transparent 60%);border:1px solid rgba(210,0,0,.08);border-radius:0.9rem;"></div>
+
+                        <div class="js-floating-logo-wrapper relative flex items-center justify-center overflow-hidden rounded-sm mx-auto" style="aspect-ratio: 1 / 1; width: 100%; max-width: 260px; padding: 1rem;">
+                            <img src="https://a.imagem.app/GSE2Mr.png" alt="Grupo Mano" class="js-floating-logo w-full h-full object-cover relative z-10 opacity-90" style="transform: translate3d(0px, -4.0742px, 0px);">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-8 md:mb-10 max-w-2xl rounded-2xl border border-white/10 bg-white/5 px-4 md:px-5 py-4 backdrop-blur-sm">
                     <p class="text-sm md:text-base text-white/90 leading-relaxed">
                         Mecânica pesada e mecatrônica especializada em <span class="font-bold italic">Volvo, Scania, Mercedes, Iveco, Volkswagen, Ford e Daf</span>.
                     </p>
                 </div>
-                <div class="flex flex-wrap gap-5">
-                    <a href="#contato" class="group btn-clean btn-primary btn-rounded min-w-[220px] px-9 py-5 font-black uppercase tracking-[0.15em] text-xs hover:scale-[1.04] backdrop-blur-md">
+                <div class="flex flex-wrap gap-4 md:gap-5">
+                    <a href="#contato" class="group btn-clean btn-primary btn-rounded w-full sm:w-auto min-w-0 sm:min-w-[220px] px-7 md:px-9 py-4 md:py-5 font-black uppercase tracking-[0.13em] md:tracking-[0.15em] text-[11px] md:text-xs hover:scale-[1.04] backdrop-blur-md">
                         <i class="fas fa-tools text-sm opacity-95"></i>
                         <span>Solicitar Orçamento</span>
                         <i class="fas fa-arrow-right text-[10px] opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 transition-all duration-300"></i>
                     </a>
-                    <a href="https://wa.me/5573991420645" target="_blank" class="group btn-clean btn-secondary btn-rounded min-w-[220px] px-9 py-5 font-black uppercase tracking-[0.15em] text-xs hover:scale-[1.04] backdrop-blur-md">
+                    <a href="https://wa.me/5573991420645" target="_blank" class="group btn-clean btn-secondary btn-rounded w-full sm:w-auto min-w-0 sm:min-w-[220px] px-7 md:px-9 py-4 md:py-5 font-black uppercase tracking-[0.13em] md:tracking-[0.15em] text-[11px] md:text-xs hover:scale-[1.04] backdrop-blur-md">
                         <i class="fab fa-whatsapp text-base text-green-400"></i>
                         <span>Falar no WhatsApp</span>
                         <i class="fas fa-external-link-alt text-[10px] opacity-60 group-hover:opacity-100 transition-all duration-300"></i>
@@ -317,8 +822,8 @@
                     <div class="absolute bottom-1 right-1 w-3.5 h-3.5 pointer-events-none" style="border-bottom:1px solid rgba(210,0,0,.5);border-right:1px solid rgba(210,0,0,.5);border-radius:0 0 3px 0;"></div>
                     <div class="absolute inset-1 rounded-2xl pointer-events-none" style="background:linear-gradient(135deg,rgba(210,0,0,.035),transparent 60%);border:1px solid rgba(210,0,0,.08);border-radius:0.9rem;"></div>
 
-                    <div id="columbina-wrapper" class="relative flex items-center justify-center overflow-hidden rounded-sm mx-auto" style="aspect-ratio: 1 / 1; width: 100%; max-width: 400px; padding: 1rem; translate: none; rotate: none; scale: none; transform: translate(0px, 0px);">
-                        <img src="https://a.imagem.app/GSE2Mr.png" id="imagemFlutuante" alt="Grupo Mano" class="idx-hero-float w-full h-full object-cover relative z-10 opacity-90" style="translate: none; rotate: none; scale: none; transform: translate3d(0px, -4.0742px, 0px);">
+                    <div class="js-floating-logo-wrapper relative flex items-center justify-center overflow-hidden rounded-sm mx-auto" style="aspect-ratio: 1 / 1; width: 100%; max-width: 400px; padding: 1rem; translate: none; rotate: none; scale: none; transform: translate(0px, 0px);">
+                        <img src="https://a.imagem.app/GSE2Mr.png" alt="Grupo Mano" class="js-floating-logo idx-hero-float w-full h-full object-cover relative z-10 opacity-90" style="translate: none; rotate: none; scale: none; transform: translate3d(0px, -4.0742px, 0px);">
                     </div>
                 </div>
             </div>
@@ -327,8 +832,8 @@
     </section>
 
     <!-- Services -->
-    <section id="servicos" class="py-20 bg-shop-gray-light scroll-mt-28 md:scroll-mt-32">
-        <div class="max-w-7xl mx-auto px-6">
+    <section id="servicos" class="py-16 md:py-20 bg-shop-gray-light scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
             <div data-scroll-anchor class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
                 <div>
                     <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">O que oferecemos</span>
@@ -339,11 +844,11 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="services-container">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch" id="services-container">
                 <!-- Services will be injected here by JS -->
             </div>
 
-            <div class="mt-10 bg-shop-gray-dark text-white rounded-2xl overflow-hidden shadow-2xl">
+            <div class="mt-10 bg-shop-gray-dark text-white rounded-2xl overflow-hidden shadow-2xl ui-panel ui-panel-dark">
                 <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
                     <div class="p-10 lg:p-12">
                         <span class="text-shop-red font-black uppercase tracking-widest text-xs mb-4 block">Especialidades em destaque</span>
@@ -382,8 +887,8 @@
     </section>
 
     <!-- Gallery Section (Serviços e Oficina) -->
-    <section id="galeria" class="py-24 bg-white scroll-mt-28 md:scroll-mt-32">
-        <div class="max-w-7xl mx-auto px-6">
+    <section id="galeria" class="py-16 md:py-24 bg-white scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
             <div data-scroll-anchor class="text-center mb-16">
                 <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">Galeria</span>
                 <h3 class="text-4xl md:text-5xl font-black text-shop-gray-dark uppercase italic">Nosso <span class="text-shop-red">Trabalho</span> em Ação</h3>
@@ -472,15 +977,29 @@
     </section>
 
     <!-- Why Us -->
-    <section id="sobre" class="py-24 bg-shop-gray-dark text-white overflow-hidden relative scroll-mt-28 md:scroll-mt-32">
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
+    <section id="sobre" class="py-16 md:py-24 bg-shop-gray-dark text-white overflow-hidden relative scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
             <div data-scroll-anchor class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div>
                        <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">Sobre nós</span>
                        <h3 class="text-4xl font-black mb-6 italic uppercase tracking-tighter">Uma oficina feita para <span class="text-shop-red underline decoration-4 underline-offset-8">resolver</span></h3>
-                       <p class="text-gray-300 leading-relaxed mb-10 max-w-2xl">
-                           Com uma trajetória sólida no setor automotivo, a oficina nasceu com o objetivo de oferecer um serviço confiável e especializado em veículos pesados. Evoluímos para um centro completo de mecânica e mecatrônica, acompanhando as novas tecnologias do mercado e investindo continuamente em capacitação e equipamentos modernos.
-                       </p>
+                       <div class="mb-10 max-w-2xl space-y-4 text-gray-300 leading-relaxed">
+                           <p>
+                               Com trajetória sólida no setor, o Grupo Mano nasceu para entregar <strong class="text-white">atendimento confiável</strong> em veículos pesados.
+                           </p>
+                           <p>
+                               Hoje somos um centro completo de <strong class="text-white">mecânica pesada e mecatrônica</strong>, com foco em diagnóstico assertivo e execução técnica.
+                           </p>
+                           <p>
+                               Evoluímos com o mercado, investindo em <strong class="text-white">tecnologia</strong>, <strong class="text-white">capacitação contínua</strong> e <strong class="text-white">equipamentos modernos</strong>.
+                           </p>
+                       </div>
+                    <div class="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold uppercase tracking-wide">
+                        <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Foco:</strong> linha pesada</span></div>
+                        <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Método:</strong> diagnóstico preciso</span></div>
+                        <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Equipe:</strong> especialização contínua</span></div>
+                        <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Meta:</strong> reduzir paradas</span></div>
+                    </div>
                     <div class="space-y-8">
                         <div class="flex gap-6">
                             <div class="text-shop-red text-3xl shrink-0"><i class="fas fa-microchip"></i></div>
@@ -504,29 +1023,29 @@
                             </div>
                         </div>
                     </div>
-                        <div class="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6">
+                        <div class="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6 ui-panel ui-panel-dark">
                             <p class="text-sm uppercase tracking-[0.2em] text-shop-red font-black mb-2">Nosso compromisso</p>
-                            <p class="text-gray-300 leading-relaxed">Garantir que cada cliente tenha seu veículo funcionando com máximo desempenho, reduzindo paradas e prejuízos.</p>
+                            <p class="text-gray-300 leading-relaxed">Garantir que cada cliente tenha seu veículo funciona desempenho, reduzindo paradas e prejuízos.</p>
                         </div>
                 </div>
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1486006396193-471a2abc881e?q=80&w=1000" alt="Mecânica" class="rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
-                    <div class="absolute -bottom-10 -left-10 bg-shop-red p-10 rounded shadow-2xl hidden md:block">
-                        <p class="text-6xl font-black italic">15+</p>
-                        <p class="text-xs uppercase font-bold tracking-widest">Anos de Mercado</p>
+                <div class="relative flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1486006396193-471a2abc881e?q=80&w=1000" alt="Mecânica" class="w-full rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700 ui-media-frame" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='https://a.imagem.app/GSEF2Z.png';">
+                    <div class="mt-4 self-center md:mt-0 md:absolute md:-bottom-10 md:-left-10 bg-shop-red p-5 md:p-10 rounded shadow-2xl ui-panel ui-panel-dark">
+                        <p class="text-4xl md:text-6xl font-black italic leading-none">19+</p>
+                        <p class="text-[10px] md:text-xs uppercase font-bold tracking-widest mt-1 md:mt-0">Anos de Mercado</p>
                     </div>
                 </div>
             </div>
         </div>
-        <i class="fas fa-tools absolute -top-20 -right-20 text-[30rem] text-white/5 rotate-12"></i>
+        <i class="fas fa-tools absolute -top-20 -right-20 text-[30rem] text-white/5 rotate-12 hidden md:block"></i>
     </section>
 
     <!-- Contact -->
-    <section id="contato" class="py-24 bg-white scroll-mt-28 md:scroll-mt-32">
-        <div class="max-w-7xl mx-auto px-6">
-            <div data-scroll-anchor class="bg-shop-gray-light rounded-2xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-3">
-                <div class="bg-shop-red p-12 text-white">
-                    <h3 class="text-3xl font-black mb-10 italic uppercase">Contato Direto</h3>
+    <section id="contato" class="py-16 md:py-24 bg-white scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div data-scroll-anchor class="bg-shop-gray-light rounded-2xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-3 ui-panel">
+                <div class="bg-shop-red p-7 md:p-12 text-white">
+                    <h3 class="text-2xl md:text-3xl font-black mb-8 md:mb-10 italic uppercase">Contato Direto</h3>
                     <div class="space-y-8">
                         <div class="flex items-center gap-4">
                             <i class="fab fa-whatsapp text-2xl"></i>
@@ -546,7 +1065,7 @@
                             <i class="fas fa-map-marker-alt text-2xl"></i>
                             <div>
                                 <p class="text-[10px] uppercase font-bold opacity-70">Endereço</p>
-                                <p class="text-lg font-bold">BR 116, km 635,8, Entroncamento Jaguaquara - BA, 45345-000</p>
+                                <a href="https://maps.app.goo.gl/Suyj57bEPjPvp3L7A" target="_blank" rel="noopener noreferrer" class="text-lg font-bold break-words hover:opacity-85 transition">BR 116, km 635,8, Entroncamento Jaguaquara - BA, 45345-000</a>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
@@ -565,185 +1084,156 @@
                         <p class="text-[10px] uppercase font-bold opacity-70 mb-4 tracking-widest">Siga-nos</p>
                         <div class="flex gap-4">
                             <a href="https://www.instagram.com/autopecas_paranaa/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/40 transition"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/40 transition"><i class="fab fa-facebook-f"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="lg:col-span-2 p-12">
-                       <h3 class="text-3xl font-black mb-6 text-shop-gray-dark italic uppercase">Precisa de manutenção ou peças para seu caminhão?</h3>
-                       <p class="text-gray-600 max-w-2xl mb-10 leading-relaxed">Fale com a oficina e tenha um serviço de confiança na estrada, com atendimento ágil para manutenção, autopeças e suporte técnico especializado.</p>
-                    <form id="contact-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="flex flex-col gap-2">
-                            <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest">Nome Completo</label>
-                            <input name="name" type="text" minlength="3" required class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition" placeholder="Seu nome">
+                <div class="lg:col-span-2 p-0 bg-shop-gray-dark text-white">
+                    <div class="h-full min-h-[360px] md:min-h-[520px] relative">
+                        <iframe
+                            title="Mapa da oficina Grupo Mano"
+                            src="https://www.google.com/maps?q=Oficina+Mecatr%C3%B4nica+e+Autope%C3%A7as+Paran%C3%A1,+Br+116+km+635,8+Entrocamento+Jaguaquara+BA,+Jaguaquara+-+BA,+45345-000&z=17&output=embed"
+                            class="absolute inset-0 w-full h-full border-0"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            allowfullscreen
+                        ></iframe>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/78 via-black/30 to-transparent"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-6 md:p-8">
+                            <div class="rounded-2xl border border-white/10 bg-black/55 backdrop-blur-md p-5 md:p-6 shadow-2xl ui-panel ui-panel-dark">
+                                <p class="text-[10px] uppercase font-black tracking-[0.25em] text-shop-red mb-2">Localização da oficina</p>
+                                <h3 class="text-xl md:text-2xl font-black italic uppercase text-white leading-tight">Grupo Mano</h3>
+                                <p class="text-sm text-gray-300 mt-3 leading-relaxed">BR 116, km 635,8, Entroncamento Jaguaquara - BA, 45345-000</p>
+                                <a href="https://www.google.com/maps/dir//Oficina+Mecatr%C3%B4nica+e+Autope%C3%A7as+Paran%C3%A1,+Br+116+km+635,8+Entrocamento+Jaguaquara+BA+Br+116,+km+635,+Jaguaquara+-+BA,+45345-000/@-13.5406007,-40.0712523,16.5z/data=!3m1!4b1!4m9!4m8!1m0!1m5!1m1!1s0x74084a8d2947d7b:0x3f3bfc6168f9f4a!2m2!1d-40.0683332!2d-13.541849!3e0?authuser=0&entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="mt-5 group btn-clean btn-primary btn-rounded w-full px-5 py-4 font-black uppercase tracking-[0.18em] text-[10px] hover:scale-[1.01]">
+                                    <i class="fas fa-location-arrow text-[10px]"></i>
+                                    <span>Abrir rota</span>
+                                    <i class="fas fa-arrow-right text-[10px] opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+                                </a>
+                            </div>
                         </div>
-                        <div class="flex flex-col gap-2">
-                            <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest">E-mail</label>
-                            <input name="email" type="email" required class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition" placeholder="seu@email.com">
-                        </div>
-                        <div class="flex flex-col gap-2 md:col-span-2">
-                            <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest">Serviço Desejado</label>
-                            <select name="service" required class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition font-bold text-sm">
-                                <option>Mecânica Pesada</option>
-                                <option>Câmbio Automático</option>
-                                <option>Automação de Módulo</option>
-                                <option>Sistema de Arla</option>
-                                <option>Outros</option>
-                            </select>
-                        </div>
-                        <div class="flex flex-col gap-2 md:col-span-2">
-                            <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest">Mensagem</label>
-                            <textarea name="message" rows="4" minlength="10" required class="bg-white border-b-2 border-gray-200 focus:border-shop-red outline-none py-3 transition" placeholder="Como podemos ajudar sua frota?"></textarea>
-                        </div>
-                        <button type="submit" class="md:col-span-2 group btn-clean btn-primary btn-rounded w-full py-5 font-black uppercase tracking-[0.2em] text-xs hover:scale-[1.01]">
-                            <i class="fas fa-paper-plane text-[10px]"></i>
-                            <span class="submit-text">Solicitar Orçamento Agora</span>
-                            <i class="fas fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300"></i>
-                        </button>
-                        <p id="contact-feedback" class="md:col-span-2 hidden text-sm font-semibold"></p>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Parceiros e Marcas -->
-    <section class="partners-section py-20 bg-shop-gray-light border-t border-b border-shop-red/10">
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
+    <section class="partners-section py-16 md:py-20 bg-shop-gray-light border-t border-b border-shop-red/10">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
             <div data-scroll-anchor class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
                 <div>
                     <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">Marcas e parceiros</span>
                     <h3 class="text-4xl md:text-5xl font-black text-shop-gray-dark uppercase italic">Tecnologias <span class="text-shop-red">que confiamos</span></h3>
                 </div>
                 <p class="max-w-xl text-gray-500 font-medium">
-                    Alguns dos nomes e marcas que fazem parte do nosso dia a dia na oficina, nas peças e no atendimento às frotas.
+                    Alguns dos nomes e marcas que fazem parte do nosso dia a dia na oficina, nas peças e no atendimento.
                 </p>
             </div>
 
             <div class="partners-marquee">
-                <div class="partners-track" aria-label="Marcas e parceiros do Grupo Mano">
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Volvo</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VN</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Linha pesada</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Scania</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">S</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Performance</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Mercedes</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">MB</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Origem forte</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Iveco</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">I</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Diesel</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Volkswagen</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VW</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Constante</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Ford</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">F</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Robustez</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">DAF</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">D</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Estrada</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Bosch</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">B</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Tecnologia</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Mahle</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">M</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Precisão</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Cummins</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">C</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Potência</span>
-                    </div>
-
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Volvo</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VN</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Linha pesada</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Scania</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">S</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Performance</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Mercedes</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">MB</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Origem forte</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Iveco</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">I</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Diesel</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Volkswagen</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VW</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Constante</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Ford</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">F</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Robustez</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">DAF</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">D</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Estrada</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Bosch</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">B</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Tecnologia</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Mahle</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">M</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Precisão</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Cummins</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">C</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Potência</span>
-                    </div>
-                </div>
+                <div id="partners-track" class="partners-track" aria-label="Marcas e parceiros do Grupo Mano"></div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-shop-gray-dark text-gray-500 py-12 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+    <footer class="bg-shop-gray-dark text-gray-500 py-10 md:py-12 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-8">
             <div class="flex items-center gap-4 grayscale opacity-80 hover:grayscale-0 transition-all duration-300">
                 <img src="https://a.imagem.app/GSE2Mr.png" alt="Grupo Mano" class="h-16 w-auto object-contain">
                 <h1 class="text-xl font-black tracking-tighter italic text-white">GRUPO <span class="text-shop-red">MANO</span></h1>
             </div>
-            <div class="text-xs font-bold tracking-widest uppercase">
+            <div class="text-xs font-bold tracking-widest uppercase text-center md:text-left">
                 &copy; 2026 Grupo Mano. Todos os direitos reservados.
             </div>
             <div class="flex gap-8 text-[10px] font-black uppercase tracking-widest">
-                <a href="#" class="hover:text-white transition">Privacidade</a>
-                <a href="#" class="hover:text-white transition">Termos</a>
+                <button type="button" class="hover:text-white transition" data-legal-open="privacy">PRIVACIDADE</button>
+                <button type="button" class="hover:text-white transition" data-legal-open="terms">TERMOS</button>
             </div>
         </div>
     </footer>
+
+    <section id="legal-modal" class="legal-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="legal-modal-title" data-lenis-prevent>
+        <div class="legal-modal-panel text-white" data-lenis-prevent>
+            <div class="px-5 md:px-7 py-5 border-b border-white/10 flex items-start justify-between gap-4">
+                <div>
+                    <p class="text-[10px] uppercase tracking-[0.2em] font-black text-shop-red">Informações legais</p>
+                    <h3 id="legal-modal-title" class="text-xl md:text-2xl font-black italic uppercase mt-1">Privacidade e termos</h3>
+                </div>
+                <button type="button" class="btn-clean btn-secondary btn-rounded px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em]" data-legal-close>
+                    Fechar
+                </button>
+            </div>
+
+            <div class="px-5 md:px-7 py-4 border-b border-white/10 flex flex-wrap gap-2" role="tablist" aria-label="Seções legais">
+                <div class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 mb-1">
+                    <p class="text-[10px] uppercase tracking-[0.2em] font-black text-shop-red mb-2">Identificação da empresa</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-gray-200">
+                        <p><strong class="text-white">Razão social:</strong> AUTO PECAS MANO E OFICINA LTDA</p>
+                        <p><strong class="text-white">CNPJ:</strong> 01.922.166/0001-28</p>
+                        <p class="md:col-span-2"><strong class="text-white">Endereço:</strong> BR 116, km 635,8, Entroncamento Jaguaquara - BA, 45345-000</p>
+                    </div>
+                </div>
+                <button
+                    id="tab-privacy"
+                    type="button"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="panel-privacy"
+                    class="legal-tab-button rounded-lg border border-white/20 px-4 py-2 text-[10px] md:text-xs font-black uppercase tracking-[0.14em] text-gray-200 transition"
+                    data-legal-tab="privacy"
+                >
+                    Privacidade
+                </button>
+                <button
+                    id="tab-terms"
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="panel-terms"
+                    class="legal-tab-button rounded-lg border border-white/20 px-4 py-2 text-[10px] md:text-xs font-black uppercase tracking-[0.14em] text-gray-200 transition"
+                    data-legal-tab="terms"
+                >
+                    Termos de uso
+                </button>
+            </div>
+
+            <div class="legal-scroll px-5 md:px-7 py-5 md:py-6 max-h-[58vh]" data-lenis-prevent>
+                <div id="panel-privacy" class="legal-tab-panel is-active" role="tabpanel" aria-labelledby="tab-privacy">
+                    <p class="text-gray-200 leading-relaxed">
+                        Esta Política de Privacidade descreve como o Grupo Mano trata dados pessoais de clientes, visitantes e contatos comerciais, em conformidade com a LGPD (Lei nº 13.709/2018).
+                    </p>
+                    <div class="mt-5 space-y-4 text-sm text-gray-300 leading-relaxed">
+                        <p><strong class="text-white">1. Dados coletados:</strong> nome, telefone, e-mail, dados do veículo, histórico de atendimento e informações enviadas pelo formulário do site, WhatsApp, telefone ou atendimento presencial.</p>
+                        <p><strong class="text-white">2. Finalidades do tratamento:</strong> atendimento de solicitações, emissão de orçamento, agendamento de serviços, execução de reparos, contato pós-atendimento e cumprimento de obrigações legais e regulatórias.</p>
+                        <p><strong class="text-white">3. Bases legais:</strong> execução de contrato e procedimentos preliminares, cumprimento de obrigação legal, exercício regular de direitos e legítimo interesse para comunicação de atendimento e relacionamento comercial.</p>
+                        <p><strong class="text-white">4. Compartilhamento de dados:</strong> os dados não são vendidos. O compartilhamento pode ocorrer com parceiros técnicos, fornecedores e plataformas de comunicação quando necessário para prestação do serviço, sempre com limitação ao mínimo necessário.</p>
+                        <p><strong class="text-white">5. Retenção:</strong> os dados são armazenados pelo período necessário para cumprir as finalidades informadas, podendo ser mantidos por até 5 anos após o último atendimento, ou por prazo superior quando exigido por lei.</p>
+                        <p><strong class="text-white">6. Segurança:</strong> adotamos medidas administrativas e técnicas para reduzir riscos de acesso não autorizado, perda, alteração ou uso indevido das informações.</p>
+                        <p><strong class="text-white">7. Direitos do titular:</strong> você pode solicitar confirmação de tratamento, acesso, correção, anonimização, portabilidade, oposição e eliminação de dados, quando aplicável.</p>
+                        <p><strong class="text-white">8. Canal de privacidade:</strong> para solicitações relacionadas à LGPD, utilize contato@grupomano.com.br ou WhatsApp (73) 99142-0645.</p>
+                        <p class="text-xs text-gray-400 pt-2 border-t border-white/10">Última atualização: 11/04/2026.</p>
+                    </div>
+                </div>
+
+                <div id="panel-terms" class="legal-tab-panel" role="tabpanel" aria-labelledby="tab-terms">
+                    <p class="text-gray-200 leading-relaxed">
+                        Estes Termos de Uso regulam o acesso ao site e aos canais digitais do Grupo Mano. Ao navegar e utilizar os recursos disponíveis, você concorda com as condições abaixo.
+                    </p>
+                    <div class="mt-5 space-y-4 text-sm text-gray-300 leading-relaxed">
+                        <p><strong class="text-white">1. Conteúdo informativo:</strong> informações, descrições técnicas e imagens são apresentadas para fins institucionais e podem ser atualizadas sem aviso prévio.</p>
+                        <p><strong class="text-white">2. Solicitações e orçamento:</strong> valores, prazo de entrega e escopo dos serviços dependem de avaliação técnica do veículo e disponibilidade de peças no momento da análise.</p>
+                        <p><strong class="text-white">3. Responsabilidade do cliente:</strong> o usuário deve fornecer dados corretos e completos sobre o veículo para permitir diagnóstico e atendimento adequados.</p>
+                        <p><strong class="text-white">4. Propriedade intelectual:</strong> marca, identidade visual, textos e elementos gráficos do site pertencem ao Grupo Mano ou a seus licenciadores, sendo vedada reprodução sem autorização.</p>
+                        <p><strong class="text-white">5. Links de terceiros:</strong> o site pode conter links para plataformas externas (ex.: mapas e redes sociais). O Grupo Mano não se responsabiliza por conteúdo, práticas e políticas desses ambientes.</p>
+                        <p><strong class="text-white">6. Disponibilidade dos canais:</strong> atendimento por WhatsApp, telefone e formulário está sujeito ao horário comercial, fila de demandas e disponibilidade operacional.</p>
+                        <p><strong class="text-white">7. Limitação de responsabilidade:</strong> eventuais indisponibilidades temporárias do site, falhas de internet ou serviços de terceiros podem ocorrer sem caracterizar garantia de continuidade ininterrupta.</p>
+                        <p><strong class="text-white">8. Alterações destes termos:</strong> o Grupo Mano poderá revisar estes termos a qualquer momento, com vigência a partir da publicação desta página.</p>
+                        <p class="text-xs text-gray-400 pt-2 border-t border-white/10">Última atualização: 11/04/2026.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <a
         id="floating-whatsapp"
@@ -772,6 +1262,7 @@
                 touchMultiplier: 1,
                 smoothWheel: true,
                 syncTouch: false,
+                prevent: (node) => Boolean(node?.closest?.('[data-lenis-prevent]')),
             });
 
             const raf = (time) => {
@@ -846,37 +1337,107 @@
             }
         });
 
-        const initScrollReveal = () => {
-            const revealTargets = document.querySelectorAll('[data-scroll-anchor]');
+        let scrollRevealObserver = null;
+
+        const registerRevealTargets = (root = document) => {
+            const revealSelectors = [
+                '[data-scroll-anchor]',
+                '#galeria [data-gallery] .gallery-item',
+                '#sobre .space-y-8 > div',
+                '#sobre .mt-10.rounded-2xl',
+                '#contato .bg-shop-red > .space-y-8 > div',
+                '#contato .lg\\:col-span-2 .rounded-2xl',
+                '.partners-marquee',
+                'footer > .max-w-7xl'
+            ];
+
+            const revealTargets = root.querySelectorAll(revealSelectors.join(','));
             if (!revealTargets.length) return;
 
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
             revealTargets.forEach((target, index) => {
-                target.style.opacity = '0';
-                target.style.transform = 'translateY(10px)';
-                target.dataset.revealDelay = `${index * 40}`;
+                if (target.dataset.revealBound === 'true') return;
+
+                target.dataset.revealBound = 'true';
+
+                if (prefersReducedMotion) {
+                    target.classList.add('is-visible');
+                    return;
+                }
+
+                const stagger = (index % 6) * 55;
+                target.style.setProperty('--reveal-delay', `${stagger}ms`);
+                target.classList.add('scroll-fade');
+
+                if (scrollRevealObserver) {
+                    scrollRevealObserver.observe(target);
+                }
             });
+        };
 
-            const reveal = (target) => {
-                if (target.dataset.revealed === 'true') return;
+        const initScrollReveal = () => {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                registerRevealTargets(document);
+                return;
+            }
 
-                target.dataset.revealed = 'true';
-                target.style.animationDelay = `${target.dataset.revealDelay || '0'}ms`;
-                target.classList.add('animate-fadeIn');
-                target.style.transform = '';
-            };
+            if (!('IntersectionObserver' in window)) {
+                registerRevealTargets(document);
+                document.querySelectorAll('.scroll-fade').forEach((target) => {
+                    target.classList.add('is-visible');
+                });
+                return;
+            }
 
-            const observer = new IntersectionObserver((entries) => {
+            scrollRevealObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
-                    reveal(entry.target);
+                    entry.target.classList.add('is-visible');
                     observer.unobserve(entry.target);
                 });
             }, {
                 threshold: 0.12,
-                rootMargin: '0px 0px -8% 0px'
+                rootMargin: '0px 0px -10% 0px'
             });
 
-            revealTargets.forEach((target) => observer.observe(target));
+            registerRevealTargets(document);
+
+            // Fallback: garante que os ultimos blocos aparecam ao atingir o fim da pagina.
+            let revealTicking = false;
+            const revealRemainingTargets = () => {
+                const pendingTargets = document.querySelectorAll('.scroll-fade:not(.is-visible)');
+                if (!pendingTargets.length) {
+                    revealTicking = false;
+                    return;
+                }
+
+                const pageBottomReached = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 2);
+                pendingTargets.forEach((target) => {
+                    const rect = target.getBoundingClientRect();
+                    const nearViewport = rect.top <= window.innerHeight * 0.98;
+
+                    if (!nearViewport && !pageBottomReached) return;
+
+                    target.classList.add('is-visible');
+                    if (scrollRevealObserver) {
+                        scrollRevealObserver.unobserve(target);
+                    }
+                });
+
+                revealTicking = false;
+            };
+
+            const scheduleRevealFallback = () => {
+                if (revealTicking) return;
+                revealTicking = true;
+                requestAnimationFrame(revealRemainingTargets);
+            };
+
+            window.addEventListener('scroll', scheduleRevealFallback, { passive: true });
+            window.addEventListener('resize', scheduleRevealFallback);
+            window.addEventListener('load', scheduleRevealFallback, { once: true });
+            scheduleRevealFallback();
         };
 
         const animateHeroOnLoad = () => {
@@ -979,6 +1540,130 @@
                 } finally {
                     if (submitButton) submitButton.disabled = false;
                     if (submitText) submitText.textContent = 'Solicitar Orçamento Agora';
+                }
+            });
+        };
+
+        const initMobileMenu = () => {
+            const menuToggle = document.getElementById('mobile-menu-toggle');
+            const menu = document.getElementById('mobile-menu');
+            if (!menuToggle || !menu) return;
+
+            const setMenuState = (isOpen) => {
+                menu.classList.toggle('is-open', isOpen);
+                menuToggle.classList.toggle('is-open', isOpen);
+                menuToggle.setAttribute('aria-expanded', String(isOpen));
+                document.body.classList.toggle('overflow-hidden', isOpen);
+            };
+
+            const closeMenu = () => {
+                setMenuState(false);
+            };
+
+            const openMenu = () => {
+                setMenuState(true);
+            };
+
+            menuToggle.addEventListener('click', () => {
+                const isOpen = menu.classList.contains('is-open');
+                if (isOpen) {
+                    closeMenu();
+                    return;
+                }
+                openMenu();
+            });
+
+            menu.querySelectorAll('a[href^="#"]').forEach((link) => {
+                link.addEventListener('click', closeMenu);
+            });
+
+            document.addEventListener('click', (event) => {
+                const clickInside = menu.contains(event.target) || menuToggle.contains(event.target);
+                if (!clickInside) {
+                    closeMenu();
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) {
+                    closeMenu();
+                }
+            });
+        };
+
+        const initLegalModal = () => {
+            const modal = document.getElementById('legal-modal');
+            if (!modal) return;
+
+            const scrollArea = modal.querySelector('.legal-scroll');
+            const openButtons = document.querySelectorAll('[data-legal-open]');
+            const closeButtons = modal.querySelectorAll('[data-legal-close]');
+            const tabButtons = modal.querySelectorAll('[data-legal-tab]');
+            const panels = modal.querySelectorAll('.legal-tab-panel');
+
+            const setActiveTab = (tab) => {
+                tabButtons.forEach((button) => {
+                    const isActive = button.dataset.legalTab === tab;
+                    button.setAttribute('aria-selected', String(isActive));
+                });
+
+                panels.forEach((panel) => {
+                    panel.classList.toggle('is-active', panel.id === `panel-${tab}`);
+                });
+            };
+
+            const openModal = (tab = 'privacy') => {
+                setActiveTab(tab);
+                modal.classList.add('is-open');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('overflow-hidden');
+                if (lenis) {
+                    lenis.stop();
+                }
+            };
+
+            const closeModal = () => {
+                modal.classList.remove('is-open');
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('overflow-hidden');
+                if (lenis) {
+                    lenis.start();
+                }
+            };
+
+            if (scrollArea) {
+                ['wheel', 'touchmove'].forEach((eventName) => {
+                    scrollArea.addEventListener(eventName, (event) => {
+                        event.stopPropagation();
+                    }, { passive: true });
+                });
+            }
+
+            openButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    openModal(button.dataset.legalOpen || 'privacy');
+                });
+            });
+
+            tabButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    setActiveTab(button.dataset.legalTab || 'privacy');
+                });
+            });
+
+            closeButtons.forEach((button) => {
+                button.addEventListener('click', closeModal);
+            });
+
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modal.classList.contains('is-open')) {
+                    closeModal();
                 }
             });
         };
@@ -1101,97 +1786,299 @@
             return 'fa-wrench';
         };
 
+        const partners = [
+            { name: 'Bosch', tag: 'Injeção', logo: './assets/img/marcas/BOSCH.svg' },
+            { name: 'WABCO', tag: 'Freios', logo: './assets/img/marcas/WABCO.svg' },
+            { name: 'Sachs', tag: 'Embreagem', logo: './assets/img/marcas/SACHS.webp' },
+            { name: 'Quinelato', tag: 'Reparos', logo: './assets/img/marcas/Quinelato.png' },
+            { name: 'Schadek', tag: 'Lubrificação', logo: './assets/img/marcas/SCHADEK.png' },
+            { name: 'MANN-FILTER', tag: 'Filtros', logo: './assets/img/marcas/MAN FILTER.svg' },
+            { name: 'Meritor', tag: 'Eixos', logo: './assets/img/marcas/Meritor.png' },
+            { name: 'FAG', tag: 'Rolamentos', logo: './assets/img/marcas/FAG.png' },
+            { name: 'Parker', tag: 'Hidráulica', logo: './assets/img/marcas/Parker.png' },
+            { name: 'Lonaflex', tag: 'Freios', logo: './assets/img/marcas/LONAFLEX.png' },
+            { name: 'ZF', tag: 'Transmissão', logo: './assets/img/marcas/ZF.svg' },
+            { name: 'Knorr-Bremse', tag: 'Freios', logo: './assets/img/marcas/Knorr-Bremse.png' },
+            { name: 'MWM', tag: 'Motores', logo: './assets/img/marcas/MWM.png' },
+            { name: 'Cummins', tag: 'Motores', logo: './assets/img/marcas/Cummins.png' },
+            { name: 'Sabó', tag: 'Vedação', logo: './assets/img/marcas/Sabo.png' },
+        ];
+
+        const renderPartners = () => {
+            const track = document.getElementById('partners-track');
+            if (!track) return;
+
+            const getLogoClass = (name) => {
+                const normalized = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                if (normalized === 'lonaflex') {
+                    return 'partner-logo logo-boost-lonaflex';
+                }
+                if (normalized === 'knorr-bremse') {
+                    return 'partner-logo logo-boost-knorr';
+                }
+                if (normalized === 'parker') {
+                    return 'partner-logo logo-boost-parker';
+                }
+                if (normalized === 'mwm') {
+                    return 'partner-logo logo-boost-mwm';
+                }
+                if (normalized === 'wabco') {
+                    return 'partner-logo logo-boost-wabco';
+                }
+                if (normalized === 'quinelato') {
+                    return 'partner-logo logo-boost-quinelato';
+                }
+                if (normalized === 'sachs') {
+                    return 'partner-logo logo-boost-sachs';
+                }
+                if (normalized === 'schadek') {
+                    return 'partner-logo logo-boost-schadek';
+                }
+                if (normalized === 'zf') {
+                    return 'partner-logo logo-boost-zf';
+                }
+                if (normalized === 'sabo') {
+                    return 'partner-logo logo-boost-sabo';
+                }
+                if (['parker', 'lonaflex', 'mwm', 'cummins', 'sabo'].includes(normalized)) {
+                    return 'partner-logo logo-boost-strong';
+                }
+                return 'partner-logo';
+            };
+
+            const allTiles = [...partners, ...partners];
+            track.innerHTML = allTiles.map((partner, index) => {
+                return `
+                <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" ${index >= partners.length ? 'aria-hidden="true"' : ''}>
+                    <div class="partner-hover-info" aria-hidden="true">
+                        <span class="partner-hover-name">${partner.name}</span>
+                        <span class="partner-hover-tag">${partner.tag}</span>
+                    </div>
+                    <div class="partner-logo-wrap">
+                        <img
+                            src="${partner.logo}"
+                            alt="Logo ${partner.name}"
+                            class="${getLogoClass(partner.name)}"
+                            loading="lazy"
+                            decoding="async"
+                            referrerpolicy="no-referrer"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+                        <span class="partner-fallback">${partner.name}</span>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        };
+
         fetch('/api/services')
             .then(res => res.json())
             .then(services => {
                 const container = document.getElementById('services-container');
-                container.innerHTML = services.map(service => `
-                    <div class="service-card bg-white p-8 border border-gray-100 shadow-sm hover:shadow-2xl transition-all group relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-16 h-16 bg-shop-red/5 -mr-8 -mt-8 rounded-full group-hover:bg-shop-red/10 transition-all"></div>
-                        <div class="text-shop-red text-3xl mb-6 relative z-10">
-                            <i class="fas ${getIconClass(service.name)}"></i>
+                container.innerHTML = services.map((service, index) => `
+                    <article class="service-card service-card--enter p-7 md:p-8">
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="service-card__icon" aria-hidden="true">
+                                <i class="fas ${getIconClass(service.name)}"></i>
+                            </span>
+                            <span class="service-card__badge">${String(index + 1).padStart(2, '0')}</span>
                         </div>
-                        <h4 class="text-lg font-black text-shop-gray-dark uppercase italic tracking-tighter mb-3 relative z-10">${service.name}</h4>
-                        <p class="text-sm text-gray-500 font-medium leading-relaxed relative z-10">${service.description}</p>
-                        <div class="mt-6 border-t border-gray-50 pt-6 opacity-0 group-hover:opacity-100 transition-all">
-                            <a href="#contato" class="btn-clean text-shop-red text-[10px] font-black uppercase tracking-widest items-center gap-2 hover:opacity-80">
-                                Solicitar orçamento <i class="fas fa-chevron-right"></i>
+                        <h4 class="service-card__title">${service.name}</h4>
+                        <p class="service-card__description">${service.description}</p>
+                        <div class="service-card__footer">
+                            <a href="#contato" class="service-card__link">
+                                Solicitar orçamento <i class="fas fa-chevron-right" aria-hidden="true"></i>
                             </a>
                         </div>
-                    </div>
+                    </article>
                 `).join('');
 
                 const cards = container.querySelectorAll('.service-card');
                 cards.forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.animationDelay = `${index * 45}ms`;
-                    requestAnimationFrame(() => {
-                        card.classList.add('animate-fadeIn');
-                    });
+                    const staggerDelay = index * 70;
+                    window.setTimeout(() => {
+                        card.classList.add('service-card--visible');
+                    }, staggerDelay);
                 });
+
+                registerRevealTargets(container);
             })
             .catch(err => console.error('Erro:', err));
 
-        const logoWrapper = document.getElementById('columbina-wrapper');
-        const floatingLogo = document.getElementById('imagemFlutuante');
+        const initFloatingLogos = () => {
+            const logoWrappers = document.querySelectorAll('.js-floating-logo-wrapper');
+            if (!logoWrappers.length) return;
 
-        if (logoWrapper && floatingLogo) {
-            let animationFrame = null;
-            let targetX = 0;
-            const baseY = -4.0742;
-            let targetY = baseY;
-            let currentX = 0;
-            let currentY = baseY;
-            let floatTime = 0;
+            logoWrappers.forEach((logoWrapper) => {
+                const floatingLogo = logoWrapper.querySelector('.js-floating-logo');
+                if (!floatingLogo) return;
 
-            const maxOffset = 8;
-            const followSpeed = 0.21;
-            const floatAmplitude = 2.2;
-            const floatVelocity = 0.003;
+                let animationFrame = null;
+                let targetX = 0;
+                const baseY = -4.0742;
+                let targetY = baseY;
+                let currentX = 0;
+                let currentY = baseY;
+                let floatTime = 0;
 
-            const animateLogo = (time) => {
-                floatTime = time;
-                currentX += (targetX - currentX) * followSpeed;
-                currentY += (targetY - currentY) * followSpeed;
-                const slowFloat = Math.sin(floatTime * floatVelocity) * floatAmplitude;
+                const maxOffset = 8;
+                const followSpeed = 0.21;
+                const floatAmplitude = 2.2;
+                const floatVelocity = 0.003;
 
-                floatingLogo.style.transform = `translate3d(${currentX}px, ${currentY + slowFloat}px, 0)`;
+                const animateLogo = (time) => {
+                    floatTime = time;
+                    currentX += (targetX - currentX) * followSpeed;
+                    currentY += (targetY - currentY) * followSpeed;
+                    const slowFloat = Math.sin(floatTime * floatVelocity) * floatAmplitude;
+
+                    floatingLogo.style.transform = `translate3d(${currentX}px, ${currentY + slowFloat}px, 0)`;
+                    animationFrame = requestAnimationFrame(animateLogo);
+                };
+
+                const moveLogo = (event) => {
+                    const rect = logoWrapper.getBoundingClientRect();
+                    const normalizedX = (event.clientX - rect.left) / rect.width - 0.5;
+                    const normalizedY = (event.clientY - rect.top) / rect.height - 0.5;
+
+                    targetX = normalizedX * maxOffset;
+                    targetY = baseY + normalizedY * maxOffset;
+
+                    if (!animationFrame) {
+                        animationFrame = requestAnimationFrame(animateLogo);
+                    }
+                };
+
+                const resetLogo = () => {
+                    targetX = 0;
+                    targetY = baseY;
+
+                    if (!animationFrame) {
+                        animationFrame = requestAnimationFrame(animateLogo);
+                    }
+                };
+
+                logoWrapper.addEventListener('mousemove', moveLogo);
+                logoWrapper.addEventListener('mouseenter', moveLogo);
+                logoWrapper.addEventListener('mouseleave', resetLogo);
                 animationFrame = requestAnimationFrame(animateLogo);
-            };
+            });
+        };
 
-            const moveLogo = (event) => {
-                const rect = logoWrapper.getBoundingClientRect();
-                const normalizedX = (event.clientX - rect.left) / rect.width - 0.5;
-                const normalizedY = (event.clientY - rect.top) / rect.height - 0.5;
+        const initKeywordHighlights = () => {
+            const keywords = [
+                'mecanica pesada',
+                'mecânica pesada',
+                'mecanica',
+                'mecânica',
+                'mecatronica',
+                'mecatrônica',
+                'autopecas',
+                'autopeças',
+                'pronta entrega',
+                'diagnostico',
+                'diagnóstico',
+                'diagnosticos',
+                'diagnósticos',
+                'linha pesada',
+                'caminhoes',
+                'caminhões',
+                'onibus',
+                'ônibus',
+                'diesel',
+                'frota',
+                'orcamento',
+                'orçamento',
+                'whatsapp',
+                'setor automotivo',
+                'veiculos pesados',
+                'veículos pesados',
+                'tecnologia',
+                'tecnologias',
+                'equipamentos modernos',
+                'capacitacao',
+                'capacitação',
+                'automacao',
+                'automação',
+                'modulos',
+                'módulos',
+                'equipe especializada',
+                'arla',
+                'cambio automatico',
+                'câmbio automático',
+                'injecao diesel',
+                'injeção diesel',
+                'agilidade',
+                'garantia',
+                'entrega rapida',
+                'entrega rápida',
+                'compromisso'
+            ];
 
-                targetX = normalizedX * maxOffset;
-                targetY = baseY + normalizedY * maxOffset;
+            const escapedKeywords = [...new Set(keywords)]
+                .sort((a, b) => b.length - a.length)
+                .map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
 
-                if (!animationFrame) {
-                    animationFrame = requestAnimationFrame(animateLogo);
+            if (!escapedKeywords.length) return;
+
+            const keywordPattern = new RegExp(
+                `(^|[^\\p{L}\\p{N}])(${escapedKeywords.join('|')})(?=[^\\p{L}\\p{N}]|$)`,
+                'giu'
+            );
+
+            const skipTags = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME', 'TEXTAREA', 'CODE', 'PRE']);
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            const nodesToProcess = [];
+
+            let textNode = walker.nextNode();
+            while (textNode) {
+                const parent = textNode.parentElement;
+
+                if (
+                    parent &&
+                    !skipTags.has(parent.tagName) &&
+                    !parent.closest('strong, b, script, style, noscript, iframe, textarea, code, pre, .no-keyword-bold') &&
+                    textNode.nodeValue &&
+                    textNode.nodeValue.trim().length
+                ) {
+                    keywordPattern.lastIndex = 0;
+                    if (keywordPattern.test(textNode.nodeValue)) {
+                        nodesToProcess.push(textNode);
+                    }
                 }
-            };
 
-            const resetLogo = () => {
-                targetX = 0;
-                targetY = baseY;
+                textNode = walker.nextNode();
+            }
 
-                if (!animationFrame) {
-                    animationFrame = requestAnimationFrame(animateLogo);
-                }
-            };
+            nodesToProcess.forEach((node) => {
+                const originalText = node.nodeValue;
+                if (!originalText) return;
 
-            logoWrapper.addEventListener('mousemove', moveLogo);
-            logoWrapper.addEventListener('mouseenter', moveLogo);
-            logoWrapper.addEventListener('mouseleave', resetLogo);
-            animationFrame = requestAnimationFrame(animateLogo);
-        }
+                keywordPattern.lastIndex = 0;
+                const highlightedText = originalText.replace(
+                    keywordPattern,
+                    (fullMatch, prefix, term) => `${prefix}<strong>${term}</strong>`
+                );
+
+                if (highlightedText === originalText) return;
+
+                const wrapper = document.createElement('span');
+                wrapper.innerHTML = highlightedText;
+                node.replaceWith(...wrapper.childNodes);
+            });
+        };
+
+        initKeywordHighlights();
 
         initLenis();
         animateHeroOnLoad();
         initScrollReveal();
+        renderPartners();
         initContactForm();
         initFloatingWhatsapp();
+        initMobileMenu();
+        initLegalModal();
+        initFloatingLogos();
     </script>
 </body>
 </html>
