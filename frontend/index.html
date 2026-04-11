@@ -228,6 +228,36 @@
         .btn-rounded {
             border-radius: 1rem;
         }
+        .ui-panel {
+            border-radius: var(--ui-radius-card);
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            box-shadow: var(--ui-shadow-card-soft);
+            transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+        }
+        .ui-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--ui-shadow-card-hover);
+            border-color: rgba(210, 0, 0, 0.2);
+        }
+        .ui-panel-dark {
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+        }
+        .ui-panel-dark:hover {
+            border-color: rgba(210, 0, 0, 0.35);
+            box-shadow: 0 24px 46px rgba(0, 0, 0, 0.34);
+        }
+        .ui-media-frame {
+            border-radius: var(--ui-radius-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--ui-shadow-card-soft);
+            transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease, filter 260ms ease;
+        }
+        .ui-media-frame:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--ui-shadow-card-hover);
+            border-color: rgba(210, 0, 0, 0.26);
+        }
         .hero-gradient {
             background: linear-gradient(rgba(26,26,26,0.65), rgba(26,26,26,0.65)), url('https://a.imagem.app/GSEF2Z.png');
             background-size: cover;
@@ -899,7 +929,7 @@
                 <!-- Services will be injected here by JS -->
             </div>
 
-            <div class="mt-10 bg-shop-gray-dark text-white rounded-2xl overflow-hidden shadow-2xl">
+            <div class="mt-10 bg-shop-gray-dark text-white rounded-2xl overflow-hidden shadow-2xl ui-panel ui-panel-dark">
                 <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
                     <div class="p-10 lg:p-12">
                         <span class="text-shop-red font-black uppercase tracking-widest text-xs mb-4 block">Especialidades em destaque</span>
@@ -1074,14 +1104,14 @@
                             </div>
                         </div>
                     </div>
-                        <div class="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6">
+                        <div class="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6 ui-panel ui-panel-dark">
                             <p class="text-sm uppercase tracking-[0.2em] text-shop-red font-black mb-2">Nosso compromisso</p>
                             <p class="text-gray-300 leading-relaxed">Garantir que cada cliente tenha seu veículo funciona desempenho, reduzindo paradas e prejuízos.</p>
                         </div>
                 </div>
                 <div class="relative flex flex-col">
-                    <img src="https://images.unsplash.com/photo-1486006396193-471a2abc881e?q=80&w=1000" alt="Mecânica" class="w-full rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='https://a.imagem.app/GSEF2Z.png';">
-                    <div class="mt-4 self-center md:mt-0 md:absolute md:-bottom-10 md:-left-10 bg-shop-red p-5 md:p-10 rounded shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1486006396193-471a2abc881e?q=80&w=1000" alt="Mecânica" class="w-full rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700 ui-media-frame" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='https://a.imagem.app/GSEF2Z.png';">
+                    <div class="mt-4 self-center md:mt-0 md:absolute md:-bottom-10 md:-left-10 bg-shop-red p-5 md:p-10 rounded shadow-2xl ui-panel ui-panel-dark">
                         <p class="text-4xl md:text-6xl font-black italic leading-none">19+</p>
                         <p class="text-[10px] md:text-xs uppercase font-bold tracking-widest mt-1 md:mt-0">Anos de Mercado</p>
                     </div>
@@ -1094,7 +1124,7 @@
     <!-- Contact -->
     <section id="contato" class="py-16 md:py-24 bg-white scroll-mt-28 md:scroll-mt-32">
         <div class="max-w-7xl mx-auto px-4 md:px-6">
-            <div data-scroll-anchor class="bg-shop-gray-light rounded-2xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-3">
+            <div data-scroll-anchor class="bg-shop-gray-light rounded-2xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-3 ui-panel">
                 <div class="bg-shop-red p-7 md:p-12 text-white">
                     <h3 class="text-2xl md:text-3xl font-black mb-8 md:mb-10 italic uppercase">Contato Direto</h3>
                     <div class="space-y-8">
@@ -1150,7 +1180,7 @@
                         ></iframe>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/78 via-black/30 to-transparent"></div>
                         <div class="absolute inset-x-0 bottom-0 p-6 md:p-8">
-                            <div class="rounded-2xl border border-white/10 bg-black/55 backdrop-blur-md p-5 md:p-6 shadow-2xl">
+                            <div class="rounded-2xl border border-white/10 bg-black/55 backdrop-blur-md p-5 md:p-6 shadow-2xl ui-panel ui-panel-dark">
                                 <p class="text-[10px] uppercase font-black tracking-[0.25em] text-shop-red mb-2">Localização da oficina</p>
                                 <h3 class="text-xl md:text-2xl font-black italic uppercase text-white leading-tight">Grupo Mano</h3>
                                 <p class="text-sm text-gray-300 mt-3 leading-relaxed">BR 116, km 635,8, Entroncamento Jaguaquara - BA, 45345-000</p>
