@@ -124,18 +124,34 @@
         .partners-section {
             position: relative;
             overflow: hidden;
+            background:
+                radial-gradient(1200px 280px at 8% -10%, rgba(210, 0, 0, 0.1), transparent 55%),
+                radial-gradient(900px 240px at 92% 118%, rgba(26, 26, 26, 0.08), transparent 58%),
+                linear-gradient(180deg, #f8f8f8 0%, #ffffff 52%, #f7f7f7 100%);
         }
         .partners-section::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.98));
+            background: linear-gradient(180deg, rgba(255,255,255,0.56), rgba(255,255,255,0.9));
+            pointer-events: none;
+        }
+        .partners-section::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -110px;
+            width: min(920px, 92vw);
+            height: 210px;
+            transform: translateX(-50%);
+            background: radial-gradient(closest-side, rgba(210, 0, 0, 0.09), transparent 70%);
+            filter: blur(10px);
             pointer-events: none;
         }
         .partners-marquee {
             position: relative;
             overflow: hidden;
-            padding: 0.75rem 0.5rem 1rem;
+            padding: 1rem 0.7rem 2.85rem;
             mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
             -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
         }
@@ -143,27 +159,45 @@
             display: flex;
             width: max-content;
             gap: 1rem;
-            animation: partnersScroll 34s linear infinite;
+            animation: partnersScroll 30s linear infinite;
             will-change: transform;
         }
         .partners-track:hover {
             animation-play-state: paused;
         }
         .partner-tile {
+            position: relative;
             width: 8.5rem;
             height: 8.5rem;
             flex: 0 0 auto;
-            overflow: hidden;
-            border: 1px solid rgba(26, 26, 26, 0.08);
-            background: linear-gradient(160deg, rgba(255,255,255,0.98), rgba(245,245,245,0.9));
-            box-shadow: 0 18px 40px rgba(26, 26, 26, 0.08);
-            transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+            overflow: visible;
+            border: 1px solid rgba(26, 26, 26, 0.07);
+            background: linear-gradient(165deg, rgba(255,255,255,0.95), rgba(248,248,248,0.78));
+            box-shadow: 0 16px 34px rgba(26, 26, 26, 0.08), inset 0 1px 0 rgba(255,255,255,0.65);
+            transform: translateY(var(--tile-offset, 0px));
+            transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, background-color 220ms ease;
             will-change: transform;
+            isolation: isolate;
+        }
+        .partner-tile::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(140deg, rgba(210, 0, 0, 0.1), transparent 38%, transparent 64%, rgba(26, 26, 26, 0.05));
+            opacity: 0.68;
+            transition: opacity 220ms ease;
+            pointer-events: none;
+            z-index: 0;
         }
         .partner-tile:hover {
-            transform: translateY(-2px) scale(1.025);
-            box-shadow: 0 24px 50px rgba(26, 26, 26, 0.14);
-            border-color: rgba(210, 0, 0, 0.18);
+            transform: translateY(calc(var(--tile-offset, 0px) - 6px)) scale(1.03);
+            box-shadow: 0 26px 54px rgba(26, 26, 26, 0.16), 0 0 0 1px rgba(210, 0, 0, 0.1);
+            border-color: rgba(210, 0, 0, 0.3);
+            background: linear-gradient(165deg, rgba(255,255,255,0.98), rgba(247,247,247,0.9));
+        }
+        .partner-tile:hover::before {
+            opacity: 1;
         }
         .partner-tile img {
             width: 100%;
@@ -171,8 +205,123 @@
             object-fit: contain;
             display: block;
         }
-        .partner-tile span:first-child {
-            letter-spacing: 0.18em;
+        .partner-logo-wrap {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.1rem 0.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        .partner-logo {
+            width: 100%;
+            max-width: 7.6rem;
+            max-height: 3.8rem;
+            object-fit: contain;
+            display: block;
+        }
+        .partner-logo.logo-boost {
+            transform: scale(1.28);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-strong {
+            transform: scale(1.42);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-lonaflex {
+            transform: scale(1.82);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-knorr {
+            transform: scale(1.58);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-parker {
+            transform: scale(1.56);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-mwm {
+            transform: scale(1.66);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-wabco {
+            transform: scale(1.58);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-quinelato {
+            transform: scale(1.52);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-sachs {
+            transform: scale(1.48);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-schadek {
+            transform: scale(1.56);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-zf {
+            transform: scale(1.52);
+            transform-origin: center;
+        }
+        .partner-logo.logo-boost-sabo {
+            transform: scale(1.6);
+            transform-origin: center;
+        }
+        .partner-fallback {
+            display: none;
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: #1A1A1A;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .partner-hover-info {
+            position: absolute;
+            top: calc(100% + 0.35rem);
+            left: 50%;
+            transform: translate(-50%, -4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.04rem;
+            padding: 0.2rem 0.42rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(210, 0, 0, 0.11);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(3px);
+            box-shadow: 0 5px 14px rgba(26, 26, 26, 0.07);
+            opacity: 0;
+            transition: opacity 200ms ease, transform 200ms ease;
+            pointer-events: none;
+            z-index: 3;
+            white-space: nowrap;
+        }
+        .partner-tile:hover .partner-hover-info {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        .partner-hover-name {
+            color: #D20000;
+            font-size: 0.56rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            line-height: 1.1;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        .partner-hover-tag {
+            color: #4b5563;
+            font-size: 0.5rem;
+            font-weight: 800;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+            line-height: 1.1;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
         @keyframes partnersScroll {
             from {
@@ -185,6 +334,19 @@
         @media (prefers-reduced-motion: reduce) {
             .partners-track {
                 animation: none;
+            }
+        }
+        @media (max-width: 640px) {
+            .partners-marquee {
+                padding-bottom: 3rem;
+            }
+            .partner-tile {
+                width: 7.8rem;
+                height: 7.8rem;
+            }
+            .partner-logo {
+                max-width: 7rem;
+                max-height: 3.45rem;
             }
         }
         .floating-whatsapp {
@@ -621,109 +783,7 @@
             </div>
 
             <div class="partners-marquee">
-                <div class="partners-track" aria-label="Marcas e parceiros do Grupo Mano">
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Volvo</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VN</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Linha pesada</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Scania</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">S</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Performance</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Mercedes</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">MB</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Origem forte</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Iveco</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">I</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Diesel</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Volkswagen</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VW</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Constante</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Ford</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">F</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Robustez</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">DAF</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">D</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Estrada</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Bosch</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">B</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Tecnologia</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Mahle</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">M</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Precisão</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Cummins</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">C</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Potência</span>
-                    </div>
-
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Volvo</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VN</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Linha pesada</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Scania</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">S</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Performance</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Mercedes</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">MB</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Origem forte</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Iveco</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">I</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Diesel</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Volkswagen</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">VW</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Constante</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Ford</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">F</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Robustez</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">DAF</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">D</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Estrada</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Bosch</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">B</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Tecnologia</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Mahle</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">M</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Precisão</span>
-                    </div>
-                    <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" aria-hidden="true">
-                        <span class="text-[10px] font-black uppercase text-shop-red">Cummins</span>
-                        <span class="text-2xl font-black tracking-tight text-shop-gray-dark">C</span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">Potência</span>
-                    </div>
-                </div>
+                <div id="partners-track" class="partners-track" aria-label="Marcas e parceiros do Grupo Mano"></div>
             </div>
         </div>
     </section>
@@ -1101,6 +1161,92 @@
             return 'fa-wrench';
         };
 
+        const partners = [
+            { name: 'Bosch', tag: 'Injeção', logo: './assets/img/marcas/BOSCH.svg' },
+            { name: 'WABCO', tag: 'Freios', logo: './assets/img/marcas/WABCO.svg' },
+            { name: 'Sachs', tag: 'Suspensão', logo: './assets/img/marcas/SACHS.webp' },
+            { name: 'Quinelato', tag: 'Reparos', logo: './assets/img/marcas/Quinelato.png' },
+            { name: 'Schadek', tag: 'Lubrificação', logo: './assets/img/marcas/SCHADEK.png' },
+            { name: 'MANN-FILTER', tag: 'Filtros', logo: './assets/img/marcas/MAN FILTER.svg' },
+            { name: 'Meritor', tag: 'Eixos', logo: './assets/img/marcas/Meritor.png' },
+            { name: 'FAG', tag: 'Rolamentos', logo: './assets/img/marcas/FAG.png' },
+            { name: 'Parker', tag: 'Hidráulica', logo: './assets/img/marcas/Parker.png' },
+            { name: 'Lonaflex', tag: 'Freios', logo: './assets/img/marcas/LONAFREX.webp' },
+            { name: 'ZF', tag: 'Transmissão', logo: './assets/img/marcas/ZF.svg' },
+            { name: 'Knorr-Bremse', tag: 'Freios', logo: './assets/img/marcas/Knorr-Bremse.png' },
+            { name: 'MWM', tag: 'Motores', logo: './assets/img/marcas/MWM.png' },
+            { name: 'Cummins', tag: 'Motores', logo: './assets/img/marcas/Cummins.png' },
+            { name: 'Sabó', tag: 'Vedação', logo: './assets/img/marcas/Sabo.png' },
+        ];
+
+        const renderPartners = () => {
+            const track = document.getElementById('partners-track');
+            if (!track) return;
+
+            const getLogoClass = (name) => {
+                const normalized = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                if (normalized === 'lonaflex') {
+                    return 'partner-logo logo-boost-lonaflex';
+                }
+                if (normalized === 'knorr-bremse') {
+                    return 'partner-logo logo-boost-knorr';
+                }
+                if (normalized === 'parker') {
+                    return 'partner-logo logo-boost-parker';
+                }
+                if (normalized === 'mwm') {
+                    return 'partner-logo logo-boost-mwm';
+                }
+                if (normalized === 'wabco') {
+                    return 'partner-logo logo-boost-wabco';
+                }
+                if (normalized === 'quinelato') {
+                    return 'partner-logo logo-boost-quinelato';
+                }
+                if (normalized === 'sachs') {
+                    return 'partner-logo logo-boost-sachs';
+                }
+                if (normalized === 'schadek') {
+                    return 'partner-logo logo-boost-schadek';
+                }
+                if (normalized === 'zf') {
+                    return 'partner-logo logo-boost-zf';
+                }
+                if (normalized === 'sabo') {
+                    return 'partner-logo logo-boost-sabo';
+                }
+                if (['parker', 'lonaflex', 'mwm', 'cummins', 'sabo'].includes(normalized)) {
+                    return 'partner-logo logo-boost-strong';
+                }
+                return 'partner-logo';
+            };
+
+            const allTiles = [...partners, ...partners];
+            track.innerHTML = allTiles.map((partner, index) => {
+                const offset = ((index % 5) - 2) * 2;
+                return `
+                <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" style="--tile-offset:${offset}px;" ${index >= partners.length ? 'aria-hidden="true"' : ''}>
+                    <div class="partner-hover-info" aria-hidden="true">
+                        <span class="partner-hover-name">${partner.name}</span>
+                        <span class="partner-hover-tag">${partner.tag}</span>
+                    </div>
+                    <div class="partner-logo-wrap">
+                        <img
+                            src="${partner.logo}"
+                            alt="Logo ${partner.name}"
+                            class="${getLogoClass(partner.name)}"
+                            loading="lazy"
+                            decoding="async"
+                            referrerpolicy="no-referrer"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+                        <span class="partner-fallback">${partner.name}</span>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        };
+
         fetch('/api/services')
             .then(res => res.json())
             .then(services => {
@@ -1190,6 +1336,7 @@
         initLenis();
         animateHeroOnLoad();
         initScrollReveal();
+        renderPartners();
         initContactForm();
         initFloatingWhatsapp();
     </script>
