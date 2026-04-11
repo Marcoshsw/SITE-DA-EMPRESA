@@ -174,7 +174,7 @@
             border: 1px solid rgba(26, 26, 26, 0.07);
             background: linear-gradient(165deg, rgba(255,255,255,0.95), rgba(248,248,248,0.78));
             box-shadow: 0 16px 34px rgba(26, 26, 26, 0.08), inset 0 1px 0 rgba(255,255,255,0.65);
-            transform: translateY(var(--tile-offset, 0px));
+            transform: translateY(0);
             transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, background-color 220ms ease;
             will-change: transform;
             isolation: isolate;
@@ -191,7 +191,7 @@
             z-index: 0;
         }
         .partner-tile:hover {
-            transform: translateY(calc(var(--tile-offset, 0px) - 6px)) scale(1.03);
+            transform: translateY(-6px) scale(1.03);
             box-shadow: 0 26px 54px rgba(26, 26, 26, 0.16), 0 0 0 1px rgba(210, 0, 0, 0.1);
             border-color: rgba(210, 0, 0, 0.3);
             background: linear-gradient(165deg, rgba(255,255,255,0.98), rgba(247,247,247,0.9));
@@ -1055,14 +1055,14 @@
             <div class="px-5 md:px-7 py-5 md:py-6 max-h-[58vh] overflow-y-auto">
                 <div id="panel-privacy" class="legal-tab-panel is-active" role="tabpanel" aria-labelledby="tab-privacy">
                     <p class="text-gray-200 leading-relaxed">
-                        Esta politica explica como o Grupo Mano coleta e utiliza dados pessoais de clientes e visitantes, em conformidade com a LGPD (Lei no 13.709/2018).
+                        Esta política explica como o Grupo Mano coleta e utiliza dados pessoais de clientes e visitantes, em conformidade com a LGPD (Lei nº 13.709/2018).
                     </p>
                     <div class="mt-5 space-y-4 text-sm text-gray-300 leading-relaxed">
-                        <p><strong class="text-white">1. Dados coletados:</strong> nome, telefone, e-mail, dados do veiculo e informacoes fornecidas no atendimento presencial, WhatsApp e formulario do site.</p>
-                        <p><strong class="text-white">2. Finalidade:</strong> elaborar orcamentos, agendar servicos, responder solicitacoes e manter contato sobre o atendimento realizado.</p>
-                        <p><strong class="text-white">3. Compartilhamento:</strong> os dados nao sao comercializados. O compartilhamento ocorre apenas quando necessario para execucao do servico, obrigacao legal ou parceiros tecnicos autorizados.</p>
-                        <p><strong class="text-white">4. Armazenamento e seguranca:</strong> adotamos medidas de seguranca para proteger os dados contra acesso nao autorizado, perda ou uso indevido.</p>
-                        <p><strong class="text-white">5. Direitos do titular:</strong> voce pode solicitar acesso, correcao, atualizacao ou exclusao de dados pessoais, conforme previsto em lei.</p>
+                        <p><strong class="text-white">1. Dados coletados:</strong> nome, telefone, e-mail, dados do veículo e informações fornecidas no atendimento presencial, WhatsApp e formulário do site.</p>
+                        <p><strong class="text-white">2. Finalidade:</strong> elaborar orçamentos, agendar serviços, responder solicitações e manter contato sobre o atendimento realizado.</p>
+                        <p><strong class="text-white">3. Compartilhamento:</strong> os dados não são comercializados. O compartilhamento ocorre apenas quando necessário para execução do serviço, obrigação legal ou parceiros técnicos autorizados.</p>
+                        <p><strong class="text-white">4. Armazenamento e segurança:</strong> adotamos medidas de segurança para proteger os dados contra acesso não autorizado, perda ou uso indevido.</p>
+                        <p><strong class="text-white">5. Direitos do titular:</strong> você pode solicitar acesso, correção, atualização ou exclusão de dados pessoais, conforme previsto em lei.</p>
                         <p><strong class="text-white">6. Contato:</strong> para assuntos de privacidade, entre em contato pelo e-mail contato@grupomano.com.br ou WhatsApp (73) 99142-0645.</p>
                         <p class="text-xs text-gray-400 pt-2 border-t border-white/10">Ultima atualizacao: 11/04/2026.</p>
                     </div>
@@ -1070,16 +1070,16 @@
 
                 <div id="panel-terms" class="legal-tab-panel" role="tabpanel" aria-labelledby="tab-terms">
                     <p class="text-gray-200 leading-relaxed">
-                        Ao utilizar este site e os canais do Grupo Mano, voce concorda com os termos abaixo para uso de conteudo, solicitacoes e atendimento.
+                        Ao utilizar este site e os canais do Grupo Mano, você concorda com os termos abaixo para uso de conteúdo, solicitações e atendimento.
                     </p>
                     <div class="mt-5 space-y-4 text-sm text-gray-300 leading-relaxed">
-                        <p><strong class="text-white">1. Informacoes do site:</strong> os conteudos tem carater informativo e podem ser atualizados sem aviso previo.</p>
-                        <p><strong class="text-white">2. Orcamentos e prazos:</strong> valores e prazos dependem de analise tecnica do veiculo e disponibilidade de pecas.</p>
-                        <p><strong class="text-white">3. Responsabilidades:</strong> o cliente deve fornecer informacoes corretas sobre o veiculo para um diagnostico adequado.</p>
+                        <p><strong class="text-white">1. Informações do site:</strong> os conteúdos têm caráter informativo e podem ser atualizados sem aviso prévio.</p>
+                        <p><strong class="text-white">2. Orçamentos e prazos:</strong> valores e prazos dependem de análise técnica do veículo e disponibilidade de peças.</p>
+                        <p><strong class="text-white">3. Responsabilidades:</strong> o cliente deve fornecer informações corretas sobre o veículo para um diagnóstico adequado.</p>
                         <p><strong class="text-white">4. Propriedade intelectual:</strong> marcas, imagens e textos do site pertencem ao Grupo Mano ou aos seus respectivos titulares.</p>
-                        <p><strong class="text-white">5. Links externos:</strong> nao nos responsabilizamos por politicas ou conteudos de sites de terceiros, como plataformas de mapas e redes sociais.</p>
-                        <p><strong class="text-white">6. Atendimento:</strong> o uso de WhatsApp, telefone e formulario esta sujeito a disponibilidade da equipe e horario comercial.</p>
-                        <p class="text-xs text-gray-400 pt-2 border-t border-white/10">Ultima atualizacao: 11/04/2026.</p>
+                        <p><strong class="text-white">5. Links externos:</strong> não nos responsabilizamos por políticas ou conteúdos de sites de terceiros, como plataformas de mapas e redes sociais.</p>
+                        <p><strong class="text-white">6. Atendimento:</strong> o uso de WhatsApp, telefone e formulário está sujeito a disponibilidade da equipe e horário comercial.</p>
+                        <p class="text-xs text-gray-400 pt-2 border-t border-white/10">Última atualização: 11/04/2026.</p>
                     </div>
                 </div>
             </div>
@@ -1558,7 +1558,7 @@
             { name: 'Meritor', tag: 'Eixos', logo: './assets/img/marcas/Meritor.png' },
             { name: 'FAG', tag: 'Rolamentos', logo: './assets/img/marcas/FAG.png' },
             { name: 'Parker', tag: 'Hidráulica', logo: './assets/img/marcas/Parker.png' },
-            { name: 'Lonaflex', tag: 'Freios', logo: './assets/img/marcas/LONAFREX.webp' },
+            { name: 'Lonaflex', tag: 'Freios', logo: './assets/img/marcas/LONAFLEX.png' },
             { name: 'ZF', tag: 'Transmissão', logo: './assets/img/marcas/ZF.svg' },
             { name: 'Knorr-Bremse', tag: 'Freios', logo: './assets/img/marcas/Knorr-Bremse.png' },
             { name: 'MWM', tag: 'Motores', logo: './assets/img/marcas/MWM.png' },
@@ -1610,9 +1610,8 @@
 
             const allTiles = [...partners, ...partners];
             track.innerHTML = allTiles.map((partner, index) => {
-                const offset = ((index % 5) - 2) * 2;
                 return `
-                <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" style="--tile-offset:${offset}px;" ${index >= partners.length ? 'aria-hidden="true"' : ''}>
+                <div class="partner-tile rounded-2xl flex flex-col items-center justify-center text-center gap-2 px-4" ${index >= partners.length ? 'aria-hidden="true"' : ''}>
                     <div class="partner-hover-info" aria-hidden="true">
                         <span class="partner-hover-name">${partner.name}</span>
                         <span class="partner-hover-tag">${partner.tag}</span>
