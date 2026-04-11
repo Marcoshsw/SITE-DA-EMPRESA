@@ -531,6 +531,51 @@
                 transform: rotate(360deg);
             }
         }
+        .legal-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 130;
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+            background: rgba(10, 10, 10, 0.72);
+            backdrop-filter: blur(3px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 220ms ease, visibility 220ms ease;
+        }
+        .legal-modal.is-open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .legal-modal-panel {
+            width: min(760px, 100%);
+            max-height: min(88vh, 760px);
+            overflow: hidden;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: linear-gradient(165deg, #151515, #101010 56%, #0b0b0b);
+            box-shadow: 0 28px 62px rgba(0, 0, 0, 0.4);
+            transform: translateY(12px) scale(0.98);
+            transition: transform 220ms ease;
+        }
+        .legal-modal.is-open .legal-modal-panel {
+            transform: translateY(0) scale(1);
+        }
+        .legal-tab-button[aria-selected="true"] {
+            color: #FFFFFF;
+            background: rgba(210, 0, 0, 0.22);
+            border-color: rgba(210, 0, 0, 0.55);
+            box-shadow: 0 10px 22px rgba(210, 0, 0, 0.2);
+        }
+        .legal-tab-panel {
+            display: none;
+        }
+        .legal-tab-panel.is-active {
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-white text-gray-900">
@@ -964,11 +1009,82 @@
                 &copy; 2026 Grupo Mano. Todos os direitos reservados.
             </div>
             <div class="flex gap-8 text-[10px] font-black uppercase tracking-widest">
-                <a href="#" class="hover:text-white transition">Privacidade</a>
-                <a href="#" class="hover:text-white transition">Termos</a>
+                <button type="button" class="hover:text-white transition" data-legal-open="privacy">PRIVACIDADE</button>
+                <button type="button" class="hover:text-white transition" data-legal-open="terms">TERMOS</button>
             </div>
         </div>
     </footer>
+
+    <section id="legal-modal" class="legal-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="legal-modal-title">
+        <div class="legal-modal-panel text-white">
+            <div class="px-5 md:px-7 py-5 border-b border-white/10 flex items-start justify-between gap-4">
+                <div>
+                    <p class="text-[10px] uppercase tracking-[0.2em] font-black text-shop-red">Informações legais</p>
+                    <h3 id="legal-modal-title" class="text-xl md:text-2xl font-black italic uppercase mt-1">Privacidade e termos</h3>
+                </div>
+                <button type="button" class="btn-clean btn-secondary btn-rounded px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em]" data-legal-close>
+                    Fechar
+                </button>
+            </div>
+
+            <div class="px-5 md:px-7 py-4 border-b border-white/10 flex flex-wrap gap-2" role="tablist" aria-label="Seções legais">
+                <button
+                    id="tab-privacy"
+                    type="button"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="panel-privacy"
+                    class="legal-tab-button rounded-lg border border-white/20 px-4 py-2 text-[10px] md:text-xs font-black uppercase tracking-[0.14em] text-gray-200 transition"
+                    data-legal-tab="privacy"
+                >
+                    Privacidade
+                </button>
+                <button
+                    id="tab-terms"
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="panel-terms"
+                    class="legal-tab-button rounded-lg border border-white/20 px-4 py-2 text-[10px] md:text-xs font-black uppercase tracking-[0.14em] text-gray-200 transition"
+                    data-legal-tab="terms"
+                >
+                    Termos de uso
+                </button>
+            </div>
+
+            <div class="px-5 md:px-7 py-5 md:py-6 max-h-[58vh] overflow-y-auto">
+                <div id="panel-privacy" class="legal-tab-panel is-active" role="tabpanel" aria-labelledby="tab-privacy">
+                    <p class="text-gray-200 leading-relaxed">
+                        Esta politica explica como o Grupo Mano coleta e utiliza dados pessoais de clientes e visitantes, em conformidade com a LGPD (Lei no 13.709/2018).
+                    </p>
+                    <div class="mt-5 space-y-4 text-sm text-gray-300 leading-relaxed">
+                        <p><strong class="text-white">1. Dados coletados:</strong> nome, telefone, e-mail, dados do veiculo e informacoes fornecidas no atendimento presencial, WhatsApp e formulario do site.</p>
+                        <p><strong class="text-white">2. Finalidade:</strong> elaborar orcamentos, agendar servicos, responder solicitacoes e manter contato sobre o atendimento realizado.</p>
+                        <p><strong class="text-white">3. Compartilhamento:</strong> os dados nao sao comercializados. O compartilhamento ocorre apenas quando necessario para execucao do servico, obrigacao legal ou parceiros tecnicos autorizados.</p>
+                        <p><strong class="text-white">4. Armazenamento e seguranca:</strong> adotamos medidas de seguranca para proteger os dados contra acesso nao autorizado, perda ou uso indevido.</p>
+                        <p><strong class="text-white">5. Direitos do titular:</strong> voce pode solicitar acesso, correcao, atualizacao ou exclusao de dados pessoais, conforme previsto em lei.</p>
+                        <p><strong class="text-white">6. Contato:</strong> para assuntos de privacidade, entre em contato pelo e-mail contato@grupomano.com.br ou WhatsApp (73) 99142-0645.</p>
+                        <p class="text-xs text-gray-400 pt-2 border-t border-white/10">Ultima atualizacao: 11/04/2026.</p>
+                    </div>
+                </div>
+
+                <div id="panel-terms" class="legal-tab-panel" role="tabpanel" aria-labelledby="tab-terms">
+                    <p class="text-gray-200 leading-relaxed">
+                        Ao utilizar este site e os canais do Grupo Mano, voce concorda com os termos abaixo para uso de conteudo, solicitacoes e atendimento.
+                    </p>
+                    <div class="mt-5 space-y-4 text-sm text-gray-300 leading-relaxed">
+                        <p><strong class="text-white">1. Informacoes do site:</strong> os conteudos tem carater informativo e podem ser atualizados sem aviso previo.</p>
+                        <p><strong class="text-white">2. Orcamentos e prazos:</strong> valores e prazos dependem de analise tecnica do veiculo e disponibilidade de pecas.</p>
+                        <p><strong class="text-white">3. Responsabilidades:</strong> o cliente deve fornecer informacoes corretas sobre o veiculo para um diagnostico adequado.</p>
+                        <p><strong class="text-white">4. Propriedade intelectual:</strong> marcas, imagens e textos do site pertencem ao Grupo Mano ou aos seus respectivos titulares.</p>
+                        <p><strong class="text-white">5. Links externos:</strong> nao nos responsabilizamos por politicas ou conteudos de sites de terceiros, como plataformas de mapas e redes sociais.</p>
+                        <p><strong class="text-white">6. Atendimento:</strong> o uso de WhatsApp, telefone e formulario esta sujeito a disponibilidade da equipe e horario comercial.</p>
+                        <p class="text-xs text-gray-400 pt-2 border-t border-white/10">Ultima atualizacao: 11/04/2026.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <a
         id="floating-whatsapp"
@@ -1248,6 +1364,68 @@
             window.addEventListener('resize', () => {
                 if (window.innerWidth >= 768) {
                     closeMenu();
+                }
+            });
+        };
+
+        const initLegalModal = () => {
+            const modal = document.getElementById('legal-modal');
+            if (!modal) return;
+
+            const openButtons = document.querySelectorAll('[data-legal-open]');
+            const closeButtons = modal.querySelectorAll('[data-legal-close]');
+            const tabButtons = modal.querySelectorAll('[data-legal-tab]');
+            const panels = modal.querySelectorAll('.legal-tab-panel');
+
+            const setActiveTab = (tab) => {
+                tabButtons.forEach((button) => {
+                    const isActive = button.dataset.legalTab === tab;
+                    button.setAttribute('aria-selected', String(isActive));
+                });
+
+                panels.forEach((panel) => {
+                    panel.classList.toggle('is-active', panel.id === `panel-${tab}`);
+                });
+            };
+
+            const openModal = (tab = 'privacy') => {
+                setActiveTab(tab);
+                modal.classList.add('is-open');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('overflow-hidden');
+            };
+
+            const closeModal = () => {
+                modal.classList.remove('is-open');
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('overflow-hidden');
+            };
+
+            openButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    openModal(button.dataset.legalOpen || 'privacy');
+                });
+            });
+
+            tabButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    setActiveTab(button.dataset.legalTab || 'privacy');
+                });
+            });
+
+            closeButtons.forEach((button) => {
+                button.addEventListener('click', closeModal);
+            });
+
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modal.classList.contains('is-open')) {
+                    closeModal();
                 }
             });
         };
@@ -1584,6 +1762,7 @@
         initContactForm();
         initFloatingWhatsapp();
         initMobileMenu();
+        initLegalModal();
         initFloatingLogos();
     </script>
 </body>
