@@ -1496,6 +1496,14 @@
                 return;
             }
 
+            if (!('IntersectionObserver' in window)) {
+                registerRevealTargets(document);
+                document.querySelectorAll('.scroll-fade').forEach((target) => {
+                    target.classList.add('is-visible');
+                });
+                return;
+            }
+
             scrollRevealObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
