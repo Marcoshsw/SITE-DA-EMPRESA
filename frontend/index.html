@@ -791,6 +791,19 @@
                 font-size: 0.9rem;
             }
         }
+        @keyframes faqAnswerOpen {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .faq-item[open] .faq-answer {
+            animation: faqAnswerOpen 700ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
     </style>
 </head>
 <body class="bg-white text-gray-900">
@@ -1228,11 +1241,19 @@
                                     <i class="fas fa-star text-shop-red text-sm"></i>
                                     <i class="fas fa-star text-shop-red text-sm"></i>
                                 </div>
-                                <p class="text-gray-700 font-medium text-lg leading-relaxed mb-6">
-                                    "Trouxe meu Scania com problema no câmbio automático e saiu no prazo combinado. Atendimento técnico de primeira."
-                                </p>
-                                <p class="text-shop-gray-dark font-bold text-sm">Carlos Mendes</p>
-                                <p class="text-gray-500 text-sm">Transportes Mendes, Vitória da Conquista</p>
+                                <div class="flex gap-4">
+                                    <i class="fas fa-quote-left text-shop-red/30 text-4xl flex-shrink-0 h-fit"></i>
+                                    <p class="text-gray-700 font-medium text-lg leading-relaxed mb-6">
+                                        Trouxe meu Scania com problema no câmbio automático e saiu no prazo combinado. Atendimento técnico de primeira.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-3 mt-6">
+                                    <i class="fas fa-user-tie text-shop-red text-lg flex-shrink-0"></i>
+                                    <div>
+                                        <p class="text-shop-gray-dark font-bold text-sm">Carlos Mendes</p>
+                                        <p class="text-gray-500 text-xs">Transportes Mendes, Vitória da Conquista</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -1246,11 +1267,19 @@
                                     <i class="fas fa-star text-shop-red text-sm"></i>
                                     <i class="fas fa-star text-shop-red text-sm"></i>
                                 </div>
-                                <p class="text-gray-700 font-medium text-lg leading-relaxed mb-6">
-                                    "Equipe especializada, diagnóstico rápido e honesto. Voltei mais de uma vez e sempre com excelente atendimento."
-                                </p>
-                                <p class="text-shop-gray-dark font-bold text-sm">Pedro Oliveira</p>
-                                <p class="text-gray-500 text-sm">Autônomo, Jequié</p>
+                                <div class="flex gap-4">
+                                    <i class="fas fa-quote-left text-shop-red/30 text-4xl flex-shrink-0 h-fit"></i>
+                                    <p class="text-gray-700 font-medium text-lg leading-relaxed mb-6">
+                                        Equipe especializada, diagnóstico rápido e honesto. Voltei mais de uma vez e sempre com excelente atendimento.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-3 mt-6">
+                                    <i class="fas fa-user-tie text-shop-red text-lg flex-shrink-0"></i>
+                                    <div>
+                                        <p class="text-shop-gray-dark font-bold text-sm">Pedro Oliveira</p>
+                                        <p class="text-gray-500 text-xs">Autônomo, Jequié</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -1264,11 +1293,19 @@
                                     <i class="fas fa-star text-shop-red text-sm"></i>
                                     <i class="fas fa-star text-shop-red text-sm"></i>
                                 </div>
-                                <p class="text-gray-700 font-medium text-lg leading-relaxed mb-6">
-                                    "Levaram meu ônibus para triagem numa terça e entregaram na quinta. Preço justo e qualidade garantida."
-                                </p>
-                                <p class="text-shop-gray-dark font-bold text-sm">Marcelo Costa</p>
-                                <p class="text-gray-500 text-sm">Transportadora Teixeira, Feira de Santana</p>
+                                <div class="flex gap-4">
+                                    <i class="fas fa-quote-left text-shop-red/30 text-4xl flex-shrink-0 h-fit"></i>
+                                    <p class="text-gray-700 font-medium text-lg leading-relaxed mb-6">
+                                        Levaram meu ônibus para triagem numa terça e entregaram na quinta. Preço justo e qualidade garantida.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-3 mt-6">
+                                    <i class="fas fa-user-tie text-shop-red text-lg flex-shrink-0"></i>
+                                    <div>
+                                        <p class="text-shop-gray-dark font-bold text-sm">Marcelo Costa</p>
+                                        <p class="text-gray-500 text-xs">Transportadora Teixeira, Feira de Santana</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -1282,11 +1319,19 @@
                                     <i class="fas fa-star text-shop-red text-sm"></i>
                                     <i class="fas fa-star text-shop-red text-sm"></i>
                                 </div>
-                                <p class="text-gray-700 font-medium text-lg leading-relaxed mb-6">
-                                    "Problema complexo no eletrônico. Conseguiram resolver onde outros não conseguiram. Recomendo muito."
-                                </p>
-                                <p class="text-shop-gray-dark font-bold text-sm">Élio Santos</p>
-                                <p class="text-gray-500 text-sm">Transportadora Bom Caminho, Ilhéus</p>
+                                <div class="flex gap-4">
+                                    <i class="fas fa-quote-left text-shop-red/30 text-4xl flex-shrink-0 h-fit"></i>
+                                    <p class="text-gray-700 font-medium text-lg leading-relaxed mb-6">
+                                        Problema complexo no eletrônico. Conseguiram resolver onde outros não conseguiram. Recomendo muito.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-3 mt-6">
+                                    <i class="fas fa-user-tie text-shop-red text-lg flex-shrink-0"></i>
+                                    <div>
+                                        <p class="text-shop-gray-dark font-bold text-sm">Élio Santos</p>
+                                        <p class="text-gray-500 text-xs">Transportadora Bom Caminho, Ilhéus</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -1300,11 +1345,19 @@
                                     <i class="fas fa-star text-shop-red text-sm"></i>
                                     <i class="fas fa-star text-shop-red text-sm"></i>
                                 </div>
-                                <p class="text-gray-700 font-medium text-lg leading-relaxed mb-6">
-                                    "Atendimento em campo quando precisei. Mobilizaram a equipe rápido e resolveram na hora."
-                                </p>
-                                <p class="text-shop-gray-dark font-bold text-sm">Gustavo Ferreira</p>
-                                <p class="text-gray-500 text-sm">Operador de Frotas, Itabuna</p>
+                                <div class="flex gap-4">
+                                    <i class="fas fa-quote-left text-shop-red/30 text-4xl flex-shrink-0 h-fit"></i>
+                                    <p class="text-gray-700 font-medium text-lg leading-relaxed mb-6">
+                                        Atendimento em campo quando precisei. Mobilizaram a equipe rápido e resolveram na hora.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-3 mt-6">
+                                    <i class="fas fa-user-tie text-shop-red text-lg flex-shrink-0"></i>
+                                    <div>
+                                        <p class="text-shop-gray-dark font-bold text-sm">Gustavo Ferreira</p>
+                                        <p class="text-gray-500 text-xs">Operador de Frotas, Itabuna</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1312,8 +1365,8 @@
 
                 <!-- Navigation Buttons -->
                 <div class="flex justify-center gap-4 mt-8">
-                    <button class="testimonials-prev group btn-clean btn-secondary btn-rounded w-12 h-12 flex items-center justify-center hover:scale-105" aria-label="Depoimento anterior">
-                        <i class="fas fa-chevron-left text-sm"></i>
+                    <button class="testimonials-prev group btn-clean btn-primary btn-rounded w-12 h-12 flex items-center justify-center hover:scale-105" aria-label="Depoimento anterior">
+                        <i class="fas fa-chevron-left text-sm text-white"></i>
                     </button>
                     <div class="flex items-center gap-2" role="tablist" aria-label="Slides de depoimentos">
                         <button class="testimonials-dot w-3 h-3 rounded-full bg-shop-red transition-all cursor-pointer" style="width: 28px;" data-index="0" role="tab" aria-selected="true" aria-label="Depoimento 1"></button>
@@ -1322,8 +1375,8 @@
                         <button class="testimonials-dot w-3 h-3 rounded-full bg-gray-300 transition-all cursor-pointer" data-index="3" role="tab" aria-selected="false" aria-label="Depoimento 4"></button>
                         <button class="testimonials-dot w-3 h-3 rounded-full bg-gray-300 transition-all cursor-pointer" data-index="4" role="tab" aria-selected="false" aria-label="Depoimento 5"></button>
                     </div>
-                    <button class="testimonials-next group btn-clean btn-secondary btn-rounded w-12 h-12 flex items-center justify-center hover:scale-105" aria-label="Próximo depoimento">
-                        <i class="fas fa-chevron-right text-sm"></i>
+                    <button class="testimonials-next group btn-clean btn-primary btn-rounded w-12 h-12 flex items-center justify-center hover:scale-105" aria-label="Próximo depoimento">
+                        <i class="fas fa-chevron-right text-sm text-white"></i>
                     </button>
                 </div>
             </div>
