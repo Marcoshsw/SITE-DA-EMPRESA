@@ -712,6 +712,85 @@
             -webkit-overflow-scrolling: touch;
             touch-action: pan-y;
         }
+        .faq-section {
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(680px 220px at 8% -10%, rgba(210, 0, 0, 0.1), transparent 60%),
+                radial-gradient(640px 200px at 100% 110%, rgba(17, 24, 39, 0.08), transparent 62%),
+                linear-gradient(180deg, #f8f8f8 0%, #ffffff 58%, #f6f6f6 100%);
+        }
+        .faq-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        .faq-item {
+            border-radius: 1rem;
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            background: #ffffff;
+            box-shadow: var(--ui-shadow-card-soft);
+            transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+            overflow: hidden;
+        }
+        .faq-item[open] {
+            border-color: rgba(210, 0, 0, 0.2);
+            box-shadow: 0 16px 30px rgba(17, 24, 39, 0.1);
+        }
+        .faq-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(210, 0, 0, 0.24);
+        }
+        .faq-question {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.1rem 1.25rem;
+            color: #111827;
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 900;
+            line-height: 1.35;
+            background: linear-gradient(180deg, #ffffff 0%, #fcfcfc 100%);
+        }
+        .faq-item[open] .faq-question {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+        .faq-question::-webkit-details-marker {
+            display: none;
+        }
+        .faq-icon {
+            color: #D20000;
+            font-size: 0.75rem;
+            transition: transform 220ms ease;
+            flex-shrink: 0;
+        }
+        .faq-item[open] .faq-icon {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            padding: 0.95rem 1.25rem 1.15rem;
+            color: #4b5563;
+            line-height: 1.72;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-top: 1px solid rgba(210, 0, 0, 0.12);
+            background: linear-gradient(180deg, rgba(248, 250, 252, 0.9) 0%, rgba(249, 250, 251, 0.75) 100%);
+        }
+        @media (max-width: 640px) {
+            .faq-question {
+                font-size: 0.73rem;
+                letter-spacing: 0.06em;
+                padding: 1rem;
+            }
+            .faq-answer {
+                padding: 0.85rem 1rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-white text-gray-900">
@@ -734,6 +813,7 @@
                 <a href="#servicos" class="hover:text-shop-red transition">Serviços</a>
                 <a href="#galeria" class="hover:text-shop-red transition">Galeria</a>
                 <a href="#sobre" class="hover:text-shop-red transition">Sobre</a>
+                <a href="#faq" class="hover:text-shop-red transition">FAQ</a>
                 <a href="https://www.google.com/maps/dir//Oficina+Mecatr%C3%B4nica+e+Autope%C3%A7as+Paran%C3%A1,+Br+116+km+635,8+Entrocamento+Jaguaquara+BA+Br+116,+km+635,+Jaguaquara+-+BA,+45345-000/@-13.5406007,-40.0712523,16.5z/data=!3m1!4b1!4m9!4m8!1m0!1m5!1m1!1s0x74084a8d2947d7b:0x3f3bfc6168f9f4a!2m2!1d-40.0683332!2d-13.541849!3e0?authuser=0&entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="group btn-clean btn-primary btn-rounded px-6 py-2 font-bold tracking-wider text-[10px] uppercase hover:scale-[1.02]">
                     <i class="fas fa-location-arrow text-[10px]"></i>
                     <span>Abrir Rota</span>
@@ -757,6 +837,7 @@
                 <a href="#servicos" class="px-2 py-3 rounded hover:bg-white/5 transition">Serviços</a>
                 <a href="#galeria" class="px-2 py-3 rounded hover:bg-white/5 transition">Galeria</a>
                 <a href="#sobre" class="px-2 py-3 rounded hover:bg-white/5 transition">Sobre</a>
+                <a href="#faq" class="px-2 py-3 rounded hover:bg-white/5 transition">FAQ</a>
                 <a href="https://www.google.com/maps/dir//Oficina+Mecatr%C3%B4nica+e+Autope%C3%A7as+Paran%C3%A1,+Br+116+km+635,8+Entrocamento+Jaguaquara+BA+Br+116,+km+635,+Jaguaquara+-+BA,+45345-000/@-13.5406007,-40.0712523,16.5z/data=!3m1!4b1!4m9!4m8!1m0!1m5!1m1!1s0x74084a8d2947d7b:0x3f3bfc6168f9f4a!2m2!1d-40.0683332!2d-13.541849!3e0?authuser=0&entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="mt-2 group btn-clean btn-primary btn-rounded px-4 py-3 font-black tracking-wider text-[10px] uppercase">
                     <i class="fas fa-location-arrow text-[10px]"></i>
                     <span>Abrir Rota</span>
@@ -1038,6 +1119,89 @@
             </div>
         </div>
         <i class="fas fa-tools absolute -top-20 -right-20 text-[30rem] text-white/5 rotate-12 hidden md:block"></i>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq-section no-keyword-bold py-16 md:py-20 scroll-mt-28 md:scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div data-scroll-anchor class="mb-10">
+                <span class="text-shop-red font-black uppercase tracking-widest text-sm mb-4 block">Dúvidas comuns</span>
+                <h3 class="text-4xl md:text-5xl font-black text-shop-gray-dark uppercase italic">FAQ para <span class="text-shop-red">linha pesada</span></h3>
+            </div>
+
+            <div class="faq-grid max-w-5xl">
+                <details class="faq-item" open>
+                    <summary class="faq-question">
+                        Atendem emergência?
+                        <i class="fas fa-plus faq-icon" aria-hidden="true"></i>
+                    </summary>
+                    <p class="faq-answer">
+                        Sim. Tratamos ocorrências emergenciais com priorização por criticidade, impacto operacional e viabilidade logística. Acione o WhatsApp para triagem imediata e direcionamento técnico da ocorrência.
+                    </p>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Atendem em campo?
+                        <i class="fas fa-plus faq-icon" aria-hidden="true"></i>
+                    </summary>
+                    <p class="faq-answer">
+                        Sim. Realizamos atendimento em campo após triagem técnica, considerando criticidade, localização e disponibilidade operacional. Acione o WhatsApp e envie modelo do veículo, sintoma e local para priorização.
+                    </p>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Quanto tempo leva o diagnóstico?
+                        <i class="fas fa-plus faq-icon" aria-hidden="true"></i>
+                    </summary>
+                    <p class="faq-answer">
+                        O prazo depende da complexidade da falha, disponibilidade do veículo para testes e necessidade de medições complementares. Na maior parte dos casos, iniciamos triagem e diagnóstico preliminar no mesmo ciclo de atendimento. Solicite estimativa inicial via WhatsApp.
+                    </p>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Trabalham com nota fiscal?
+                        <i class="fas fa-plus faq-icon" aria-hidden="true"></i>
+                    </summary>
+                    <p class="faq-answer">
+                        Sim. Todos os serviços e fornecimentos de peças são formalizados com emissão de nota fiscal, vinculados à ordem de serviço e aos dados cadastrais do cliente. Fale no WhatsApp para validação cadastral e abertura rápida do atendimento.
+                    </p>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Atendem frotas?
+                        <i class="fas fa-plus faq-icon" aria-hidden="true"></i>
+                    </summary>
+                    <p class="faq-answer">
+                        Sim. Atendemos autônomos, transportadoras e gestores de frota com foco em disponibilidade operacional, redução de indisponibilidade e previsibilidade de manutenção. Chame no WhatsApp para estruturarmos o fluxo da sua demanda.
+                    </p>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Tem guindaste?
+                        <i class="fas fa-plus faq-icon" aria-hidden="true"></i>
+                    </summary>
+                    <p class="faq-answer">
+                        Não operamos guindaste próprio. Quando necessário, acionamos parceiros homologados para remoção segura e ágil, com alinhamento técnico prévio para preservar o diagnóstico inicial. Solicite o encaminhamento via WhatsApp para atendimento imediato.
+                    </p>
+                </details>
+            </div>
+
+            <div class="mt-8 max-w-5xl rounded-2xl border border-shop-red/20 bg-white/90 p-5 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 ui-panel">
+                <p class="text-sm md:text-base text-gray-700 leading-relaxed">
+                    <strong class="text-shop-gray-dark">Evite veículo parado:</strong> envie agora modelo do veículo, sintoma, localização e janela de operação para ser atendido imediatamente.
+                </p>
+                <a href="https://wa.me/5573991420645?text=Ol%C3%A1!%20Preciso%20de%20triagem%20priorit%C3%A1ria%20para%20linha%20pesada.%20Segue%20modelo%20do%20ve%C3%ADculo%2C%20sintoma%20e%20localiza%C3%A7%C3%A3o." target="_blank" rel="noopener noreferrer" class="group btn-clean btn-primary btn-rounded px-6 py-3 font-black uppercase tracking-[0.14em] text-[10px] shrink-0">
+                    <i class="fab fa-whatsapp text-sm text-green-300"></i>
+                    <span>Solicitar prioridade agora</span>
+                    <i class="fas fa-arrow-right text-[10px] opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+                </a>
+            </div>
+        </div>
     </section>
 
     <!-- Contact -->
@@ -1435,6 +1599,7 @@
                 '#galeria [data-gallery] .gallery-item',
                 '#sobre .space-y-8 > div',
                 '#sobre .mt-10.rounded-2xl',
+                '#faq .faq-item',
                 '#contato .bg-shop-red > .space-y-8 > div',
                 '#contato .lg\\:col-span-2 .rounded-2xl',
                 '.partners-marquee',
