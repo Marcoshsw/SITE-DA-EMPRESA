@@ -1298,26 +1298,93 @@
             });
         };
 
+        const ANCHOR_GAP = 27;
+        const ANCHOR_SCROLL_DURATION = 1.1;
+        const ANCHOR_TOLERANCE = 3;
+
         const headerOffset = () => {
             const header = document.querySelector('header');
-            return header ? header.getBoundingClientRect().height + 16 : 96;
+            return header ? header.getBoundingClientRect().height : 96;
+        };
+
+        const syncScrollOffset = () => {
+            const offset = headerOffset() + ANCHOR_GAP;
+            document.documentElement.style.scrollPaddingTop = `${offset}px`;
+
+            if (lenis && typeof lenis.resize === 'function') {
+                lenis.resize();
+            }
+        };
+
+        const resolveAnchor = (target) => {
+            if (!target) return null;
+            if (!target.matches('section')) return target;
+
+            return target.querySelector('[data-scroll-anchor]') || target.querySelector('h1, h2, h3, h4') || target;
+        };
+
+        const targetTopFor = (target) => {
+            const anchor = resolveAnchor(target);
+            if (!anchor) return 0;
+
+            return window.pageYOffset + anchor.getBoundingClientRect().top - (headerOffset() + ANCHOR_GAP);
+        };
+
+        const scrollToAnchor = (target, options = {}) => {
+            const {
+                duration = ANCHOR_SCROLL_DURATION,
+                offsetPx = -(headerOffset() + ANCHOR_GAP),
+            } = options;
+            const anchor = resolveAnchor(target);
+
+            if (!anchor) return;
+
+            if (lenis) {
+                lenis.scrollTo(anchor, {
+                    offset: offsetPx,
+                    duration,
+                    lock: false,
+                });
+                return;
+            }
+
+            smoothScrollTo(targetTopFor(target), { duration, force: true });
         };
 
         const scrollToTarget = (target) => {
             if (!target) return;
 
             if (target.id === 'inicio') {
-                smoothScrollTo(0, { duration: 1.1, force: true });
+                if (Math.abs(window.scrollY) <= ANCHOR_TOLERANCE) return;
+                smoothScrollTo(0, { duration: ANCHOR_SCROLL_DURATION, force: true });
                 return;
             }
 
-            const anchor = target.matches('section')
-                ? (target.querySelector('[data-scroll-anchor]') || target.querySelector('h2, h3, h4') || target)
-                : target;
+            const desiredTop = targetTopFor(target);
+            if (Math.abs(window.scrollY - desiredTop) <= ANCHOR_TOLERANCE) return;
 
-            const top = window.scrollY + anchor.getBoundingClientRect().top - headerOffset();
-            smoothScrollTo(top, { duration: 1.1, force: true });
+            scrollToAnchor(target, { duration: ANCHOR_SCROLL_DURATION });
         };
+
+        const closeMobileMenuInstant = () => {
+            const menu = document.getElementById('mobile-menu');
+            const menuToggle = document.getElementById('mobile-menu-toggle');
+            if (!menu || !menuToggle || !menu.classList.contains('is-open')) return;
+
+            menu.style.transition = 'none';
+            menu.classList.remove('is-open');
+            menuToggle.classList.remove('is-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('overflow-hidden');
+
+            // Force style flush to apply close state before measuring header height.
+            void menu.offsetHeight;
+            menu.style.transition = '';
+        };
+
+        syncScrollOffset();
+        window.addEventListener('resize', syncScrollOffset);
+        window.addEventListener('load', syncScrollOffset);
 
         document.addEventListener('click', (event) => {
             const link = event.target.closest('a[href^="#"]');
@@ -1330,7 +1397,30 @@
             if (!target) return;
 
             event.preventDefault();
-            scrollToTarget(target);
+
+            const desiredTop = targetTopFor(target);
+            if (Math.abs(window.scrollY - desiredTop) <= ANCHOR_TOLERANCE) {
+                return;
+            }
+
+            if (link.closest('#mobile-menu')) {
+                closeMobileMenuInstant();
+            }
+
+            syncScrollOffset();
+            requestAnimationFrame(() => {
+                const offsetPx = -(headerOffset() + ANCHOR_GAP);
+
+                if (target.id === 'inicio') {
+                    scrollToTarget(target);
+                    return;
+                }
+
+                scrollToAnchor(target, {
+                    duration: ANCHOR_SCROLL_DURATION,
+                    offsetPx,
+                });
+            });
 
             if (history.replaceState) {
                 history.replaceState(null, '', href);
