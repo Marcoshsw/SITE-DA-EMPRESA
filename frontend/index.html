@@ -1087,7 +1087,7 @@
                                Com <strong class="text-white">19+ anos de mercado</strong>, o Grupo Mano entrega <strong class="text-white">atendimento confiável</strong> e <strong class="text-white">rápido</strong> para linha pesada.
                            </p>
                            <p>
-                               Já são <strong class="text-white"><span data-attended-count>+25.000</span> atendidos</strong>, entre autônomos, frotistas e transportadoras no <strong class="text-white">Brasil</strong>.
+                               Já são <strong class="text-white">+25.000 atendidos</strong>, entre autônomos, frotistas e transportadoras do <strong class="text-white">Brasil</strong>.
                            </p>
                            <p>
                                Especialização em <strong class="text-white">diesel, eletrica, injeção, câmbio e diagnóstico avançado</strong>, com execução técnica orientada por dados.
@@ -1095,7 +1095,7 @@
                        </div>
                     <div class="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold uppercase tracking-wide">
                         <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Tempo de mercado:</strong> 19+ anos</span></div>
-                        <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Volume:</strong> <span data-attended-count>+25.000</span> atendidos</span></div>
+                        <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Volume:</strong> +25.000 atendidos</span></div>
                         <div class="flex items-center gap-2.5 text-gray-200"><i class="fas fa-circle-check text-shop-red"></i><span><strong class="text-white">Especialização:</strong> diesel e mecatrônica</span></div>
                     </div>
                     <div class="space-y-8">
@@ -2409,81 +2409,6 @@
             });
         };
 
-        const initAttendedCounter = () => {
-            const counterElements = document.querySelectorAll('[data-attended-count]');
-            if (!counterElements.length) return;
-
-            const SYNC_INTERVAL_MS = 5 * 60 * 1000;
-            const ANIMATION_DURATION_MS = 700;
-            const formatter = new Intl.NumberFormat('pt-BR');
-            let currentCount = 25000;
-            let animationFrameId = null;
-
-            const renderCounter = (count) => {
-                const value = `+${formatter.format(count)}`;
-                counterElements.forEach((el) => {
-                    el.textContent = value;
-                });
-            };
-
-            const animateCounterTo = (targetCount) => {
-                const startCount = Number.isFinite(currentCount) ? currentCount : targetCount;
-                const delta = targetCount - startCount;
-
-                if (animationFrameId !== null) {
-                    cancelAnimationFrame(animationFrameId);
-                }
-
-                if (delta === 0) {
-                    renderCounter(targetCount);
-                    return;
-                }
-
-                const startedAt = performance.now();
-
-                const tick = (now) => {
-                    const progress = Math.min(1, (now - startedAt) / ANIMATION_DURATION_MS);
-                    const eased = 1 - Math.pow(1 - progress, 3);
-                    const value = Math.round(startCount + (delta * eased));
-
-                    renderCounter(value);
-
-                    if (progress < 1) {
-                        animationFrameId = requestAnimationFrame(tick);
-                        return;
-                    }
-
-                    currentCount = targetCount;
-                    animationFrameId = null;
-                };
-
-                animationFrameId = requestAnimationFrame(tick);
-            };
-
-            const syncCounter = async () => {
-                try {
-                    const response = await fetch('/api/attended-counter', {
-                        cache: 'no-store',
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Nao foi possivel carregar o contador.');
-                    }
-
-                    const data = await response.json();
-                    if (typeof data?.count === 'number' && Number.isFinite(data.count)) {
-                        const nextCount = Math.max(0, Math.floor(data.count));
-                        animateCounterTo(nextCount);
-                    }
-                } catch (error) {
-                    console.warn('Falha ao sincronizar contador:', error);
-                }
-            };
-
-            syncCounter();
-            window.setInterval(syncCounter, SYNC_INTERVAL_MS);
-        };
-
         const initKeywordHighlights = () => {
             const keywords = [
                 'mecanica pesada',
@@ -2654,7 +2579,6 @@
         };
 
         initKeywordHighlights();
-        initAttendedCounter();
 
         initLenis();
         animateHeroOnLoad();
