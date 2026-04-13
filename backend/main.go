@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/mail"
 	"os"
 	"path/filepath"
@@ -32,6 +34,7 @@ type appConfig struct {
 	Port              string
 	CorsOrigins       []string
 	FrontendDir       string
+	CounterStateFile  string
 	GinMode           string
 	AllowWildcardCORS bool
 	ContactLimit      int
@@ -58,6 +61,13 @@ func loadAppConfig() appConfig {
 		frontendDir = resolvedDir
 	} else if absDir, err := filepath.Abs(frontendDir); err == nil {
 		frontendDir = absDir
+	}
+
+	counterStateFile := strings.TrimSpace(os.Getenv("COUNTER_STATE_FILE"))
+	if counterStateFile == "" {
+		counterStateFile = resolveCounterStateFile()
+	} else if absFile, err := filepath.Abs(counterStateFile); err == nil {
+		counterStateFile = absFile
 	}
 
 	originsRaw := strings.TrimSpace(os.Getenv("CORS_ORIGINS"))
@@ -100,11 +110,204 @@ func loadAppConfig() appConfig {
 		Port:              port,
 		CorsOrigins:       origins,
 		FrontendDir:       frontendDir,
+		CounterStateFile:  counterStateFile,
 		GinMode:           ginMode,
 		AllowWildcardCORS: allowWildcard,
 		ContactLimit:      contactLimit,
 		ContactWindowSecs: contactWindowSecs,
 	}
+}
+
+const attendedCounterBase = 25000
+
+var attendedCounterInterval = 3 * time.Hour
+
+type attendedCounterState struct {
+	Count      int   `json:"count"`
+	LastUpdate int64 `json:"last_update"`
+}
+
+type attendedCounterManager struct {
+	mu         sync.Mutex
+	path       string
+	count      int
+	lastUpdate time.Time
+	rng        *rand.Rand
+}
+
+func resolveCounterStateFile() string {
+	wd, _ := os.Getwd()
+	exePath, _ := os.Executable()
+	exeDir := filepath.Dir(exePath)
+
+	candidates := []string{}
+
+	if wd != "" {
+		if _, err := os.Stat(filepath.Join(wd, "go.mod")); err == nil {
+			candidates = append(candidates, filepath.Join(wd, "attended-counter.json"))
+		}
+
+		if _, err := os.Stat(filepath.Join(wd, "backend", "go.mod")); err == nil {
+			candidates = append(candidates, filepath.Join(wd, "backend", "attended-counter.json"))
+		}
+	}
+
+	if exeDir != "" {
+		candidates = append(candidates,
+			filepath.Join(exeDir, "attended-counter.json"),
+			filepath.Join(exeDir, "..", "backend", "attended-counter.json"),
+		)
+	}
+
+	if len(candidates) == 0 {
+		candidates = append(candidates, filepath.Join(wd, "backend", "attended-counter.json"))
+	}
+
+	for _, candidate := range candidates {
+		if absPath, err := filepath.Abs(candidate); err == nil {
+			return absPath
+		}
+	}
+
+	absPath, err := filepath.Abs(filepath.Join(wd, "backend", "attended-counter.json"))
+	if err == nil {
+		return absPath
+	}
+
+	return filepath.Join(wd, "backend", "attended-counter.json")
+}
+
+func newAttendedCounterManager(path string) *attendedCounterManager {
+	manager := &attendedCounterManager{
+		path:       path,
+		count:      attendedCounterBase,
+		lastUpdate: time.Now().UTC(),
+		rng:        rand.New(rand.NewSource(time.Now().UnixNano())),
+	}
+
+	if err := manager.load(); err != nil {
+		log.Printf("contador: usando valor padrao: %v", err)
+	}
+
+	return manager
+}
+
+func (m *attendedCounterManager) load() error {
+	if strings.TrimSpace(m.path) == "" {
+		return fmt.Errorf("caminho do contador nao configurado")
+	}
+
+	data, err := os.ReadFile(m.path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return m.saveLocked(time.Now().UTC())
+		}
+		return err
+	}
+
+	var state attendedCounterState
+	if err := json.Unmarshal(data, &state); err != nil {
+		return err
+	}
+
+	if state.Count < attendedCounterBase {
+		state.Count = attendedCounterBase
+	}
+	if state.LastUpdate <= 0 {
+		state.LastUpdate = time.Now().UTC().Unix()
+	}
+
+	m.mu.Lock()
+	m.count = state.Count
+	m.lastUpdate = time.Unix(state.LastUpdate, 0).UTC()
+	m.mu.Unlock()
+
+	return nil
+}
+
+func (m *attendedCounterManager) saveLocked(now time.Time) error {
+	if strings.TrimSpace(m.path) == "" {
+		return fmt.Errorf("caminho do contador nao configurado")
+	}
+
+	if err := os.MkdirAll(filepath.Dir(m.path), 0o755); err != nil {
+		return err
+	}
+
+	payload, err := json.MarshalIndent(attendedCounterState{
+		Count:      m.count,
+		LastUpdate: m.lastUpdate.Unix(),
+	}, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	tempPath := m.path + ".tmp"
+	if err := os.WriteFile(tempPath, payload, 0o644); err != nil {
+		return err
+	}
+
+	if err := os.Rename(tempPath, m.path); err != nil {
+		_ = os.Remove(tempPath)
+		return err
+	}
+
+	return nil
+}
+
+func (m *attendedCounterManager) advanceLocked(now time.Time) bool {
+	if now.Before(m.lastUpdate) {
+		m.lastUpdate = now
+		return false
+	}
+
+	intervals := int(now.Sub(m.lastUpdate) / attendedCounterInterval)
+	if intervals <= 0 {
+		return false
+	}
+
+	for i := 0; i < intervals; i++ {
+		m.count += m.rng.Intn(5) + 1
+	}
+
+	m.lastUpdate = m.lastUpdate.Add(time.Duration(intervals) * attendedCounterInterval)
+	return true
+}
+
+func (m *attendedCounterManager) ensureCurrent(now time.Time) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	if m.advanceLocked(now.UTC()) {
+		return m.saveLocked(now.UTC())
+	}
+
+	return nil
+}
+
+func (m *attendedCounterManager) snapshot() (int, time.Time) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	return m.count, m.lastUpdate
+}
+
+func (m *attendedCounterManager) currentCount() int {
+	_ = m.ensureCurrent(time.Now().UTC())
+	count, _ := m.snapshot()
+	return count
+}
+
+func (m *attendedCounterManager) startAutoAdvance() {
+	ticker := time.NewTicker(time.Minute)
+	go func() {
+		defer ticker.Stop()
+		for range ticker.C {
+			if err := m.ensureCurrent(time.Now().UTC()); err != nil {
+				log.Printf("contador: nao foi possivel atualizar: %v", err)
+			}
+		}
+	}()
 }
 
 type rateBucket struct {
@@ -242,6 +445,8 @@ func main() {
 	r.Use(gin.Recovery())
 	r.Use(securityHeaders())
 	contactLimiter := newRateLimiter(config.ContactLimit, time.Duration(config.ContactWindowSecs)*time.Second)
+	attendedCounter := newAttendedCounterManager(config.CounterStateFile)
+	attendedCounter.startAutoAdvance()
 
 	// Configuração do CORS
 	corsConfig := cors.Config{
@@ -277,6 +482,17 @@ func main() {
 
 	r.GET("/api/services", func(c *gin.Context) {
 		c.JSON(200, services)
+	})
+
+	r.GET("/api/attended-counter", func(c *gin.Context) {
+		count := attendedCounter.currentCount()
+		_, lastUpdate := attendedCounter.snapshot()
+
+		c.JSON(200, gin.H{
+			"count":        count,
+			"lastUpdate":   lastUpdate.UTC().Format(time.RFC3339),
+			"nextUpdateAt": lastUpdate.Add(attendedCounterInterval).UTC().Format(time.RFC3339),
+		})
 	})
 
 	r.GET("/api/info", func(c *gin.Context) {
