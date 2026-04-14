@@ -150,7 +150,7 @@ func (rl *rateLimiter) middleware() gin.HandlerFunc {
 		c.Header("X-RateLimit-Limit", strconv.Itoa(rl.limit))
 		if remaining < 0 {
 			c.Header("Retry-After", strconv.Itoa(int(time.Until(resetAt).Seconds())+1))
-			c.JSON(429, gin.H{"message": "Muitas solicitacoes. Tente novamente em instantes."})
+			c.JSON(429, gin.H{"message": "Muitas solicitações. Tente novamente em instantes."})
 			c.Abort()
 			return
 		}
@@ -230,7 +230,7 @@ func resolveFrontendDir() (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("nao foi possivel localizar frontend/index.html")
+	return "", fmt.Errorf("não foi possível localizar frontend/index.html")
 }
 
 func main() {
@@ -300,7 +300,7 @@ func main() {
 	r.POST("/api/contact", contactLimiter.middleware(), func(c *gin.Context) {
 		var req ContactRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
-			c.JSON(400, gin.H{"message": "Dados invalidos para envio."})
+			c.JSON(400, gin.H{"message": "Dados inválidos para envio."})
 			return
 		}
 
@@ -310,17 +310,17 @@ func main() {
 		req.Message = strings.TrimSpace(req.Message)
 
 		if len(req.Name) < 3 {
-			c.JSON(400, gin.H{"message": "Informe um nome valido."})
+			c.JSON(400, gin.H{"message": "Informe um nome válido."})
 			return
 		}
 
 		if _, err := mail.ParseAddress(req.Email); err != nil {
-			c.JSON(400, gin.H{"message": "Informe um e-mail valido."})
+			c.JSON(400, gin.H{"message": "Informe um e-mail válido."})
 			return
 		}
 
 		if req.Service == "" {
-			c.JSON(400, gin.H{"message": "Selecione o servico desejado."})
+			c.JSON(400, gin.H{"message": "Selecione o serviço desejado."})
 			return
 		}
 
@@ -329,8 +329,8 @@ func main() {
 			return
 		}
 
-		log.Printf("Novo contato | nome=%s email=%s servico=%s mensagem=%q", req.Name, req.Email, req.Service, req.Message)
-		c.JSON(200, gin.H{"message": "Solicitacao enviada com sucesso. Nossa equipe retornara em breve."})
+		log.Printf("Novo contato | nome=%s email=%s serviço=%s mensagem=%q", req.Name, req.Email, req.Service, req.Message)
+		c.JSON(200, gin.H{"message": "Solicitação enviada com sucesso. Nossa equipe retornará em breve."})
 	})
 
 	// Serve a página inicial e arquivos estáticos do frontend sem depender de caminho absoluto.
